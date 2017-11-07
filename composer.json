@@ -1,0 +1,10 @@
+{
+    "config": {
+        "COMPOSER_CAFILE": "c:/php7/DevicelockInc.pem",
+		"cafile": "c:/php7/DevicelockInc.pem"
+    },
+    "require": {
+        "twig/twig": "~2.0",
+        "respect/validation": "*"
+    }
+}

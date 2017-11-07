@@ -1,0 +1,32 @@
+[
+{
+"id": "6fac90d6-7303-11dc-89ad-00195b6993ba",
+"code": "643",
+"name": "Российский рубль",
+"short_name": "руб."
+},
+{
+"id": "cd693dff-7303-11dc-89ad-00195b6993ba",
+"code": "840",
+"name": "Доллар США",
+"short_name": "USD"
+},
+{
+"id": "cd693e00-7303-11dc-89ad-00195b6993ba",
+"code": "978",
+"name": "Евро",
+"short_name": "EUR"
+},
+{
+"id": "646745ab-7276-1da6-6285-0d5e89a514a9",
+"code": "348",
+"name": "Форинт",
+"short_name": "HUF"
+},
+{
+"id": "35feefe9-9e9a-11e5-827a-3065ec4b215b",
+"code": "203",
+"name": "Чешская крона",
+"short_name": "CZK"
+}
+]

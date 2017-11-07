@@ -1,0 +1,8 @@
+{% for element in vars %}
+    <tr id="tr_1">
+          <td class="hidden">{{ element.id }}</td>
+          <td dblclick="AddNew();">{{ element.code }}</td>
+          <td>{{ element.name }}</td>
+          <td>{{ element.short_name }}</td>
+      </tr>  
+{% endfor %}

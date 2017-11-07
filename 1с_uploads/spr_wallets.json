@@ -1,0 +1,58 @@
+[
+{
+"id": "524849d2-1b17-cc53-78b7-82d31471e5ae",
+"currency_id": "cd693e00-7303-11dc-89ad-00195b6993ba",
+"name": "наличные евро",
+"is_creditcard": 0,
+"credit_limit": 0,
+"grace_period": 0
+},
+{
+"id": "d7ce4581-a4e8-11e5-81b2-20cf30c96001",
+"currency_id": "6fac90d6-7303-11dc-89ad-00195b6993ba",
+"name": "Зарплатная карта",
+"is_creditcard": 0,
+"credit_limit": 0,
+"grace_period": 0
+},
+{
+"id": "a9015aad-6796-11e5-8276-3065ec4b215b",
+"currency_id": "6fac90d6-7303-11dc-89ad-00195b6993ba",
+"name": "Кредитная карта",
+"is_creditcard": 1,
+"credit_limit": 299000,
+"grace_period": 0
+},
+{
+"id": "71a801a3-6f79-11e5-8276-3065ec4b215b",
+"currency_id": "cd693dff-7303-11dc-89ad-00195b6993ba",
+"name": "ТКС USD",
+"is_creditcard": 0,
+"credit_limit": 0,
+"grace_period": 0
+},
+{
+"id": "d8103790-7505-11e5-8276-3065ec4b215b",
+"currency_id": "6fac90d6-7303-11dc-89ad-00195b6993ba",
+"name": "Накопительный счет",
+"is_creditcard": 0,
+"credit_limit": 0,
+"grace_period": 0
+},
+{
+"id": "a6b5cdac-a361-11e5-827b-3065ec4b215b",
+"currency_id": "cd693dff-7303-11dc-89ad-00195b6993ba",
+"name": "Накопительный счет USD",
+"is_creditcard": 0,
+"credit_limit": 0,
+"grace_period": 0
+},
+{
+"id": "9c86ddad-c51d-11dc-89d6-00195b6993ba",
+"currency_id": "6fac90d6-7303-11dc-89ad-00195b6993ba",
+"name": "Свободные деньги",
+"is_creditcard": 0,
+"credit_limit": 0,
+"grace_period": 0
+}
+]
