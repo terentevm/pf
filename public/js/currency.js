@@ -44,10 +44,7 @@ function getAjax(id =''){
         });
         
     }
-
-function td_dbl_click(){
 	
-}	
  
 function AddNew(id){
 	
@@ -79,7 +76,6 @@ function AddNew(id){
 
 function saveElement(dataForm){
 
-	console.log(dataForm);
 	
 	$.ajax({
 			type: "POST",
