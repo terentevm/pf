@@ -82,9 +82,11 @@ class CurrencyController extends Controller
                 'string' => '{{name}} must be a string',
                 'notEmpty' => '{{name}} must not be empty'
             ]);
+            
+            header(http_response_code(500));
         }
         
-        
+        /*ntcnjdsdd*/
 	
         $success = $currency->save();
 		
