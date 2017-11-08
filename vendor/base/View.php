@@ -27,10 +27,7 @@ class View{
     }
     public function Render($vars){
         
-        $loader = new Twig_Loader_Filesystem( array(APP. '/Views/layouts', APP. '/Views/templates', APP. '/Views/templates/forms'));
-        $twig = new Twig_Environment($loader, array('cache' => APP. '/Views/compilation_cache','auto_reload' => true));
-        
-         
+		
         $file_view = APP . "/Views/{$this->route['controller']}/{$this->view}.php";
         $file_config = APP . "/config/config_view.php";
         $render_param = [];
@@ -61,24 +58,15 @@ class View{
         
 
         if(is_file($file_view)){
-            require $file_view;
+            //register view diectory as directory for look up templates twig.
+			$loader = new Twig_Loader_Filesystem( array(APP. '/Views/layouts', APP. '/Views/templates', dirname($file_view));
+			$twig = new Twig_Environment($loader, array('cache' => APP. '/Views/compilation_cache','auto_reload' => true));
+			require $file_view;
         }
         else{
             echo "<p>Не найден вид {$file_view}</p>";
         }
-        /*  ob_start();
-        $content = ob_get_clean();
 
-        if (false !== $this->layout){
-            $file_layout = APP . "/views/layouts/{$this->layout}.php";
-            
-                if(is_file($file_layout)){
-                    require $file_layout;
-                }
-                else{
-                    echo "<p>Не найден шаблон {$file_layout}</p>";
-                }
-        }*/
         
     }
     
