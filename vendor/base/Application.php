@@ -19,6 +19,9 @@ class Application extends Singleton{
     public function Run(){
         $Controller_params = [];
 
+        $_SESSION['isAjax'] = $this->isAjax();
+        define("LANGUAGE", $this->config['lang']);
+
         if(!isset($_REQUEST['route'])){
             $Controller = 'Controllers\SiteController';
             $action = 'actionIndex';

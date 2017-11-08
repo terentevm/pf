@@ -30,6 +30,7 @@ class CurrencyController extends Controller
         $this->vars = $dic_elements;
         $this->GetView();
     }
+    
     public function actionGetElement(){
        
         $this->view = 'currency_element';

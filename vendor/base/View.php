@@ -31,6 +31,9 @@ class View{
         $file_view = APP . "/Views/{$this->route['controller']}/{$this->view}.php";
         $file_config = APP . "/config/config_view.php";
         $render_param = [];
+
+        $this->setMeta($render_param);
+
         if(is_file($file_config)){
             require $file_config;
             $head_js = $this->getIncludeJS($scripts, $this->view, 'head');
@@ -59,7 +62,7 @@ class View{
 
         if(is_file($file_view)){
             //register view diectory as directory for look up templates twig.
-			$loader = new Twig_Loader_Filesystem( array(APP. '/Views/layouts', APP. '/Views/templates', dirname($file_view));
+			$loader = new Twig_Loader_Filesystem( array(APP. '/Views/layouts', APP. '/Views/templates', dirname($file_view)));
 			$twig = new Twig_Environment($loader, array('cache' => APP. '/Views/compilation_cache','auto_reload' => true));
 			require $file_view;
         }
@@ -70,6 +73,17 @@ class View{
         
     }
     
+    public function setMeta(&$render_param){
+        $render_param['metatags'] =[
+            "<meta charset='utf-8'>",
+            "<meta http-equiv='X-UA-Compatible' content='IE=edge' />",
+            "<meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no'>",
+            "<meta name='ccsrf_token' content='" . $_SESSION['csrf_token'] . "'>",
+            "<META HTTP-EQUIV='Content-language' CONTENT='" . LANGUAGE . "'>"
+        ];
+
+    }
+
     public function getIncludeJS($scripts,$view,$part){
        
         $result = [];

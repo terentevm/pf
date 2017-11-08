@@ -9,6 +9,9 @@
 namespace Controllers;
 use Base\Controller;
 use Models\User;
+use Respect\Validation\Validator as v;
+use Respect\Validation\Exceptions\ValidationException;
+use Respect\Validation\Exceptions\NestedValidationExceptionInterface;
 /**
  * Description of User
  *
@@ -19,33 +22,33 @@ class UserController extends Controller {
     public $layout = 'main';
     
     public function actionLogin(){
+        
         if(isset($_POST) && !empty($_POST)){
         
-            $rules = [
-                'required' => [
-                'password',
-                'email'
-                
+            $formData = filter_input_array(
+                INPUT_POST,
+                [
+                    'login' => FILTER_SANITIZE_EMAIL,
+                    'password' => FILTER_DEFAULT
                 ],
-                'email' => [
-                'email'
-            ]
-            ];
+                true
+            );
         
-            $data = $_POST;
-            
-            //если данные не валидированы, то выводим вид вместе с сообщением
-            
-            if(!$this->validate($data, $rules)){
+            $validator = v::attribute('login', v::stringType()->notEmpty()->email())
+            ->attribute('password', v::stringType()->notEmpty());
+
+            $user = new User();
+            $user->Load($formData);
+
+            try{
+                $validator->assert($user);
+            } catch (ValidationException $exception) {
+                $this->errors = $exception->getMessages();
                 $this->getErrors();
+                $this->vars = $formData;
                 $this->GetView();
                 exit();
             }
-            
-            //проверяем введенные данные
-            
-            $user = new User();
-            $user->Load($data);
             
             $AuthData = $user->CheckAuthData();
             
@@ -66,6 +69,7 @@ class UserController extends Controller {
             $this->GetView();
         }
     }
+
     public function actionLogout(){
         $user = new User();
         $user->Load(['id' => $_SESSION['user_id']]);
@@ -84,31 +88,35 @@ class UserController extends Controller {
         
         if(isset($_POST) && !empty($_POST)){
         
-            $rules = [
-                'required' => [
-                'password',
-                'email',
-                'name',
-                ],
-                'email' => [
-                'email',
-            ]
-            ];
-        
-            $data = $_POST;
+            $formData = filter_input_array(
+                INPUT_POST,
+                [
+                    'login' => FILTER_SANITIZE_EMAIL,
+                    'name' => FILTER_SANITIZE_STRING,
+                    'password' => FILTER_DEFAULT
+                ]
+            );
             
-            //если данные не валидированы, то выводим вид вместе с сообщением
-            
-            if(!$this->validate($data, $rules)){
+            $validator = v::attribute('login', v::stringType()->notEmpty()->email())
+            ->attribute('name', v::stringType()->notEmpty())
+            ->attribute('password', v::stringType()->notEmpty());
+
+            $user = new User();
+            $user->Load($formData);
+
+            try{
+                $validator->assert($user);
+            } catch (ValidationException $exception) {
+                $this->errors = $exception->getMessages();
                 $this->getErrors();
+                $this->vars = $formData;
                 $this->GetView();
                 exit();
             }
             
             //проверяем уникальноть логина.
             
-            $user = new User();
-            $user->Load($data);
+            
             
             if(!$user->CheckUnique()){
                 //выводим вид вместе с ошибкой
@@ -119,8 +127,8 @@ class UserController extends Controller {
                 exit();
                 
             }
-            
-            //создаем нового пользователя и переадресуем на страницу входа.
+    
+            //Create new user and redirect to login page
            if(!$user->CreateNewUser()){
                 $this->errors[] = 'Error, please try again!';
                 $this->getErrors();

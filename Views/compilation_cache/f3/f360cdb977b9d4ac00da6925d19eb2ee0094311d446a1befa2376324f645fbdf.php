@@ -21,13 +21,28 @@ class __TwigTemplate_1a58066c6ff2e878e3df75cc9bf68ef71fc4022eac7715a65189f0c2c1c
     {
         // line 1
         echo "<!DOCTYPE html>
-<html lang=\"en\" style=\"height: 100%\">
+<html lang=\"cs style=\"height: 100%\">
   <head>
     <!-- Required meta tags -->
-    <meta charset=\"utf-8\">
-    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\">
-    <meta name=\"ccsrf_token\" content= \"<?= \$_SESSION['csrf_token'] ?>\">
-    <!--<meta http-equiv=\"Cache-Control\" content=\"no-cache\"><meta http-equiv=\"Cache-Control\" content=\"no-cache\">-->
+    ";
+        // line 6
+        echo "    ";
+        $context['_parent'] = $context;
+        $context['_seq'] = twig_ensure_traversable(($context["metatags"] ?? null));
+        foreach ($context['_seq'] as $context["_key"] => $context["meta"]) {
+            // line 7
+            echo "    ";
+            echo $context["meta"];
+            echo "
+    ";
+        }
+        $_parent = $context['_parent'];
+        unset($context['_seq'], $context['_iterated'], $context['_key'], $context['meta'], $context['_parent'], $context['loop']);
+        $context = array_intersect_key($context, $_parent) + $_parent;
+        // line 9
+        echo "    ";
+        // line 10
+        echo "    <!--<meta http-equiv=\"Cache-Control\" content=\"no-cache\"><meta http-equiv=\"Cache-Control\" content=\"no-cache\">-->
     <!-- Bootstrap CSS -->
     <style>
     /*описание стилей*/
@@ -40,17 +55,17 @@ class __TwigTemplate_1a58066c6ff2e878e3df75cc9bf68ef71fc4022eac7715a65189f0c2c1c
    <link href=\"/public/bootstrap-fileinput/css/fileinput.min.css\" rel=\"stylesheet\" />
     
     ";
-        // line 20
+        // line 22
         $this->displayBlock('script_head', $context, $blocks);
-        // line 24
+        // line 26
         echo "  
 
   </head>
   <body style=\"height: 100%\">
     ";
-        // line 28
+        // line 30
         $this->displayBlock('script_body_begin', $context, $blocks);
-        // line 33
+        // line 35
         echo "      <div class=\"navmenu navmenu-default navmenu-fixed-left offcanvas-sm\">
       <a class=\"navmenu-brand visible-md visible-lg\" style=\"font-style:oblique; color: #f7f7f7;\" href=\"/site/index\">Project name</a>
 
@@ -73,14 +88,14 @@ class __TwigTemplate_1a58066c6ff2e878e3df75cc9bf68ef71fc4022eac7715a65189f0c2c1c
 
     <div class=\"container\">
     ";
-        // line 54
+        // line 56
         $this->displayBlock('content', $context, $blocks);
-        // line 55
+        // line 57
         echo "      </div><!-- /.container -->
     ";
-        // line 56
+        // line 58
         $this->displayBlock('script_body_end', $context, $blocks);
-        // line 60
+        // line 62
         echo "\t
     
     <img id=\"loadImg\" src=\"/public/src/ajax-loader.gif\"/>
@@ -90,15 +105,15 @@ class __TwigTemplate_1a58066c6ff2e878e3df75cc9bf68ef71fc4022eac7715a65189f0c2c1c
 ";
     }
 
-    // line 20
+    // line 22
     public function block_script_head($context, array $blocks = array())
     {
-        // line 21
+        // line 23
         echo "        ";
         $context['_parent'] = $context;
         $context['_seq'] = twig_ensure_traversable(($context["head_js"] ?? null));
         foreach ($context['_seq'] as $context["_key"] => $context["link"]) {
-            // line 22
+            // line 24
             echo "            <script src=\"";
             echo twig_escape_filter($this->env, $context["link"], "html", null, true);
             echo "\"></script>
@@ -107,19 +122,19 @@ class __TwigTemplate_1a58066c6ff2e878e3df75cc9bf68ef71fc4022eac7715a65189f0c2c1c
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['_key'], $context['link'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 24
+        // line 26
         echo "    ";
     }
 
-    // line 28
+    // line 30
     public function block_script_body_begin($context, array $blocks = array())
     {
-        // line 29
+        // line 31
         echo "    ";
         $context['_parent'] = $context;
         $context['_seq'] = twig_ensure_traversable(($context["body_begin_js"] ?? null));
         foreach ($context['_seq'] as $context["_key"] => $context["link"]) {
-            // line 30
+            // line 32
             echo "      <script src=\"";
             echo twig_escape_filter($this->env, $context["link"], "html", null, true);
             echo "\"></script>
@@ -128,24 +143,24 @@ class __TwigTemplate_1a58066c6ff2e878e3df75cc9bf68ef71fc4022eac7715a65189f0c2c1c
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['_key'], $context['link'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 32
+        // line 34
         echo "    ";
     }
 
-    // line 54
+    // line 56
     public function block_content($context, array $blocks = array())
     {
     }
 
-    // line 56
+    // line 58
     public function block_script_body_end($context, array $blocks = array())
     {
-        // line 57
+        // line 59
         echo "    ";
         $context['_parent'] = $context;
         $context['_seq'] = twig_ensure_traversable(($context["body_end_js"] ?? null));
         foreach ($context['_seq'] as $context["_key"] => $context["link"]) {
-            // line 58
+            // line 60
             echo "      <script src=\"";
             echo twig_escape_filter($this->env, $context["link"], "html", null, true);
             echo "\"></script>
@@ -154,7 +169,7 @@ class __TwigTemplate_1a58066c6ff2e878e3df75cc9bf68ef71fc4022eac7715a65189f0c2c1c
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['_key'], $context['link'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 60
+        // line 62
         echo "    ";
     }
 
@@ -163,13 +178,18 @@ class __TwigTemplate_1a58066c6ff2e878e3df75cc9bf68ef71fc4022eac7715a65189f0c2c1c
         return "main.twig";
     }
 
+    public function isTraitable()
+    {
+        return false;
+    }
+
     public function getDebugInfo()
     {
-        return array (  158 => 60,  149 => 58,  144 => 57,  141 => 56,  136 => 54,  132 => 32,  123 => 30,  118 => 29,  115 => 28,  111 => 24,  102 => 22,  97 => 21,  94 => 20,  84 => 60,  82 => 56,  79 => 55,  77 => 54,  54 => 33,  52 => 28,  46 => 24,  44 => 20,  23 => 1,);
+        return array (  173 => 62,  164 => 60,  159 => 59,  156 => 58,  151 => 56,  147 => 34,  138 => 32,  133 => 31,  130 => 30,  126 => 26,  117 => 24,  112 => 23,  109 => 22,  99 => 62,  97 => 58,  94 => 57,  92 => 56,  69 => 35,  67 => 30,  61 => 26,  59 => 22,  45 => 10,  43 => 9,  34 => 7,  29 => 6,  23 => 1,);
     }
 
     public function getSourceContext()
     {
-        return new Twig_Source("", "main.twig", "C:\\OSPanel\\domains\\localhost\\pf\\Views\\layouts\\main.twig");
+        return new Twig_Source("", "main.twig", "C:\\Apache\\Apache24\\htdocs\\pf\\Views\\layouts\\main.twig");
     }
 }
