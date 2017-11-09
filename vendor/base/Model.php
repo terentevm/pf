@@ -124,27 +124,16 @@ class Model{
         return $this->pdo->Query(self::$sql,self::$param);
     }
     
-    public function FindOne($condition, $param_values)
-    {
-        $sql = QueryBuilder::Select($this->table)::Where($condition)::_And('user_id = :user_id')::Limit(1)::getSql();
-        $query_param = [];
-        
-        foreach($param_values as $param => $value){
-            $query_param[$param] = $value;  
-        }
-        $query_param['user_id'] = $_SESSION['user_id'];
-        
-        return $this->pdo->Query($sql,$query_param);
-    }
-    
     public function Save(){
         
         $pk = $this->getPrimaryKeys();
         $properties = $this->getProperties();
-        
+        $is_new = false;
+		
         foreach ($pk as $key){
             if(!isset($properties[$key])){
-                $this->set($key, $this->getGuide());    
+                 $is_new = true;
+				$this->set($key, $this->getGuide());    
             }
         }
         
@@ -154,7 +143,13 @@ class Model{
         
         $DbColumnes= $this->getDbColumnes();
         self::$instance = $this;
-        self::$sql = self::insert(static::setTableName(),$DbColumnes)::orUpdate($DbColumnes)::getSql();
+        
+		if ($is_new) {
+			self::$sql = self::insert(static::setTableName(), $DbColumnes);	
+		}
+		else {
+			self::$sql = self::update(static::setTableName(), $DbColumnes);	
+		}
        
         if ($this->stmt === null){
         
@@ -174,28 +169,7 @@ class Model{
        
     }
     
-    public function SaveOrUpdate(){
     
-        //$builder = new QueryBuilder();
-        //$sql = $builder::Insert($this->table, $this->CreateCoulmns())::getSql();
-    
-        try {
-           $sql = QueryBuilder::Insert($this->table, $this->CreateCoulmns())::OrUpdate($this->CreateCoulmns())::getSql();
-        } catch (Exception $ex) {
-                $error = $ex->getMessage();
-                return FALSE;
-            }
-            catch (Throwable $ex){
-                $error = $ex->getMessage();
-                return FALSE; 
-            }    
-  
-
-       $success = $this->pdo->execute($sql,$this->attributes);
-       
-       return $success;
-       
-    }
     
     public function CreateCoulmns(){
         $columns = [];
@@ -255,6 +229,13 @@ class Model{
         return self::$instance;
     }
     
+	public static function Update($table, $fields =[]){
+       
+        self::$prefix = 'UPDATE ' . $table . ' SET ' . self::CreatePart_On_Duplicate($fields);
+        
+        return self::$instance;    
+    }
+	
     public static function orUpdate($fields =[]){
         
         $temp_prefix = self::$prefix;
@@ -266,12 +247,7 @@ class Model{
         return self::$instance;
     }
     
-    public static function Update($table, $fields =[]){
-        
-        self::$prefix = ' UPDATE ' . $table . ' SET ' . self::CreatePart_On_Duplicate($fields);
-        
-        return self::$instance;    
-    }
+
     
     public static function Where($condition = []){
         $pref = (self::$mainTablePrefix == '') ? '' : self::$mainTablePrefix . '.';
