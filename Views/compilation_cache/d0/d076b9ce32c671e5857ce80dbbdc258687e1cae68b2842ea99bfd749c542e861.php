@@ -43,7 +43,7 @@ class __TwigTemplate_53dead9b125f8bd2b75f8a56b063a95433fe36bb19b031b13e4436658a8
         <ul class=\"border\">
             <li><a href=\"/Dictonaries/Income\">Income items</a></li>
             <li><a href=\"/Dictonaries/Expenditure\">Expenditure items</a></li>
-            <li><a href=\"/Dictonaries/Wallets\">Wallets</a></li>
+            <li><a href=\"/Wallets/GetList\">Wallets</a></li>
         </ul>
     </div>
     <div class=\"col-lg-6 col-md-6 col-sm-12 col-xs-12\">

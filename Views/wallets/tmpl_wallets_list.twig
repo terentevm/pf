@@ -1,0 +1,30 @@
+{% extends "main.twig" %}
+  
+{% block content %}
+    <div id="frame">
+<div class="page-header">
+    <h2>Wallets</h2>
+</div>
+<form id ="form">
+    <div class="form-group">
+    <button class="btn btn-primary" id="btn_curr_update" onclick="getData(); return false;">Update</button>
+    <button class="btn btn-primary" id="btn_curr_new" data-whatever="@mdo" onclick="AddNew(); return false;">Add</button>
+    </div>
+    <div class="table-responsive">
+    <div class="row"></div>
+    <table class="table table-bordered table-hover">
+      <tr class="spr_list_head">
+          <th class="hidden">id</th>
+          <th>Name</th>
+          <th>Currency</th>
+          <th class="visible-md visible-lg">Is credit card</th>
+      </tr>
+      <tbody id="tbody">
+      {% include 'tmpl_wallets_list_data.twig' %}    
+      </tbody>  
+  </table>
+</div>
+</form> 
+</div>
+
+{% endblock %}
