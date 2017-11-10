@@ -25,23 +25,6 @@ class Model{
     {
         $this->pdo = Db::Instance();
     }
-    
-    public function load($data){
-        
-        $ClassName = get_called_class();
-        
-        $ClassAttributes = get_class_vars($ClassName);
-        
-        foreach($ClassAttributes  as $attribute){
-            if(isset($data[$attribute]) && !empty($data[$attribute])){
-                $this->attributes[$attribute] = $data[$attribute];
-            }
-        }
-        if(isset($this->attributes['user_id'])){
-            $this->attributes['user_id'] = $_SESSION['user_id'];   
-        }
-    }
-    
 
 
     public static function getGuide(){
@@ -62,7 +45,8 @@ class Model{
         self::select($table, '', $column_names);
         return self::$instance ;
     }
-    
+    /*
+    */
     public static function findView($column_names, $f_fields = []) {
         $ClassName = get_called_class();
         
@@ -335,12 +319,17 @@ class Model{
     *	@param string table prefix
     *	@param string column names ('col1, col2, col3')
     */
-    public static function addPrefixToColumnNames($prefix, $column_names) {
+    public static function addPrefixToColumnNames($prefix, $column_names, $table_name ='') {
 
+        $table_prefix = ($table_name =='') ? '' : ' AS ' . $table_name . 
         $fields_arr = explode(',', $column_names);
 
         foreach ($fields_arr as &$col) {
             $col = $prefix . '.' . trim($col);
+
+            if(!$table_name == ''){
+                $col .= ' AS ' . $table_name . '_' . $col;   //for example: $col = "name", $table_name = "titles", result = AS titles_name
+            }
         }
 
         $column_names_pref = implode(',', $fields_arr);

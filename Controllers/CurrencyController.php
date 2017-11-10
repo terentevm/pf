@@ -4,6 +4,7 @@ namespace Controllers;
 
 use Base\Controller;
 use Models\Currency;
+use Base\Validator as my_validator;
 use Respect\Validation\Validator as v;
 use Respect\Validation\Exceptions\ValidationException;
 
@@ -36,16 +37,22 @@ class CurrencyController extends Controller
         $this->view = 'currency_element';
 		
         if (isset($_POST['id'])){
-           /*$is_id = v::uuid()->validate($_POST['id']);
+           $is_id = my_validator::uuid($_POST['id']);
 
             if(!$is_id){
                 header('HTTP/1.1 400 Bad Request');
                 header('Content-Type: application/text; charset=UTF-8');
                 die("Incorrect id format");
-            }*/
+            }
 			
             $dic_element = Currency::find()->where(['id', '=', $_POST['id']])->limit(1)->selectAll();
-    
+            
+            if (empty($dic_element)){
+                header(http_response_code(404));
+                header('Content-Type: application/text; charset=UTF-8');
+                die("element not found by id");   
+            }
+
 			$this->vars = $dic_element;
             
             $this->GetView();

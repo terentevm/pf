@@ -36,4 +36,8 @@ class WalletsController extends Controller
         
         $this->GetView();
     }
+
+    public function actionGetElement() {
+        
+    }
 }
