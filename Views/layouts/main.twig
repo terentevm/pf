@@ -26,7 +26,7 @@
     {% endblock %}  
 
   </head>
-  <body style="height: 100%">
+  <body style="height: 100%; background: #F5F3E5;">
     {% block script_body_begin %}
     {% for link in body_begin_js %}
       <script src="{{ link }}"></script>
@@ -36,10 +36,10 @@
       <a class="navmenu-brand visible-md visible-lg" style="font-style:oblique; color: #f7f7f7;" href="/site/index">Project name</a>
 
       <ul class="nav navmenu-nav">
-        <li><a href="/site/index" class="navtext" style= "color: #f7f7f7;">Home</a></li>
-        <li><a href="#" class="navtext" style= "color: #f7f7f7;">Transactions</a></li>
-        <li><a href="/site/settings" class="navtext" style= "color: #f7f7f7;">Settings</a></li>
-        <li><a href="/user/logout" class="navtext" style= "color: #f7f7f7;">Logout</a></li>
+        <li><a href="/site/index" class="navtext" style= "color: #f7f7f7;"> <img class="photo" src="/public/src/home.png"/> Home</a></li>
+        <li><a href="#" class="navtext" style= "color: #f7f7f7;"><img class="photo" src="/public/src/transactions.png"/> Transactions</a></li>
+        <li><a href="/site/settings" class="navtext" style= "color: #f7f7f7;"><img class="photo" src="/public/src/settings.png"/> Settings</a></li>
+        <li><a href="/user/logout" class="navtext" style= "color: #f7f7f7;"><img class="photo" src="/public/src/logout.png"/> Logout</a></li>
       </ul>
     </div>
 

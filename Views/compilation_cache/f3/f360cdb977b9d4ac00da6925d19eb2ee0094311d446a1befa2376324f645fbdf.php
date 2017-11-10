@@ -61,7 +61,7 @@ class __TwigTemplate_1a58066c6ff2e878e3df75cc9bf68ef71fc4022eac7715a65189f0c2c1c
         echo "  
 
   </head>
-  <body style=\"height: 100%\">
+  <body style=\"height: 100%; background: #F5F3E5;\">
     ";
         // line 30
         $this->displayBlock('script_body_begin', $context, $blocks);
@@ -70,10 +70,10 @@ class __TwigTemplate_1a58066c6ff2e878e3df75cc9bf68ef71fc4022eac7715a65189f0c2c1c
       <a class=\"navmenu-brand visible-md visible-lg\" style=\"font-style:oblique; color: #f7f7f7;\" href=\"/site/index\">Project name</a>
 
       <ul class=\"nav navmenu-nav\">
-        <li><a href=\"/site/index\" class=\"navtext\" style= \"color: #f7f7f7;\">Home</a></li>
-        <li><a href=\"#\" class=\"navtext\" style= \"color: #f7f7f7;\">Transactions</a></li>
-        <li><a href=\"/site/settings\" class=\"navtext\" style= \"color: #f7f7f7;\">Settings</a></li>
-        <li><a href=\"/user/logout\" class=\"navtext\" style= \"color: #f7f7f7;\">Logout</a></li>
+        <li><a href=\"/site/index\" class=\"navtext\" style= \"color: #f7f7f7;\"> <img class=\"photo\" src=\"/public/src/home.png\"/> Home</a></li>
+        <li><a href=\"#\" class=\"navtext\" style= \"color: #f7f7f7;\"><img class=\"photo\" src=\"/public/src/transactions.png\"/> Transactions</a></li>
+        <li><a href=\"/site/settings\" class=\"navtext\" style= \"color: #f7f7f7;\"><img class=\"photo\" src=\"/public/src/settings.png\"/> Settings</a></li>
+        <li><a href=\"/user/logout\" class=\"navtext\" style= \"color: #f7f7f7;\"><img class=\"photo\" src=\"/public/src/logout.png\"/> Logout</a></li>
       </ul>
     </div>
 

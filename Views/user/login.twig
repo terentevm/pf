@@ -1,8 +1,13 @@
 {% extends "main.twig" %}
   
 {% block content %}
-<div class="page-header">
+<div class="page-header" style="vertical-align: middle;">
+    <div class="col-sm-1" style="vertical-align: middle;">
+    <img class="img-rounded" src="/public/src/login.png"/>
+    </div> 
+    <div class="col-sm-11" style="vertical-align: middle;">
     <h3>Please, login to enter!</h3>
+    </div> 
 </div>
 {% autoescape false %}
 {% if error %}
