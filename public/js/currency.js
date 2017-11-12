@@ -16,6 +16,7 @@ $(document).ready(function(){
 });
 
 
+
 function getData(){
     startLoadingAnimation();
     getAjax();  
@@ -67,7 +68,10 @@ function AddNew(id){
 					saveElement(dataForm) ;
 					event.preventDefault();						
                 });
-                    },
+                $("#btn_reset").on('click', function(){
+                    location.reload();
+                });    
+            },
             error: function(xhr, desc, err){
                         console.log(err);
                     }
@@ -83,11 +87,13 @@ function saveElement(dataForm){
 			data: dataForm,
 			success: function(response){
 				console.log(response);
-                                return false;	
-                            //location.reload();
+                              	
+                                location.reload();
 			},
 			error: function(jqXHR, textStatus, errorThrown ){
-				console.log(textStatus);
+                            $("#error_list").html(jqXHR.responseText);
+                            $("#alertbox").show();
+                            return false;
 			}
 		});	
 	

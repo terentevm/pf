@@ -23,7 +23,16 @@ class Model{
 
     public function __Construct()
     {
-        $this->pdo = Db::Instance();
+        $this->pdo = Db::getInstance();
+        self::$sql = '';
+        self::$mainTablePrefix = '';
+        self::$prefix = '';
+        self::$from = '';
+        self::$join = '';
+        self::$instance = NULL;
+        self::$where = [];
+        self::$control = [];
+        self::$param = [];
     }
 
 
@@ -115,7 +124,7 @@ class Model{
         $is_new = false;
 		
         foreach ($pk as $key){
-            if(!isset($properties[$key])){
+            if(empty($properties[$key])){
                  $is_new = true;
 				$this->set($key, $this->getGuide());    
             }
@@ -129,10 +138,11 @@ class Model{
         self::$instance = $this;
         
 		if ($is_new) {
-			self::$sql = self::insert(static::setTableName(), $DbColumnes);	
+			self::$sql = self::insert(static::setTableName(), $DbColumnes)->getSql();	
 		}
 		else {
-			self::$sql = self::update(static::setTableName(), $DbColumnes);	
+                  
+                    self::$sql = self::update(static::setTableName(), $DbColumnes)->where(['id', '=', $this->get('id')])->getSql();	
 		}
        
         if ($this->stmt === null){
@@ -186,7 +196,7 @@ class Model{
     
     public static function leftJoin($table, $fields, $conditions, $main_table_prefix, $table_prefix) {
         
-        self::$prefix = self::$prefix . ',' . self::addPrefixToColumnNames($table_prefix, $fields);
+        self::$prefix = self::$prefix . ',' . self::addPrefixToColumnNames($table_prefix, $fields, $table);
         
         $part = " LEFT JOIN " . $table . " AS " . $table_prefix . ' ON ';
         $partON = '';
@@ -213,7 +223,7 @@ class Model{
         return self::$instance;
     }
     
-	public static function Update($table, $fields =[]){
+	public static function update($table, $fields =[]){
        
         self::$prefix = 'UPDATE ' . $table . ' SET ' . self::CreatePart_On_Duplicate($fields);
         
@@ -233,7 +243,7 @@ class Model{
     
 
     
-    public static function Where($condition = []){
+    public static function where($condition = []){
         $pref = (self::$mainTablePrefix == '') ? '' : self::$mainTablePrefix . '.';
         self::$where[0] = ' WHERE ' . $pref . $condition[0] . $condition[1] . ':' . $condition[0] ;
         self::$param[$condition[0]] = $condition[2];
@@ -321,15 +331,14 @@ class Model{
     */
     public static function addPrefixToColumnNames($prefix, $column_names, $table_name ='') {
 
-        $table_prefix = ($table_name =='') ? '' : ' AS ' . $table_name . 
         $fields_arr = explode(',', $column_names);
 
         foreach ($fields_arr as &$col) {
-            $col = $prefix . '.' . trim($col);
-
             if(!$table_name == ''){
-                $col .= ' AS ' . $table_name . '_' . $col;   //for example: $col = "name", $table_name = "titles", result = AS titles_name
-            }
+                $col = trim($col) . ' AS ' . $table_name . '_' . $col;   //for example: $col = "name", $table_name = "titles", result = AS titles_name
+            } 
+            $col = $prefix . '.' . trim($col);
+ 
         }
 
         $column_names_pref = implode(',', $fields_arr);

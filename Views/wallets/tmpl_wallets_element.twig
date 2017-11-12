@@ -1,0 +1,72 @@
+{% extends isNotAjax ? "main.twig" : "" %}   
+{% block content %}
+<div class="page-header">
+    <h2>{{ form_header }}</h2>
+</div>
+
+<form class="form-horizontal" id="wallet_form" name ="wallet_form" method="post" action="/Wallets/SaveElement">
+<input name="csrf_token" type="hidden" value="{{ csrf_token }}"> 
+<input type="text" class="form-control" name="id" id="id" style="display: none;" value={{ id }}>
+    
+<div class="form-group">
+    
+    <label class="control-label col-sm-1" for="name">Name</label>    
+
+    <div class="col-sm-11">
+    <input class="form-control" type="text" id="name" name="name" value = "{{ name }}">   
+    </div>
+     
+    
+</div>
+
+<div class="form-group">
+
+    <label class="control-label col-sm-1" for="currency_id">Currency</label>    
+
+    <div class="col-sm-11">
+        <select class="form-control" id = "currency_id" name="currency_id">
+            {% for currency in currency_list%}
+                {% if currency.id == currency_id %}
+                    <option selected value="{{ currency.id }}" >{{ currency.short_name}} </option>
+                {% else %}
+                    <option value="{{ currency.id }}" >{{ currency.short_name}} </option>
+                {% endif %}
+            {% endfor%}
+        </select>
+    </div>
+</div>
+{% autoescape false %}
+<div class="form-group">
+<div class="col-sm-offset-1 col-sm-11">
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" id="is_creditcard" name="is_creditcard" {{ is_checked }} value = "1"> Is credit card
+        </label>
+      </div>
+    </div>   
+</div>
+{% endautoescape %}
+<div class="form-group">
+ 
+    <label class="control-label col-sm-1" for="credit_limit">Credit limit</label>    
+
+    <div class="col-sm-11">
+    <input class="form-control" type="number" step ="0.01" id="credit_limit" name="credit_limit" value = {{ credit_limit }}>   
+    </div>
+     
+    
+</div>
+    
+ <div class="form-group">
+   
+    <label class="control-label col-sm-1" for="grace_period">Grace period</label>    
+
+    <div class="col-sm-11">
+    <input class="form-control" type="number" id="grace_period" name="grace_period" value = {{ grace_period }}>   
+    </div>
+      
+</div>
+    {% include 'form_buttons_footer.twig' %}   
+</form>
+    
+{% endblock %}

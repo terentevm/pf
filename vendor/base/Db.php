@@ -2,7 +2,9 @@
 
 namespace Base;
 
-class Db{
+use Base\Singleton;
+
+class Db extends Singleton{
 
     protected $pdo;
     protected static  $instance;
@@ -18,14 +20,6 @@ class Db{
         $this->pdo = new \PDO($db['dsn'], $db['user'], $db['pass'], $options);
     }
 
-    public static function Instance()
-    {
-        if(self::$instance === null){
-            return new self;
-        }
-        
-        return self::$instance;
-    }
     
     public function prepare($sql){
         $stmt = $this->pdo->prepare($sql);

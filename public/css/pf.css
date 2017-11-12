@@ -4,6 +4,7 @@
 .border {
 list-style: none;
 padding: 0;
+height: 150px;
 }
 .border li {
 font-family: "Trebuchet MS", "Lucida Sans";

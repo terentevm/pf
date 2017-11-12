@@ -1,24 +1,33 @@
 <div class="page-header">
     <h2>{{ form_header }}</h2>
 </div>
-<form id="form_element" type="submit" submit="event.preventDefault(); saveElement();">
+<form class="form-horizontal" id="form_element" type="submit" submit="event.preventDefault(); saveElement();">
     <input type="text" class="form-control" name="id" id="id" style="display: none;" value={{ id }}>
     <div class="form-group code">
-        <label for="recipient-name" class="control-label">Code</label>
-        <input type="text" class="form-control" name="code" id="code" value={{ code }}>
+        <label for="recipient-name" class="control-label col-sm-1">Code</label>
+        <div class="col-sm-11">
+            <input type="text" class="form-control" name="code" id="code" value={{ code }}>
+        </div>
     </div>
     <div class="form-group">
-        <label for="text" class="control-label">Name:</label>
-        <input class="form-control" name = "name" id="name" value={{ name }}>
+        <label for="text" class="control-label col-sm-1">Name:</label>
+        <div class="col-sm-11">
+            <input class="form-control" name = "name" id="name" value= {{ name }}>
+        </div>
     </div>
     <div class="form-group">
-        <label for="text" class="control-label">Short name:</label>
-        <input class="form-control" name="short_name" id="short_name" value={{ short_name }}>
+        <label for="text" class="control-label col-sm-1">Short name:</label>
+        <div class="col-sm-11">
+            <input class="form-control" name="short_name" id="short_name" value={{ short_name }}>
+        </div>
     </div>
     
-    <div class="form-group">
-        <button type ="submit" class ="btn btn-primary" >Save</button>
-        <button type ="reset" class ="btn btn-warning">Cancel</button>
+    {% include 'form_buttons_footer.twig' %}  
+    <div id="alertbox" class="alert alert-warning alert-dismissible" role="alert" style="display: none">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <div id="error_list">
+        
+    </div>
     </div>
 </form>
     

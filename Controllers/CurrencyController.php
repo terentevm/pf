@@ -37,13 +37,13 @@ class CurrencyController extends Controller
         $this->view = 'currency_element';
 		
         if (isset($_POST['id'])){
-           $is_id = my_validator::uuid($_POST['id']);
+           /*$is_id = my_validator::uiid($_POST['id']);
 
             if(!$is_id){
                 header('HTTP/1.1 400 Bad Request');
                 header('Content-Type: application/text; charset=UTF-8');
                 die("Incorrect id format");
-            }
+            }*/
 			
             $dic_element = Currency::find()->where(['id', '=', $_POST['id']])->limit(1)->selectAll();
             
@@ -86,15 +86,24 @@ class CurrencyController extends Controller
         try{
             $validator->assert($currency);
         } catch (ValidationException $exception) {
-            $errors = $exception->findMessages([
-                'string' => '{{name}} must be a string',
-                'notEmpty' => '{{name}} must not be empty'
-            ]);
+
+            $errors = $exception->getMessages();
             
             header(http_response_code(500));
+            
+            $this->errors = $errors;
+            
+            $this->getErrors();
+            
+            if ($_SESSION[isAjax]){
+                echo $_SESSION['error'];
+                exit();
+            }
+            $this->vars[] = $inputData;
+            $this->GetView();
+            
         }
         
-        /*ntcnjdsdd*/
 	
         $success = $currency->save();
 		

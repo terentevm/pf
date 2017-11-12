@@ -34,8 +34,9 @@ class __TwigTemplate_50fa54fc237895cb22e52b050a004db9fb65cf7da0d791762f855f839d7
 </div>
 <form id =\"form\">
     <div class=\"form-group\">
+    <a href=\"/wallets/getelement\" class=\"btn btn-primary\" id =\"btn_wallet_new\">Add</a>
     <button class=\"btn btn-primary\" id=\"btn_curr_update\" onclick=\"getData(); return false;\">Update</button>
-    <button class=\"btn btn-primary\" id=\"btn_curr_new\" data-whatever=\"@mdo\" onclick=\"AddNew(); return false;\">Add</button>
+   
     </div>
     <div class=\"table-responsive\">
     <div class=\"row\"></div>
@@ -48,8 +49,8 @@ class __TwigTemplate_50fa54fc237895cb22e52b050a004db9fb65cf7da0d791762f855f839d7
       </tr>
       <tbody id=\"tbody\">
       ";
-        // line 23
-        $this->loadTemplate("tmpl_wallets_list_data.twig", "tmpl_wallets_list.twig", 23)->display($context);
+        // line 24
+        $this->loadTemplate("tmpl_wallets_list_data.twig", "tmpl_wallets_list.twig", 24)->display($context);
         echo "    
       </tbody>  
   </table>
@@ -72,7 +73,7 @@ class __TwigTemplate_50fa54fc237895cb22e52b050a004db9fb65cf7da0d791762f855f839d7
 
     public function getDebugInfo()
     {
-        return array (  52 => 23,  31 => 4,  28 => 3,  11 => 1,);
+        return array (  53 => 24,  31 => 4,  28 => 3,  11 => 1,);
     }
 
     public function getSourceContext()

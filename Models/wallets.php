@@ -16,7 +16,7 @@ use Base\Model;
  */
 class Wallets extends Model {
     
-    private $id = '';
+    private $id = null;
     private $name = '';
     private $user_id = '';
     private $is_creditcard = 0; 
@@ -34,8 +34,47 @@ class Wallets extends Model {
         'credit_limit' => 0
     ];
     
+    public function load($attributes = []){
+        
+        foreach ($attributes as $property => $value){
+            
+            $this->set($property, $value);   
+     
+        }
+        
+    }
+    
+    public function set($property, $value){
+ 
+        if (property_exists($this, $property)){
+            $this->$property = $value;   
+        }
+        
+    }
+    
+    public function get($property){
+ 
+        if (property_exists($this, $property)){
+            return $this->$property;   
+        } else{
+            return null;
+        }
+        
+    }
+    
+    public function getProperties(){
+        
+        return get_object_vars($this);
+        
+    }
     public static function setTableName(){
         return 'wallets';
+    }
+    
+    public function getDbColumnes(){
+        
+        return ['id', 'name', 'user_id', 'is_creditcard', 'currency_id', 'grace_period', 'credit_limit'];
+        
     }
     
     public static function getForeignKeys() {
