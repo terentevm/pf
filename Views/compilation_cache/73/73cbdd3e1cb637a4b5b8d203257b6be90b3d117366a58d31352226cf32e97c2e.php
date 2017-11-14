@@ -7,8 +7,6 @@ class __TwigTemplate_fc0722e93634bc8f6dde5b5ebde9948d1d73e20f58be3407b2b75dab935
     {
         parent::__construct($env);
 
-        // line 1
-        $this->parent = $this->loadTemplate("main.twig", "currency_list.twig", 1);
         $this->blocks = array(
             'content' => array($this, 'block_content'),
         );
@@ -16,12 +14,13 @@ class __TwigTemplate_fc0722e93634bc8f6dde5b5ebde9948d1d73e20f58be3407b2b75dab935
 
     protected function doGetParent(array $context)
     {
-        return "main.twig";
+        // line 1
+        return $this->loadTemplate(($context["layout"] ?? null), "currency_list.twig", 1);
     }
 
     protected function doDisplay(array $context, array $blocks = array())
     {
-        $this->parent->display($context, array_merge($this->blocks, $blocks));
+        $this->getParent($context)->display($context, array_merge($this->blocks, $blocks));
     }
 
     // line 3
@@ -69,7 +68,7 @@ class __TwigTemplate_fc0722e93634bc8f6dde5b5ebde9948d1d73e20f58be3407b2b75dab935
 
     public function getDebugInfo()
     {
-        return array (  31 => 4,  28 => 3,  11 => 1,);
+        return array (  30 => 4,  27 => 3,  18 => 1,);
     }
 
     public function getSourceContext()

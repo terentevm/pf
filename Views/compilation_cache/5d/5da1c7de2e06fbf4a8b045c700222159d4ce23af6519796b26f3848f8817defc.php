@@ -7,8 +7,6 @@ class __TwigTemplate_50fa54fc237895cb22e52b050a004db9fb65cf7da0d791762f855f839d7
     {
         parent::__construct($env);
 
-        // line 1
-        $this->parent = $this->loadTemplate("main.twig", "tmpl_wallets_list.twig", 1);
         $this->blocks = array(
             'content' => array($this, 'block_content'),
         );
@@ -16,45 +14,45 @@ class __TwigTemplate_50fa54fc237895cb22e52b050a004db9fb65cf7da0d791762f855f839d7
 
     protected function doGetParent(array $context)
     {
-        return "main.twig";
+        // line 1
+        return $this->loadTemplate(($context["layout"] ?? null), "tmpl_wallets_list.twig", 1);
     }
 
     protected function doDisplay(array $context, array $blocks = array())
     {
-        $this->parent->display($context, array_merge($this->blocks, $blocks));
+        $this->getParent($context)->display($context, array_merge($this->blocks, $blocks));
     }
 
     // line 3
     public function block_content($context, array $blocks = array())
     {
         // line 4
-        echo "    <div id=\"frame\">
-<div class=\"page-header\">
-    <h2>Wallets</h2>
-</div>
+        echo "<div id=\"frame\">
+
+    <h2 class=\"header thin\">Wallets</h2>
+
 <form id =\"form\">
     <div class=\"form-group\">
-    <a href=\"/wallets/getelement\" class=\"btn btn-primary\" id =\"btn_wallet_new\">Add</a>
-    <button class=\"btn btn-primary\" id=\"btn_curr_update\" onclick=\"getData(); return false;\">Update</button>
+    <a href=\"/wallets/getelement\" class=\"right btn-floating btn-large waves-effect waves-light red\" id =\"btn_wallet_new\"><i class=\"material-icons\">add</i></a>
+    <button class=\"right btn-floating btn-large waves-effect waves-light yellow\" id=\"btn_curr_update\" onclick=\"getData(); return false;\"><i class=\"material-icons\">sync</i></button>
    
     </div>
-    <div class=\"table-responsive\">
-    <div class=\"row\"></div>
-    <table class=\"table table-bordered table-hover\">
+    
+    <table class=\"bordered\">
       <tr class=\"spr_list_head\">
-          <th class=\"hidden\">id</th>
+          <th class=\"hide\">id</th>
           <th>Name</th>
           <th>Currency</th>
           <th class=\"visible-md visible-lg\">Is credit card</th>
       </tr>
       <tbody id=\"tbody\">
       ";
-        // line 24
-        $this->loadTemplate("tmpl_wallets_list_data.twig", "tmpl_wallets_list.twig", 24)->display($context);
+        // line 23
+        $this->loadTemplate("tmpl_wallets_list_data.twig", "tmpl_wallets_list.twig", 23)->display($context);
         echo "    
       </tbody>  
   </table>
-</div>
+
 </form> 
 </div>
 
@@ -73,7 +71,7 @@ class __TwigTemplate_50fa54fc237895cb22e52b050a004db9fb65cf7da0d791762f855f839d7
 
     public function getDebugInfo()
     {
-        return array (  53 => 24,  31 => 4,  28 => 3,  11 => 1,);
+        return array (  51 => 23,  30 => 4,  27 => 3,  18 => 1,);
     }
 
     public function getSourceContext()

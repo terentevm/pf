@@ -9,7 +9,7 @@ use Models\Wallets;
 use Models\Currency;
 class SiteController extends Controller{
 
-public $layout = 'main';
+    public $layout = 'material';
 
     public function actionIndex(){
         

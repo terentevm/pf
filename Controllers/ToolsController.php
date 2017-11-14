@@ -15,7 +15,7 @@ use Models\Tools;
  * @author terentyev.m
  */
 class ToolsController extends Controller {
-    public $layout = 'main';
+    public $layout = 'material';
     
     public function actionImport1c(){
         $this->GetView();

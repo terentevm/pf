@@ -7,8 +7,6 @@ class __TwigTemplate_53dead9b125f8bd2b75f8a56b063a95433fe36bb19b031b13e4436658a8
     {
         parent::__construct($env);
 
-        // line 1
-        $this->parent = $this->loadTemplate("main.twig", "settings.twig", 1);
         $this->blocks = array(
             'content' => array($this, 'block_content'),
         );
@@ -16,59 +14,123 @@ class __TwigTemplate_53dead9b125f8bd2b75f8a56b063a95433fe36bb19b031b13e4436658a8
 
     protected function doGetParent(array $context)
     {
-        return "main.twig";
+        // line 1
+        return $this->loadTemplate(($context["layout"] ?? null), "settings.twig", 1);
     }
 
     protected function doDisplay(array $context, array $blocks = array())
     {
-        $this->parent->display($context, array_merge($this->blocks, $blocks));
+        $this->getParent($context)->display($context, array_merge($this->blocks, $blocks));
     }
 
     // line 3
     public function block_content($context, array $blocks = array())
     {
         // line 4
-        echo "<div class=\"page-header\">
-    <h2>Settings</h2>
-</div>    
+        echo "
+    
+    <h3 class=\"header thin grey-text text-darken-4\"><i class=\" medium material-icons\">settings</i> Settings</h3>
+    
+    <section>
+      <h4 class=\"header thin grey-text text-darken-4\"><span>References</span></h4>   
+    </section>
+   
 
 <div class=\"row\">
-    <div class=\"col-lg-12 col-md-12 col-sm-12 col-xs-12\">
-        <h4><ins>Dictonaries</ins></h4>   
+    <div class=\"col s12 m6 l6 xl6\">
+     <div class=\"card  horizontal hoverable\">
+        <div class=\"card-image\">
+            <i class=\"material-icons medium\">queue</i>
+        </div>
+         <div class=\"card-stacked\">
+            <div class=\"card-action\"> 
+                <a href=\"/RefIncome/GetList\">Income items</a>
+            </div> 
+        </div> 
+     </div> 
+    </div>
+    
+    <div class=\"col s12 m6 l6 xl6\">
+     <div class=\"card horizontal hoverable\">
+        <div class=\"card-image\">
+            <i class=\"material-icons medium\">euro_symbol</i>
+        </div>
+         <div class=\"card-stacked\">
+            <div class=\"card-action\"> 
+                <a href=\"/Currency/GetList\">Currencies</a>
+            </div> 
+        </div> 
+     </div> 
     </div>
 </div>
 
 <div class=\"row\">
-    <div class=\"col-lg-6 col-md-6 col-sm-12 col-xs-12\">
-        <ul class=\"border\">
-            <li><a href=\"/Dictonaries/Income\">Income items</a></li>
-            <li><a href=\"/Dictonaries/Expenditure\">Expenditure items</a></li>
-            <li><a href=\"/Wallets/GetList\">Wallets</a></li>
-        </ul>
+    <div class=\"col s12 m6 l6 xl6\">
+     <div class=\"card horizontal hoverable\">
+        <div class=\"card-image\">
+            <i class=\"material-icons medium\">local_grocery_store</i>
+        </div>
+         <div class=\"card-stacked\">
+            <div class=\"card-action\"> 
+                <a href=\"/RefExpenditure/GetList\">Expenditure items</a>
+            </div> 
+        </div> 
+     </div> 
     </div>
-    <div class=\"col-lg-6 col-md-6 col-sm-12 col-xs-12\">
-        <ul class=\"border\">
-            <li><a href=\"/Currency/GetList\">Currencies</a></li>
-        </ul>   
-    </div>     
-</div>
-<div class=\"row\">
-    <div class=\"col-lg-12 col-md-12 col-sm-12 col-xs-12\">
-        <h4><ins>Tools</ins></h4>   
-    </div>
-</div>
-<div class=\"row\">
-    <div class=\"col-lg-6 col-md-6 col-sm-12 col-xs-12\">
-        <ul class=\"border\">
-            <li><a href=\"/tools/import1c\">Import from 1C:Money</a></li>
-            <li><a href=\"/tools/program_settings\">Program settings</a></li>
-           
-        </ul>
-    </div>
-    <div class=\"col-lg-6 col-md-6 col-sm-12 col-xs-12\">
+    
+    <div class=\"col s12 m6 l6 xl6\">
+     <div class=\"card horizontal hoverable\">
+        <div class=\"card-image\">
+            <i class=\"material-icons medium\">account_balance_wallet</i>
+        </div>
          
-    </div>     
-</div>    
+        <div class=\"card-stacked\">
+
+            <div class=\"card-action\">
+                <a href=\"/Wallets/GetList\">Wallets</a>
+            </div>
+        </div>
+         
+     </div> 
+    </div>
+</div>
+
+    <section>
+        <h4 class=\"header thin grey-text text-darken-4\"><span>Tools</span></h4>   
+    </section>
+
+    <div class=\"col s12 m12 l12 xl2\">
+        <div class=\"card horizontal hoverable\">
+            <div class=\"card-image\">
+                <i class=\"material-icons medium\">settings_applications</i>
+            </div>
+
+            <div class=\"card-stacked\">
+
+                <div class=\"card-action\">
+                    <a href=\"/tools/program_settings\">Program settings</a>
+                </div>
+            </div>
+
+        </div> 
+    </div>
+    
+    <div class=\"col s12 m12 l12 xl2\">
+        <div class=\"card horizontal hoverable\">
+            <div class=\"card-image\">
+                <i class=\"material-icons medium\">import_export</i>
+            </div>
+
+            <div class=\"card-stacked\">
+
+                <div class=\"card-action\">
+                    <a href=\"/tools/import1c\">Import from 1C:Money</a>
+                </div>
+            </div>
+
+        </div> 
+    </div>
+    
 ";
     }
 
@@ -84,7 +146,7 @@ class __TwigTemplate_53dead9b125f8bd2b75f8a56b063a95433fe36bb19b031b13e4436658a8
 
     public function getDebugInfo()
     {
-        return array (  31 => 4,  28 => 3,  11 => 1,);
+        return array (  30 => 4,  27 => 3,  18 => 1,);
     }
 
     public function getSourceContext()

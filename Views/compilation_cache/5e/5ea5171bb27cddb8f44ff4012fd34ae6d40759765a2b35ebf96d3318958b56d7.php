@@ -23,7 +23,7 @@ class __TwigTemplate_2f329a24334caf2b7d7285fe2706fb0ca8269225399f3cf60f4b0f703e2
             echo "    <tr name=\"tr_1\" id=\"tr_1\" data-href= \"/wallets/GetElement/?";
             echo twig_escape_filter($this->env, twig_urlencode_filter(array("id" => twig_get_attribute($this->env, $this->getSourceContext(), $context["element"], "id", array()))), "html", null, true);
             echo "\">
-          <td class=\"hidden\">";
+          <td class=\"hide\">";
             // line 3
             echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->getSourceContext(), $context["element"], "id", array()), "html", null, true);
             echo "</td>

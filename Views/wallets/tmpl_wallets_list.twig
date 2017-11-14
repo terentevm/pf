@@ -1,21 +1,20 @@
-{% extends "main.twig" %}
+{% extends layout %}
   
 {% block content %}
-    <div id="frame">
-<div class="page-header">
-    <h2>Wallets</h2>
-</div>
+<div id="frame">
+
+    <h2 class="header thin">Wallets</h2>
+
 <form id ="form">
     <div class="form-group">
-    <a href="/wallets/getelement" class="btn btn-primary" id ="btn_wallet_new">Add</a>
-    <button class="btn btn-primary" id="btn_curr_update" onclick="getData(); return false;">Update</button>
+    <a href="/wallets/getelement" class="right btn-floating btn-large waves-effect waves-light red" id ="btn_wallet_new"><i class="material-icons">add</i></a>
+    <button class="right btn-floating btn-large waves-effect waves-light yellow" id="btn_curr_update" onclick="getData(); return false;"><i class="material-icons">sync</i></button>
    
     </div>
-    <div class="table-responsive">
-    <div class="row"></div>
-    <table class="table table-bordered table-hover">
+    
+    <table class="bordered">
       <tr class="spr_list_head">
-          <th class="hidden">id</th>
+          <th class="hide">id</th>
           <th>Name</th>
           <th>Currency</th>
           <th class="visible-md visible-lg">Is credit card</th>
@@ -24,7 +23,7 @@
       {% include 'tmpl_wallets_list_data.twig' %}    
       </tbody>  
   </table>
-</div>
+
 </form> 
 </div>
 

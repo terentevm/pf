@@ -59,7 +59,8 @@ class View{
             }
         }
         
-
+        $render_param['layout'] = $this->layout . '.twig';
+        
         if(is_file($file_view)){
             //register view diectory as directory for look up templates twig.
 			$loader = new Twig_Loader_Filesystem( array(APP. '/Views/layouts', APP. '/Views/templates', dirname($file_view)));

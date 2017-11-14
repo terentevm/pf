@@ -5,7 +5,7 @@ $loader->addPsr4('Controllers\\', __DIR__ . '/Controllers/');
 $loader->addPsr4('Models\\', __DIR__ . '/Models');
 $loader->addPsr4('Views\\', __DIR__ . '/Views');
 $loader->setUseIncludePath(true);
-define('LAYOUT', 'main');
+define('LAYOUT', 'material');
 define('APP', dirname(__FILE__));
 
 $config = require(__DIR__ . '/vendor/base/config.php');

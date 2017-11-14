@@ -23,7 +23,12 @@
             <script src="{{ link }}"></script>
         {% endfor %}
     {% endblock %}  
+    <div class="container">
+        <nav class="light-green darken-2 hide-on-large-only">
+        <a id="mobile_menu_button" href="#" data-activates="slide-out" class="button-collapse  waves-effect waves-light light-green darken-2 top-nav full hide-on-large-only"><i class="material-icons">menu</i></a>
+        </nav>
 
+    </div>
   </head>
   <body style="height: 100%;">
     {% block script_body_begin %}
@@ -31,14 +36,15 @@
       <script src="{{ link }}"></script>
     {% endfor %}
     {% endblock %}
-    <div class="container"><a id="mobile_menu_button" href="#" data-activates="slide-out" class="button-collapse btn-floating btn-large waves-effect waves-light light-green darken-2 top-nav full hide-on-large-only"><i class="material-icons">menu</i></a></div>
+
     <ul id="slide-out" class="side-nav fixed light-green darken-2 hoverable">
-    
-        <div class="card #689f38 light-green darken-2">
+    <div><a href="#" class="button-close-panel hide-on-large-only"><i class="right material-icons">close</i></a></div>
+        <div class="card light-green darken-2">
 
         <div class="card-content">
-        <span class="card-title grey-text text-darken-4">Personal finance</span>
-      
+            <div><span class="card-title grey-text text-darken-4">Personal finance</span></div>
+            
+        
         </div>
 
     </div>
@@ -59,8 +65,7 @@
     
     <img id="loadImg" src="/public/src/ajax-loader.gif"/>
     <script>
-       $(".button-collapse").sideNav();
-       
+       $('.button-collapse').sideNav();
     </script>
   </body>
   
