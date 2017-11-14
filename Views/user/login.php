@@ -15,5 +15,16 @@
     $html = $template->render($render_param);
     
     unset($_SESSION['error']);    
+  //   ob_start();
     
     echo $html;
+    
+    /*$html_buf = ob_get_contents();
+    ob_end_clean();
+    
+    exit($html_buf);*/
+    
+    //$val2 = microtime();
+    
+    //$result = $val2 - VAL1;
+    //echo $result;

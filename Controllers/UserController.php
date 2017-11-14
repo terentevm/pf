@@ -19,7 +19,7 @@ use Respect\Validation\Exceptions\NestedValidationExceptionInterface;
  */
 class UserController extends Controller {
     
-    public $layout = 'main';
+    public $layout = 'material';
     
     public function actionLogin(){
         

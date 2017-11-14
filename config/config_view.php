@@ -21,8 +21,12 @@ $scripts = [
             'part' => 'body_end'
         ],
         
-        [
+       /* [
             'link' => '/public/bootstrap/js/bootstrap.min.js',
+            'part' => 'body_end'
+        ],*/
+        [
+            'link' => '/public/materialize/js/materialize.min.js',
             'part' => 'body_end'
         ],
         [

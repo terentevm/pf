@@ -9,4 +9,5 @@ define('LAYOUT', 'main');
 define('APP', dirname(__FILE__));
 
 $config = require(__DIR__ . '/vendor/base/config.php');
+
 (new Base\Application($config))->Run();

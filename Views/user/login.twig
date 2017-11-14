@@ -1,14 +1,7 @@
-{% extends "main.twig" %}
+{% extends "material.twig" %}
   
 {% block content %}
-<div class="page-header" style="vertical-align: middle;">
-    <div class="col-sm-1" style="vertical-align: middle;">
-    <img class="img-rounded" src="/public/src/login.png"/>
-    </div> 
-    <div class="col-sm-11" style="vertical-align: middle;">
-    <h3>Please, login to enter!</h3>
-    </div> 
-</div>
+
 {% autoescape false %}
 {% if error %}
            
@@ -17,8 +10,12 @@
 </div>
 {% endif %}
 {% endautoescape %}
-<form action='/user/login' method='post'>
-
+<div class="row">
+<div class="col s12 m12 l12 xl12 ">
+<div class="card login-wrapper">
+<div class="card-content hoverable">
+<form  action='/user/login' method='post'>
+ <span class="card-title grey-text text-darken-4">Please, login for enter!</span>
     <input name="csrf_token" type="hidden" value="{{ csrf_token }}"> 
    <div class="form-group">
     <label for="exampleInputEmail1">Email address</label>
@@ -29,7 +26,11 @@
     <input type="password" name="password" class="form-control" id="InputPassword1" placeholder="Password">
   </div>
 
-    <button type="submit" name="buttonregister" class="btn btn-primary">Login</button>
-    <a class="btn btn-primary active" href="/user/signup">Register new user</a>
+    <button type="submit" name="buttonregister" class="btn-floating btn-large waves-effect waves-light light-green darken-2"><i class="material-icons">send</i></button>
+    <a class="btn-floating btn-large waves-effect waves-light amber darken-1" href="/user/signup"><i class="material-icons right">add</i></a>
 </form>
+</div>
+</div>
+</div>
+</div>
 {% endblock %}
