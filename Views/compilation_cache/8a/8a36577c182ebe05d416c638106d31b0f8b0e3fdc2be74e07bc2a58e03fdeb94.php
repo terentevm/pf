@@ -69,8 +69,9 @@ class __TwigTemplate_90c0741de61ee493223e375f738affeade42ac8da7552ff8903732a9bc0
         // line 32
         echo "    ";
         echo "      
-    <button type=\"submit\" name=\"buttonregister\" class=\"btn-floating btn-large waves-effect waves-light light-green darken-2\"><i class=\"material-icons\">send</i></button>
-    <a class=\"btn-floating btn-large waves-effect waves-light amber darken-1\" href=\"/user/signup\"><i class=\"material-icons right\">add</i></a>
+    <button type=\"submit\" name=\"buttonregister\" class=\" btn waves-effect waves-light light-green darken-2\"><i class=\"material-icons left\">send</i>Login</button>
+    <a class=\" btn waves-effect waves-light amber darken-1\" href=\"/user/signup\"><i class=\"material-icons left\">add</i>Sign up</a>
+  
 </form>
 </div>
 </div>
@@ -96,6 +97,6 @@ class __TwigTemplate_90c0741de61ee493223e375f738affeade42ac8da7552ff8903732a9bc0
 
     public function getSourceContext()
     {
-        return new Twig_Source("", "login.twig", "C:\\OSPanel\\domains\\localhost\\pf\\Views\\user\\login.twig");
+        return new Twig_Source("", "login.twig", "C:\\Apache\\Apache24\\htdocs\\pf\\Views\\user\\login.twig");
     }
 }
