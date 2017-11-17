@@ -27,7 +27,9 @@
         <nav class="light-green darken-2 hide-on-large-only">
         <div class="nav-wrapper">
         <a id="mobile_menu_button" href="#" data-activates="slide-out" class="button-collapse  waves-effect waves-light light-green darken-2 top-nav full hide-on-large-only"><i class="material-icons">menu</i></a>
-        <a href="#" class="brand-logo right">PF</a>
+        <div class="brand-logo right" style="height: inherit; width: 64px;">
+        <object id="front-page-logo" type="image/svg+xml" data="/public/src/logo_var2.svg" style="height: inherit; width: 64px;">Your browser does not support SVG</object>
+        </div>
         </div>
         </nav>
 
@@ -42,11 +44,19 @@
 
     <ul id="slide-out" class="side-nav fixed light-green darken-2 hoverable">
     
-    <li></li>
+    <div class="card no-padding light-green darken-2">
+     <div class="card-image light-green darken-2">
+          <div>
+            <object id="front-page-logo" type="image/svg+xml" data="/public/src/title_panel.svg" style="height: 400; width: 200px;">Your browser does not support SVG</object>
+          </div>
+        </div>
+    </div>
+    <ul>
     <li><a href="/site/index">Home<i class="material-icons">home</i></a></li>        
     <li><a href="#">Transactions<i class="material-icons">event_note</i></a></li> 
     <li><a href="/site/settings">Settings<i class="material-icons">settings</i></a></li> 
     <li><a href="/user/logout">Exit<i class="material-icons">exit_to_app</i></a></li> 
+    </ul>
     </ul>
 
     <div class="container">

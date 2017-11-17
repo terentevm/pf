@@ -16,6 +16,7 @@ use Base\Model;
 class Itemsincome extends Model {
     
     public $table = 'dic_items_income';
+    use Base\TraitModelFunc;
     
     public $attributes = [
         'id' => '',

@@ -25,6 +25,8 @@ class Itemsexpenditure extends Model {
         'parent_id' => NULL
     ];
     
+    use Base\TraitModelFunc;
+
     public function GetHierarhicalList(){
         $tree = [];
         

@@ -14,33 +14,7 @@ class User extends Model{
     private $password;
     private $name;
     
-    public function load($attributes = []){
-        
-        foreach ($attributes as $property => $value){
-            
-            $this->set($property, $value);   
-     
-        }
-        
-    }
-    
-    public function set($property, $value){
- 
-        if (property_exists($this, $property)){
-            $this->$property = $value;   
-        }
-        
-    }
-    
-    public function get($property){
- 
-        if (property_exists($this, $property)){
-            return $this->$property;   
-        } else{
-            return null;
-        }
-        
-    }
+    use Base\TraitModelFunc;
     
     public function getProperties(){
         

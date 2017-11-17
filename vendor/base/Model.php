@@ -3,7 +3,6 @@
 namespace Base;
 
 use Base\Db;
-use Base\QueryBuilder;
 
 class Model{
     
@@ -35,6 +34,13 @@ class Model{
         self::$param = [];
     }
 
+    public function load($attributes = []) {
+        foreach ($attributes as $property => $value){
+            
+            $this->set($property, $value);   
+     
+        }
+    }
 
     public static function getGuide(){
         if (function_exists('com_create_guid') === true){
@@ -47,6 +53,41 @@ class Model{
         return vsprintf('%s%s-%s-%s-%s-%s%s%s', str_split(bin2hex($data), 4));    
     }
     
+    public function getObjectVars($use_mapping = false) {
+
+        $reflect = new ReflectionObject($this);
+		
+		$props = $reflect->getProperties(ReflectionProperty::IS_PRIVATE);
+		
+		$obj_val = [];
+        
+        if ($use_mapping) {
+            $mapping = $this->getMapping();
+        }
+        
+		foreach ($props as $prop) {
+            
+            $prop_value = $this->get($prop->name);
+
+            if ($use_mapping && is_array($mapping) && !empty($mapping)) {
+                
+                if (array_key_exists($prop->name, $mapping)) {
+                    $prop_name = $mapping[$prop->name] ; 
+                }
+                else{
+                    continue;
+                }
+                
+            }
+            else {
+                $prop_name = $prop->name;
+            }
+            $obj_val[$prop_name] = $prop_value;
+		}
+		
+		return $obj_val;
+    }
+
     public function find($column_names =''){
         $ClassName = get_called_class(); 
         $table = $ClassName::setTableName();
@@ -118,13 +159,13 @@ class Model{
     }
     
     public function Save(){
-        
+        $obj_as_array = $this->getObjectVars(true);
         $pk = $this->getPrimaryKeys();
-        $properties = $this->getProperties();
+
         $is_new = false;
 		
         foreach ($pk as $key){
-            if(empty($properties[$key])){
+            if(empty($obj_as_array[$key])){
                  $is_new = true;
 				$this->set($key, $this->getGuide());    
             }
@@ -134,7 +175,10 @@ class Model{
             $this->set('user_id', $_SESSION['user_id']);   
         }
         
-        $DbColumnes= $this->getDbColumnes();
+        
+
+        $DbColumnes = $this->getObjectVarsAsString($obj_as_array);
+
         self::$instance = $this;
         
 		if ($is_new) {
@@ -142,7 +186,7 @@ class Model{
 		}
 		else {
                   
-                    self::$sql = self::update(static::setTableName(), $DbColumnes)->where(['id', '=', $this->get('id')])->getSql();	
+            self::$sql = self::update(static::setTableName(), $DbColumnes)->where(['id', '=', $this->get('id')])->getSql();	
 		}
        
         if ($this->stmt === null){
@@ -150,20 +194,19 @@ class Model{
             $this->stmt = $this->pdo->prepare(self::$sql);
                 
         }
-        self::$param = [];
-        foreach ($DbColumnes as $column){
-
-            self::$param[$column] = $this->get($column);
- 
-        }
         
-        $success = $this->stmt->execute(self::$param);
+        $success = $this->stmt->execute($obj_as_array);
         
         return $success;
        
     }
     
-    
+    public function getObjectVarsAsString($obj_vars) {
+        $keys = array_keys($obj_vars);
+
+        return implode(',', $keys);
+        
+    }
     
     public function CreateCoulmns(){
         $columns = [];

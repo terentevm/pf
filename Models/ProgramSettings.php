@@ -15,14 +15,38 @@ use Base\Model;
  * @author terentyev.m
  */
 class ProgramSettings extends Model {
-    public $table = 'view_program_settings';
     
-    public $attributes = [
-        'user_id' => '',
-        'main_currency_id',
-        'main_currency_name',
-        'sys_currency_id',
-        'sys_currency_name',
-        'central_bank'
-    ];
+    private $user_id;
+    private $main_currency_id;
+    private $main_currency_name;
+    private $sys_currency_id;
+    private $sys_currency_name;
+    private $central_bank;
+
+    use Base\TraitModelFunc;
+
+    public static function setTableName() {
+        return 'ProgramSettings';
+    }
+
+    public static function getPrimaryKeys(){
+        return ['user_id'];
+    }
+
+    public static function getForeignKeys() {
+        return [
+		'user_id' => [
+			'key' => 'id',
+			'table' => 'users'
+            ],
+        'main_currency_id' => [
+            'key' => 'id',
+            'table' => 'dic_currency'
+            ],
+        'sys_currency_id' => [
+            'key' => 'id',
+            'table' => 'dic_currency'
+            ]
+                ];
+    }
 }

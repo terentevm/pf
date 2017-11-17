@@ -21,44 +21,9 @@ class Currency extends Model {
     private $short_name = '';
     private $user_id;
     
-    public function load($attributes = []){
-        
-        foreach ($attributes as $property => $value){
-            
-            $this->set($property, $value);   
-     
-        }
-        
-    }
+    use Base\TraitModelFunc;
     
-    public function set($property, $value){
- 
-        if (property_exists($this, $property)){
-            $this->$property = $value;   
-        }
-        
-    }
-    
-    public function get($property){
- 
-        if (property_exists($this, $property)){
-            return $this->$property;   
-        } else{
-            return null;
-        }
-        
-    }
-    
-    public function getProperties(){
-        
-        return get_object_vars($this);
-        
-    }
-    public function getDbColumnes(){
-        
-        return ['id', 'code', 'name', 'short_name', 'user_id'];
-        
-    }
+
     public static function setTableName(){
         return 'dic_currency';
     }

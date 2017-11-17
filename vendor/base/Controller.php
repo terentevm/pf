@@ -35,44 +35,6 @@ Class Controller{
         echo '<pre>' .print_r($arr,true).'</pre>';
     }
     
-    public function validate($data, $rules){
-        
-        foreach($rules as $rule => $fields){
-            if($rule == 'required'){
-                $this->ValidateRequired($data,$fields);    
-            }
-            if($rule == 'email'){
-               $this->ValidateEmail($data,$fields);  
-            }
-        }
-        
-        if(empty($this->errors)){
-            return TRUE;
-        }
-        
-        return FALSE;
-    }
-    
-    public function ValidateRequired($data,$fields){
-        foreach($fields as $field){
-            if(isset($data[$field]) && empty($data[$field])){
-                $this->errors[] = 'Field ' . $field . ' is empty!' ;  
-            }
-        }   
-    }
-    
-    public function ValidateEmail($data,$fields){
-       foreach($fields as $field){
-            if(isset($data[$field])){
-                $email_validate = filter_var($data[$field], FILTER_VALIDATE_EMAIL);
-                
-                if(!$email_validate){
-                   $this->errors[] = 'In field ' . $field . ' email is incorrect!' ; 
-                }
-            }
-        }  
-    } 
-    
     public function getErrors(){
         $errors = '<ul>';
         foreach($this->errors as $error){
