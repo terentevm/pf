@@ -8,6 +8,7 @@
 
 namespace Models;
 use Base\Model;
+use Base\TraitModelFunc;
 /**
  * Description of itemsexpenditure
  *
@@ -25,7 +26,7 @@ class Itemsexpenditure extends Model {
         'parent_id' => NULL
     ];
     
-    use Base\TraitModelFunc;
+    use TraitModelFunc;
 
     public function GetHierarhicalList(){
         $tree = [];

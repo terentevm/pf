@@ -8,7 +8,7 @@
 
 namespace Models;
 use Base\Model;
-
+use Base\TraitModelFunc;
 /**
  * Description of wallets
  *
@@ -24,7 +24,7 @@ class Wallets extends Model {
     private $grace_period = 0;
     private $credit_limit = 0;
     
-    use Base\TraitModelFunc;
+    use TraitModelFunc;
     
     public static function setTableName(){
         return 'wallets';

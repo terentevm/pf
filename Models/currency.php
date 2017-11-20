@@ -8,6 +8,7 @@
 
 namespace Models;
 use Base\Model;
+use Base\TraitModelFunc;
 /**
  * Description of Currency
  *
@@ -21,7 +22,7 @@ class Currency extends Model {
     private $short_name = '';
     private $user_id;
     
-    use Base\TraitModelFunc;
+    use TraitModelFunc;
     
 
     public static function setTableName(){

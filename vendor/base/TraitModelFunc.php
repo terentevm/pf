@@ -1,5 +1,6 @@
 <?php
 
+namespace Base;
 
 trait TraitModelFunc
 {

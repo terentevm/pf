@@ -9,6 +9,7 @@
 namespace Models;
 
 use Base\Model;
+use Base\TraitModelFunc;
 /**
  * Description of ProgramSettings
  *
@@ -23,7 +24,7 @@ class ProgramSettings extends Model {
     private $sys_currency_name;
     private $central_bank;
 
-    use Base\TraitModelFunc;
+    use TraitModelFunc;
 
     public static function setTableName() {
         return 'ProgramSettings';

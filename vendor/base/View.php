@@ -59,6 +59,8 @@ class View{
             }
         }
         
+        ob_start('ob_gzhandler' , 9);
+        
         $render_param['layout'] = $this->layout . '.twig';
         
         if(is_file($file_view)){

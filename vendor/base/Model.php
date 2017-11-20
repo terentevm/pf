@@ -55,9 +55,9 @@ class Model{
     
     public function getObjectVars($use_mapping = false) {
 
-        $reflect = new ReflectionObject($this);
+        $reflect = new \ReflectionObject($this);
 		
-		$props = $reflect->getProperties(ReflectionProperty::IS_PRIVATE);
+		$props = $reflect->getProperties(\ReflectionProperty::IS_PRIVATE);
 		
 		$obj_val = [];
         
@@ -159,15 +159,15 @@ class Model{
     }
     
     public function Save(){
-        $obj_as_array = $this->getObjectVars(true);
+        
         $pk = $this->getPrimaryKeys();
 
         $is_new = false;
 		
         foreach ($pk as $key){
-            if(empty($obj_as_array[$key])){
-                 $is_new = true;
-				$this->set($key, $this->getGuide());    
+            if(empty($this->get($key))){
+                $is_new = true;
+		$this->set($key, $this->getGuide());    
             }
         }
         
@@ -175,9 +175,9 @@ class Model{
             $this->set('user_id', $_SESSION['user_id']);   
         }
         
-        
+        $obj_as_array = $this->getObjectVars(true);
 
-        $DbColumnes = $this->getObjectVarsAsString($obj_as_array);
+        $DbColumnes = $this->getDbColumnes($obj_as_array);
 
         self::$instance = $this;
         
@@ -201,10 +201,10 @@ class Model{
        
     }
     
-    public function getObjectVarsAsString($obj_vars) {
+    public function getDbColumnes($obj_vars) {
         $keys = array_keys($obj_vars);
 
-        return implode(',', $keys);
+        return $keys;
         
     }
     

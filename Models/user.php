@@ -2,6 +2,7 @@
 
 namespace Models;
 use Base\Model;
+use Base\TraitModelFunc;
 /**
  * Description of user
  *
@@ -14,7 +15,7 @@ class User extends Model{
     private $password;
     private $name;
     
-    use Base\TraitModelFunc;
+    use TraitModelFunc;
     
     public function getProperties(){
         

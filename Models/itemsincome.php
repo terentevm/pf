@@ -8,6 +8,7 @@
 
 namespace Models;
 use Base\Model;
+use Base\TraitModelFunc;
 /**
  * Description of itemsincome
  *
@@ -16,7 +17,7 @@ use Base\Model;
 class Itemsincome extends Model {
     
     public $table = 'dic_items_income';
-    use Base\TraitModelFunc;
+    use TraitModelFunc;
     
     public $attributes = [
         'id' => '',
