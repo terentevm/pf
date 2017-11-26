@@ -22,28 +22,39 @@ class User extends Model{
         return get_object_vars($this);
         
     }
-    public function getDbColumnes(){
-        
-        return ['id', 'code', 'name', 'short_name', 'user_id'];
-        
-    }
+    
     public static function setTableName(){
         return 'users';
     }
     
     public function CheckUnique() {
-        $sql = "SELECT * FROM {$this->table} WHERE login = :login";
+        
+        $user = $this->getUser($this->login);
+        
+        if(empty($user)){
+            return TRUE;
+        }
+            
+        return FALSE;
+    }
+    
+    private function getUser(string $login) {
+        $db = $this->getDb();
+        $sql = "SELECT id, password, name FROM users WHERE login = :login LIMIT 1";
+        
         $param = [
-            ':login' =>$this->login
+            ':login' =>$login
             ];
         
-            $QueryResult = $this->pdo->Query($sql, $param);
-            
-            if(empty($QueryResult)){
-                return TRUE;
-            }
-            
-            return FALSE;
+        $success = $db->prepare($sql);
+        
+        if (!$success) {
+            die("System database error");
+        }
+        $db->execute($param);
+        $user = $db->fetchOne();
+        
+        return $user;
     }
     
     public function CreateNewUser(){
@@ -60,7 +71,9 @@ class User extends Model{
             ':name' => $name
         ];
         
-        $success = $this->pdo->Execute($sql, $param);
+        $db = $this->getDb();
+        $db->prepare($sql);
+        $success = $db->execute($param);
         
         return $success;
     }
@@ -69,45 +82,24 @@ class User extends Model{
         $login = $this->login;
         $inPass = $this->password;
         
-        $sql = "SELECT users.id, users.password FROM users WHERE users.login = :login";
-        $param = [':login' => $login];
+        $user = $this->getUser($login);
         
-        $QueryResult = $this->pdo->Query($sql, $param);
-        
-        if (empty($QueryResult)){
+        if (empty($user)){
             return ['success' => FALSE,'user_id' => ''];
         }
         
-        $data_auth = $QueryResult[0];
-        
-        if (password_verify($inPass, $data_auth['password'])){
-            $this->id = $data_auth['id'];
+        if (password_verify($inPass, $user['password'])){
+            $this->id = $user['id'];
             
-            return ['success' => TRUE,'user_id' => $data_auth['id']];
+            return ['success' => TRUE,'user_id' => $user['id']];
         }
         
         return ['success' => FALSE,'user_id' => ''];
     }
     
-    public function StartSession($options){
-        
-        $hash = crypt($this->password,$options['user_agent']);
-        $sql = "INSERT INTO sessions (id,user_id,useragent,time,hash) VALUES (:id,:user_id,:useragent,:time,:hash)";
-        
-        $param = [
-            ':id' => $this->GetGuide(),
-            ':user_id' => $this->id,
-            ':useragent' =>$options['user_agent'],
-            ':time' => date("Y-m-d H:i:s"),
-            ':hash' => $hash
-        ];
-        
-        $success = $this->pdo->Execute($sql, $param);
-        
-        if($success){
-            $_SESSION['user_id'] = $this->id;
-            setcookie('hash',$hash, time()+(60*60*24*30), '/');
-        }
+    public function StartSession(){
+
+        $_SESSION['user_id'] = $this->id;
     }
     
     public function Logout(){
@@ -115,10 +107,9 @@ class User extends Model{
             return;
         }
         
-        $sql = "DELETE FROM sessions WHERE sessions.user_id = :user_id";
-        $param =[':user_id' => $this->id];
         
-        $success = $this->pdo->Execute($sql, $param);
+        unset($_SESSION['user_id']);
+        unset($_SESSION['success']);
         
         return;
     }

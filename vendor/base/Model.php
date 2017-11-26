@@ -2,11 +2,10 @@
 
 namespace Base;
 
-use Base\Db;
+use base\database\AbstractDb;
 
 class Model{
     
-    protected $pdo;
     protected $stmt;
     protected $table;
     protected static $sql = '';
@@ -22,7 +21,7 @@ class Model{
 
     public function __Construct()
     {
-        $this->pdo = Db::getInstance();
+       
         self::$sql = '';
         self::$mainTablePrefix = '';
         self::$prefix = '';
@@ -32,6 +31,10 @@ class Model{
         self::$where = [];
         self::$control = [];
         self::$param = [];
+    }
+    
+    protected function getDb() {
+        return AbstractDb::init();
     }
 
     public function load($attributes = []) {
@@ -56,36 +59,33 @@ class Model{
     public function getObjectVars($use_mapping = false) {
 
         $reflect = new \ReflectionObject($this);
-		
-		$props = $reflect->getProperties(\ReflectionProperty::IS_PRIVATE);
-		
-		$obj_val = [];
-        
+
+        $props = $reflect->getProperties(\ReflectionProperty::IS_PRIVATE);
+
+        $obj_val = [];
+
         if ($use_mapping) {
             $mapping = $this->getMapping();
         }
-        
-		foreach ($props as $prop) {
-            
+
+        foreach ($props as $prop) {
+
             $prop_value = $this->get($prop->name);
 
             if ($use_mapping && is_array($mapping) && !empty($mapping)) {
-                
+
                 if (array_key_exists($prop->name, $mapping)) {
-                    $prop_name = $mapping[$prop->name] ; 
-                }
-                else{
+                    $prop_name = $mapping[$prop->name];
+                } else {
                     continue;
                 }
-                
-            }
-            else {
+            } else {
                 $prop_name = $prop->name;
             }
             $obj_val[$prop_name] = $prop_value;
-		}
-		
-		return $obj_val;
+        }
+
+        return $obj_val;
     }
 
     public function find($column_names =''){

@@ -60,9 +60,9 @@ class UserController extends Controller {
                 exit();   
             }
             
-            $user->StartSession(['user_agent' => $_SERVER['HTTP_USER_AGENT']]);
+            $user->StartSession();
             
-            $_SESSION['success'] = TRUE;
+            $_SESSION['success'] = true;
             header('Location: /site/index');
         }
         else{
@@ -74,11 +74,6 @@ class UserController extends Controller {
         $user = new User();
         $user->Load(['id' => $_SESSION['user_id']]);
         $user->Logout();
-        
-        unset($_SESSION['success']);
-        unset($_SESSION['user_id']);
-        
-        setcookie('hash','',time()-3600);
         
         session_destroy();
         header('Location: /user/login');

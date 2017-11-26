@@ -83,27 +83,8 @@ class Application extends Singleton{
     
     public function CheckSession(){
         
-        if(!isset($_COOKIE['hash'])){
-            return FALSE;
-        }
-        
         if(!isset($_SESSION['user_id'])){
             return FALSE;  
-        }
-        $pdo = Db::Instance();
-        
-        $sql = "SELECT user_id FROM sessions WHERE user_id = :user_id AND useragent = :useragent AND hash = :hash LIMIT 1";
-        
-        $param = [
-            'user_id' =>$_SESSION['user_id'],
-            ':useragent' => $_SERVER['HTTP_USER_AGENT'],
-            ':hash' => $_COOKIE['hash']
-        ];
-        
-        $result = $pdo->Query($sql, $param);
-        
-        if(empty($result)){
-            return FALSE;
         }
         
         return TRUE;

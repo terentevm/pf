@@ -42,4 +42,5 @@ class Currency extends Model {
         return ['id'];
     }
     
+    
 }
