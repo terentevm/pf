@@ -15,8 +15,47 @@ use Base\TraitModelFunc;
  * @author terentyev.m
  */
 class Currency extends Model {
-  
-    private $id;
+    function getId() {
+        return $this->id;
+    }
+
+    function getCode() {
+        return $this->code;
+    }
+
+    function getName() {
+        return $this->name;
+    }
+
+    function getShort_name() {
+        return $this->short_name;
+    }
+
+    function getUser_id() {
+        return $this->user_id;
+    }
+
+    function setId($id) {
+        $this->id = $id;
+    }
+
+    function setCode($code) {
+        $this->code = $code;
+    }
+
+    function setName($name) {
+        $this->name = $name;
+    }
+
+    function setShort_name($short_name) {
+        $this->short_name = $short_name;
+    }
+
+    function setUser_id($user_id) {
+        $this->user_id = $user_id;
+    }
+
+        private $id;
     private $code = '';
     private $name = '';
     private $short_name = '';
