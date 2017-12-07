@@ -1,8 +1,8 @@
 <?php
 
-namespace base\database;
+namespace tm\database;
 
-use base\database\DatabaseInterface;
+use tm\database\DatabaseInterface;
 
 abstract class AbstractDb implements DatabaseInterface
 {

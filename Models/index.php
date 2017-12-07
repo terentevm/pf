@@ -1,7 +1,7 @@
 <?php
 namespace Models;
 
-use Base\Model;
+use tm\Model;
 
 class Index extends Model{
     public $table = 'posts';

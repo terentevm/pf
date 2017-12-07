@@ -7,7 +7,7 @@
  */
 
 namespace Controllers;
-use Base\Controller;
+use tm\Controller;
 use Models\User;
 use Respect\Validation\Validator as v;
 use Respect\Validation\Exceptions\ValidationException;

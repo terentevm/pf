@@ -1,6 +1,6 @@
 <?php
 
-namespace Base;
+namespace tm;
 
 class Router extends Singleton{
     

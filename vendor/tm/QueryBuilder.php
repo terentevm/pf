@@ -6,9 +6,9 @@
  * and open the template in the editor.
  */
 
-namespace Base;
+namespace tm;
 
-use Base\Model;
+use tm\Model;
 /**
  * Description of QueryBuilder
  *

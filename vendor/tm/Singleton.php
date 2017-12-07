@@ -1,5 +1,5 @@
 <?php
-namespace Base;
+namespace tm;
 
 abstract class Singleton{
     // в $_aInstances будут хранится все

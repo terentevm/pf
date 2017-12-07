@@ -7,12 +7,12 @@
  */
 
 namespace Controllers;
-use Base\Controller;
+use tm\Controller;
 use Models\Wallets;
 use Models\Currency;
 use Models\Itemsincome;
 use Models\Itemsexpenditure;
-use Base\Validator;
+use tm\Validator;
 /**
  * Description of DictonariesController
  *

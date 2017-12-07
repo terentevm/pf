@@ -2,9 +2,9 @@
 
 namespace Controllers;
 
-use Base\Controller;
+use tm\Controller;
 use Models\Currency;
-use Base\Validator as my_validator;
+use tm\Validator as my_validator;
 use Respect\Validation\Validator as v;
 use Respect\Validation\Exceptions\ValidationException;
 

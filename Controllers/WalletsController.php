@@ -8,8 +8,8 @@
 
 namespace Controllers;
 
-use Base\Controller;
-use Base\Validator;
+use tm\Controller;
+use tm\Validator;
 use Models\Wallets;
 use Models\Currency;
 use Respect\Validation\Validator as v;

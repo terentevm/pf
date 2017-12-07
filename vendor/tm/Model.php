@@ -1,8 +1,8 @@
 <?php
 
-namespace Base;
+namespace tm;
 
-use base\database\AbstractDb;
+use tm\database\AbstractDb;
 
 class Model{
     

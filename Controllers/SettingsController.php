@@ -2,8 +2,8 @@
 
 namespace Controllers;
 
-use Base\Controller;
-use Base\Validator;
+use tm\Controller;
+use tm\Validator;
 use Models\ProgramSettings;
 use Models\Wallets;
 use Models\Currency;

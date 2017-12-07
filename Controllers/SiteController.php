@@ -2,7 +2,7 @@
 
 namespace Controllers;
 
-use Base\Controller;
+use tm\Controller;
 use Models\Index;
 use Models\User;
 use Models\Wallets;

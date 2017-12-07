@@ -6,9 +6,9 @@
  * and open the template in the editor.
  */
 
-namespace base\database;
+namespace tm\database;
 
-use base\database\AbstractDb;
+use tm\database\AbstractDb;
 /**
  * Description of MySql
  *

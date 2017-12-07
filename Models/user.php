@@ -1,8 +1,8 @@
 <?php
 
 namespace Models;
-use Base\Model;
-use Base\TraitModelFunc;
+use tm\Model;
+use tm\TraitModelFunc;
 /**
  * Description of user
  *

@@ -7,7 +7,7 @@
  */
 
 namespace Models;
-use Base\Model;
+use tm\Model;
 /**
  * Description of tools
  *

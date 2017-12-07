@@ -1,9 +1,9 @@
 <?php
 
-namespace Base;
-use Base\Controller;
+namespace tm;
+use tm\Controller;
 use Controllers\SiteController;
-use Base\Db;
+use tm\Db;
 
 class Application extends Singleton{
     public $config;
