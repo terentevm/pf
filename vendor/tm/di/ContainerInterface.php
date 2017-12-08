@@ -15,5 +15,5 @@ namespace tm\di;
 interface ContainerInterface {
     
     public function get($name);
-    public function has($name);
+    
 }

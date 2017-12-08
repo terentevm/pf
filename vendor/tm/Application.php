@@ -1,22 +1,35 @@
 <?php
 
 namespace tm;
+use tm\Base;
 use tm\Controller;
 use Controllers\SiteController;
 use tm\Db;
+use tm\Request;
 
-class Application extends Singleton{
+class Application extends Base{
+    
+    private static $instance; 
+
     public $config;
+
+
+    public static $request;
 
     public function __construct($config){
        
         session_start();
        // session_regenerate_id(1);
-     
+        
         $this->config = $config;
     }
     
     public function Run(){
+        
+        if (!isset(self::$request)) {
+            self::$request = new request();  
+        }
+        
         $Controller_params = [];
 
         $_SESSION['isAjax'] = $this->isAjax();
@@ -41,9 +54,9 @@ class Application extends Singleton{
                 'action' => $reqest['action']
             ];
         }
-        if(!$this->check_token($_POST)){
+       /* if(!$this->check_token($_POST)){
             die('token error');
-        }
+        }*/
         if (class_exists($Controller)){
             $Controller = New $Controller($Controller_params);
         }
@@ -81,6 +94,8 @@ class Application extends Singleton{
 
     }
     
+
+
     public function CheckSession(){
         
         if(!isset($_SESSION['user_id'])){
