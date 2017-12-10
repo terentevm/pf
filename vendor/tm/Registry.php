@@ -6,13 +6,13 @@ use tm\di\Container;
 class Registry
 {
     private static $instance;
-
+ 
     /**
      * @var Container instance of container class.
      */
-    private static $container = null;
+    public static $container = null;
     
-    public $app;
+    public static $app = null;
 
     private function __construct() {
         if (self::$container === null) {
@@ -32,7 +32,15 @@ class Registry
     }
 
     public function getApp($param) {
-
+        if (is_null(self::$app)) {
+            self::$app = self::CreateObject(\tm\Application::className(), $param);
+            return self::$app;
+        }
+        elseif (self::$app instanceof \tm\Application) {
+            return self::$app;
+        }
+        
+        throw \Exeption('Cannot initialize application');
     }
 
     /**
@@ -42,5 +50,7 @@ class Registry
      */
     public static function CreateObject($type, array $params = []) {
         $obj = self::$container->get($type, $params);
+        return $obj;
     }
+    
 }

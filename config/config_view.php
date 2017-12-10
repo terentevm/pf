@@ -43,6 +43,12 @@ $scripts = [
         'link' => '/public/js/currency.js',
         'part' => 'body_end'
         ]
-    ]
+    ],
+    'index' =>[
+        [
+        'link' => '/public/js/site.js',
+        'part' => 'body_end'
+        ]
+    ],
 ];
 

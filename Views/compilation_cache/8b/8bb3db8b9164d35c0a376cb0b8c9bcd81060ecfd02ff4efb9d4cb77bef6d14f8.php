@@ -33,6 +33,7 @@ class __TwigTemplate_7b25b15e85958015d4abb3e423181edfa8c342c97ea5d01f1667d29a7eb
         <div class=\"panel-heading\"><?= \$post['email'] ?></div>
         <div class=\"panel-body\">
             <h1>ВЫ ВОШЛИ</h1>
+            <button name =\"but1\" id=\"but1\">Тест перехода ajax</button>
         </div>
     </div>
 

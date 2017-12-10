@@ -4,6 +4,7 @@ namespace tm\di;
 
 use tm\di\ContainerInterface;
 use ReflectionClass;
+use tm\di\Instance;
 /**
  * Description of Container
  *
@@ -17,13 +18,44 @@ class Container implements ContainerInterface
     private $_reflections = [];
     
     /**
+     * @var array contains class names that must be as singletons
+     */
+    private $singletons = [];
+    
+     /**
+     * @var array cached objects - singletons indexed by class name;
+     */
+    private $object_store = [];
+    
+    /**
      * @var array cached dependencies indexed by class names.
      */
     private $_dependencies = [];
     
     public function get($class, $params = []) {
+        
+        if(is_string($class)) {
+            $class_name = $class;
+        } 
+        elseif ($class instanceof Instance) {
+            $class_name = $class->id === null ? '' : $class->id;
+        }
+       
+        
+        $class_is_singleton = $this->isSingleton($class_name);
+        
+        if ($class_is_singleton){
+            if (array_key_exists($class_name, $this->object_store)) {
+                return $this->object_store[$class_name];
+            }
+        }
+        
         $object = $this->build($class, $params);
-
+        
+        if ($class_is_singleton) {
+            $this->object_store[$class] = $object;   
+        }
+        
         return $object;
     }
 
@@ -90,7 +122,7 @@ class Container implements ContainerInterface
                 }
                 else {
                     $c = $param->getClass();
-                    $dependencies[] = $c === null ? null : $c->getName();
+                    $dependencies[] = Instance::of($c === null ? null : $c->getName());
                 }
 
                 
@@ -115,16 +147,38 @@ class Container implements ContainerInterface
     protected function resolveDependencies($dependencies, $reflection = null)
     {
         foreach ($dependencies as $index => $dependency) {
-                if ($dependency !== null) {
+            
+            if($dependency instanceof Instance) {
+                if ($dependency->id !== null) {
                     $dependencies[$index] = $this->get($dependency);
                 } elseif ($reflection !== null) {
                     $name = $reflection->getConstructor()->getParameters()[$index]->getName();
                     $class = $reflection->getName();
-                    throw new \Exeption("Missing required parameter \"$name\" when instantiating \"$class\".");
+                    throw new \Exception("Missing required parameter \"$name\" when instantiating \"$class\".");
+                                
                 }
+            }
         }
 
         return $dependencies;
     }
+    
+    /**
 
+     * function ckecks is class singleton or not
+     * @param string classname
+     * @return bool
+     */
+    private function isSingleton($classname) {
+        return in_array($classname, $this->singletons);
+    }
+    
+    public function registerSingletons() {
+        $this->singletons = [
+            'tm\Application',
+            'tm\Router',
+            'tm\Request',
+            'tm\auth\StandartAuth'
+        ];
+    }
 }

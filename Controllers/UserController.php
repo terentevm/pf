@@ -21,6 +21,9 @@ class UserController extends Controller {
     
     public $layout = 'material';
     
+    public static $defaultAction = 'actionLogin';
+
+
     public function actionLogin(){
         
         if(isset($_POST) && !empty($_POST)){

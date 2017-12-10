@@ -2,8 +2,12 @@
 
 namespace tm;
 
-Class Controller{
+use tm\Base;
 
+Class Controller extends Base{
+    
+    public static $default_controller = 'Site';
+    
     public $route = [];
     public $layout;
     public $view;
@@ -29,10 +33,6 @@ Class Controller{
 
     public function Set($vars){
         $this->vars = $vars;
-    }
-
-    public function debug($arr){
-        echo '<pre>' .print_r($arr,true).'</pre>';
     }
     
     public function getErrors(){
