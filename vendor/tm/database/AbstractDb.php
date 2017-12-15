@@ -66,6 +66,28 @@ abstract class AbstractDb implements DatabaseInterface
         return $options;
     }
     
+    public function query($sql, $param = []) {
+        
+        $success = $this->prepare($sql);
+
+        if ($success) {
+            $this->stmt->execute($param);
+            return $this->stmt->fetchAll($this->stmtFetchMode);
+        }
+        return [];
+    }
+
+    public function queryOne($sql, $param = []) {
+        $success = $this->prepare($sql);
+        
+        if ($success) {
+            $this->stmt->execute($param);
+            return $this->stmt->fetch($this->stmtFetchMode);
+        }
+        
+        return [];
+    }
+
     public function prepare(string $sql) : bool{
         try {
             $prepared = $this->pdo->prepare($sql);

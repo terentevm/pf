@@ -3,6 +3,7 @@
 namespace tm;
 
 use tm\database\AbstractDb;
+use tm\Mapper;
 
 class Model{
     
@@ -33,6 +34,10 @@ class Model{
         self::$param = [];
     }
     
+    public static function find() {
+        return Mapper::getMapper(get_called_class());
+    }
+
     protected function getDb() {
         return AbstractDb::init();
     }
@@ -88,13 +93,13 @@ class Model{
         return $obj_val;
     }
 
-    public function find($column_names =''){
+    /*public function find($column_names =''){
         $ClassName = get_called_class(); 
         $table = $ClassName::setTableName();
         self::$instance = new $ClassName();
         self::select($table, '', $column_names);
         return self::$instance ;
-    }
+    }*/
     /*
     */
     public static function findView($column_names, $f_fields = []) {

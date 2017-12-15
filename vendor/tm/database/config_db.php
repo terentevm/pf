@@ -2,7 +2,8 @@
 
 return [
     'db_driver' => 'sqllite',
-    'dsn' => 'sqlite:C:/OSPanel/domains/localhost/money_db/money.db',
+    //'dsn' => 'sqlite:C:/OSPanel/domains/localhost/money_db/money.db',
+    'dsn' => 'sqlite:C:/Apache/Apache24/htdocs/db/money.db',
     //'dsn' => 'mysql:host=localhost;dbname=money;charset=utf8',
     'user' => '',
     'pass' => '',

@@ -9,6 +9,7 @@
 namespace tm\database;
 
 use tm\database\AbstractDb;
+use tm\QueryBuilder;
 /**
  * Description of MySql
  *
@@ -38,5 +39,9 @@ class MySql extends AbstractDb
 	self::$instance = new self();
 	}
 	return self::$instance;
+    }
+
+    public function getQueryBuilder() {
+        return new QueryBuilder();
     }
 }

@@ -9,6 +9,7 @@
 namespace tm\database;
 
 use tm\database\AbstractDb;
+use tm\QueryBuilder;
 /**
  * Description of Sqllite
  *
@@ -41,5 +42,9 @@ class Sqlite extends AbstractDb
 	}
 	return self::$instance;
 
+    }
+
+    public function getQueryBuilder() {
+        return new QueryBuilder();
     }
 }
