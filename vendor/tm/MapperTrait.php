@@ -14,7 +14,7 @@ trait MapperTrait
    
     public $asArray = false;
 
-    public $params;
+    public $params = [];
 
     public function where(array $condition) {
         $this->where = $condition;

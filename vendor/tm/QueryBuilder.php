@@ -115,4 +115,21 @@ class QueryBuilder {
         return '';
         
     }
+    
+    /**
+     * transforms filters array to text condition
+     * @param string col_name  name of column wich is contained in filter array
+     * @param array filter array  this is values array
+     */
+    public static function createTextConditionFromArray($col_name, $filter_arr) {
+        
+        foreach ($filter_arr as &$arr) {
+            $arr = "'" . $arr . "'";
+        }
+        
+        $cond_text = "{$col_name} IN (" . implode(',', $filter_arr) . ")";
+        
+        return $cond_text;
+        
+    }
 }
