@@ -8,6 +8,7 @@
 
 namespace Controllers;
 use tm\Controller;
+use tm\Registry;
 use Models\User;
 use Respect\Validation\Validator as v;
 use Respect\Validation\Exceptions\ValidationException;
@@ -27,35 +28,17 @@ class UserController extends Controller {
     public function actionLogin(){
         
         if(isset($_POST) && !empty($_POST)){
-        
-            $formData = filter_input_array(
-                INPUT_POST,
-                [
-                    'login' => FILTER_SANITIZE_EMAIL,
-                    'password' => FILTER_DEFAULT
-                ],
-                true
-            );
-        
-            $validator = v::attribute('login', v::stringType()->notEmpty()->email())
-            ->attribute('password', v::stringType()->notEmpty());
-
-            $user = new User();
-            $user->Load($formData);
-
-            try{
-                $validator->assert($user);
-            } catch (ValidationException $exception) {
-                $this->errors = $exception->getMessages();
-                $this->getErrors();
-                $this->vars = $formData;
-                $this->GetView();
-                exit();
-            }
             
-            $AuthData = $user->CheckAuthData();
+            $login = Registry::$app->reqest->post('login');
+            $password = Registry::$app->reqest->post('password');
+            /**
+             * Here must be validations actions
+             */
+             
             
-            if(!$AuthData['success']){
+            $success = User::verify($login, $password);
+            
+            if(!$success){
                 $this->errors[] = 'Invalid login or password';
                 $this->getErrors();
                 $this->GetView();
