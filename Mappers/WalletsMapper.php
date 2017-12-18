@@ -28,4 +28,21 @@ class WalletsMapper extends Mapper
                 'table_col' => 'id'
             ];
     }
+
+    protected function create(\tm\Model $obj) {
+        
+    }
+
+    protected function delete(\tm\Model $obj) {
+        
+    }
+
+    protected function getPrimaryKey() {
+        return 'id';
+    }
+
+    protected function update(\tm\Model $obj) {
+        
+    }
+
 }

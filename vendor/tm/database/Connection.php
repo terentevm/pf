@@ -2,12 +2,20 @@
 
 namespace tm\database;
 
-use tm\database\DatabaseInterface;
+use tm\QueryBuilder;
 
-abstract class AbstractDb implements DatabaseInterface
+class Connection
 {
 
+    private $dsn;
+    private $user = null;
+    private $password = null;
+    
     protected $pdo = null;
+   
+    private static $instance = null;
+
+
     protected $stmt = null;
     protected $stmtFetchMode = \PDO::FETCH_ASSOC;
      
@@ -18,20 +26,25 @@ abstract class AbstractDb implements DatabaseInterface
     public static $countsql = 0;
     public static $queries = [];
     
-    public static function init() {
+    protected function __construct() {
         $db_config = require  dirname(__FILE__) . '/config_db.php';
         
-        self::$db_config = $db_config;
+        $this->dsn = $db_config['dsn'];
+        $this->user = $db_config['user'];
+        $this->password = $db_config['password'];
         
-        if ($db_config['db_driver'] == 'sqllite') {
-            return Sqlite::getInstance();
+        $connOptions = $this->getConnectionOptions($db_config);
+        
+        $this->pdo = new \PDO($this->dsn, $this->user, $this->password,$connOptions);
+    }
+
+    public static function init() {
+        
+        if (self::$instance === null) {
+            self::$instance = new self();
+            return self::$instance;
         }
-        elseif ($db_config['db_driver'] == 'mysql') {
-            return Mysql::getInstance();
-        }
-        else {
-            return null;
-        }
+        
     }
 
 
@@ -66,6 +79,11 @@ abstract class AbstractDb implements DatabaseInterface
         return $options;
     }
     
+    public function getQueryBuilder() {
+        return new QueryBuilder();
+    }
+
+
     public function query($sql, $param = []) {
         
         $success = $this->prepare($sql);

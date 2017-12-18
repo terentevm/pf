@@ -3,42 +3,61 @@
 namespace tm;
 
 use tm\Base;
+use tm\Model;
 use tm\MapperTrait;
 use tm\Registry;
-use tm\database\AbstractDb;
+use tm\database\Connection;
 
-class Mapper extends Base
+abstract class Mapper extends Base
 {
     use MapperTrait;
+    
+    protected $db = null;
+    
+    protected static $mapperStorage = [];
+    
+    public function __construct() {
+        if ($this->db === null) {
+           $this->db = Connection::init(); 
+        }
+    } 
+
 
     public static function getMapper($type) {
 
         $type = preg_replace( '|^.*\\\|', "", $type );
         $mapper = "\\mappers\\{$type}Mapper";
         if ( class_exists( $mapper ) ) {
-            return new $mapper();
+            
+            //check if mapper object has been already created - return from storage
+            
+            if (array_key_exists($mapper, self::$mapperStorage)) {
+                return self::$mapperStorage[$mapper];
+            }
+            
+            $mapperInstance = new $mapper();
+            self::$mapperStorage[$mapper] = $mapperInstance;
+            return $mapperInstance;
         }
         throw new \Exception( "Unknown: $mapper" );
     }
 
     public function all() {
 
-        $db = AbstractDb::init();
-        list($sql, $params) = $db->getQueryBuilder()->build($this);
+        list($sql, $params) = $this->db->getQueryBuilder()->build($this);
 
-        $rows = $db->query($sql, $params);
+        $rows = $this->db->query($sql, $params);
         
-       $result_data = $this->processRelations($rows);
+        $result_data = $this->processRelations($rows);
         
         return $result_data ;
     }
 
     public function one() {
-        $db = AbstractDb::init();
         
-        list($sql, $params) = $db->getQueryBuilder()->build($this);
+        list($sql, $params) = $this->db->getQueryBuilder()->build($this);
 
-        $query_result = $db->queryOne($sql, $params);
+        $query_result = $this->db->queryOne($sql, $params);
 
         return $query_result;
     }
@@ -120,4 +139,24 @@ class Mapper extends Base
         
         return $primary_arr;
     }
+    
+    public function save(Model $obj) {
+        $pk_name = $this->getPrimaryKey();
+        
+        $pk_val = $obj->$pk_name;
+        
+        if (is_null($pk_val) || empty($pk_val)) {
+            $success = $this->create($obj);
+        }
+        else {
+            $success = $this->update($obj);
+        }
+        
+        return $success;
+    }
+    
+    abstract protected function create(Model $obj);
+    abstract protected function update(Model $obj);
+    abstract protected function delete(Model $obj);
+    abstract protected function getPrimaryKey();
 }

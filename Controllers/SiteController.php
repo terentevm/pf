@@ -29,7 +29,9 @@ class SiteController extends Controller{
         
         $user = User::find()->where(['login = :login'])->setParams(['login' => 'mick911@mail.ru'])->limit(1)->one();
         
-        $obj = Wallets::find()->with(['Currency'])->where(['user_id = :user_id'])->setParams(['user_id' => $user['id']])->all();
+        $user = User::find()->where(['login = :login'])->setParams(['login' => 'mick9131@mail.ru'])->limit(1)->one();
+        
+        //$obj = Wallets::find()->with(['Currency'])->where(['user_id = :user_id'])->setParams(['user_id' => $user['id']])->all();
         
         $this->debug($obj);
 
