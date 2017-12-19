@@ -13,17 +13,21 @@ abstract class Mapper extends Base
     use MapperTrait;
     
     protected $db = null;
-    
+    protected $modelClassName;
     protected static $mapperStorage = [];
     
-    public function __construct() {
+    public function __construct($modelClassName) {
         if ($this->db === null) {
            $this->db = Connection::init(); 
         }
+
+        $this->modelClassName = $modelClassName;
     } 
 
 
     public static function getMapper($type) {
+
+        $modelClassName = $type;
 
         $type = preg_replace( '|^.*\\\|', "", $type );
         $mapper = "\\mappers\\{$type}Mapper";
@@ -35,10 +39,11 @@ abstract class Mapper extends Base
                 return self::$mapperStorage[$mapper];
             }
             
-            $mapperInstance = new $mapper();
+            $mapperInstance = new $mapper($modelClassName);
             self::$mapperStorage[$mapper] = $mapperInstance;
             return $mapperInstance;
         }
+        
         throw new \Exception( "Unknown: $mapper" );
     }
 
@@ -59,7 +64,13 @@ abstract class Mapper extends Base
 
         $query_result = $this->db->queryOne($sql, $params);
 
-        return $query_result;
+        if ($this->asArray) {
+            return $query_result;
+        }
+
+        $model = $this->dbRecordToModel($query_result);
+
+        return $model;
     }
 
     public function processRelations(&$data) {
@@ -140,6 +151,23 @@ abstract class Mapper extends Base
         return $primary_arr;
     }
     
+    public function performToModels(array $rows) {
+
+        $models = [];
+
+        foreach ($rows as $row) {
+            $models[] = $this->dbRecordToModel($row);
+        }
+
+        return $models;
+    }
+
+    public function dbRecordToModel($record) {
+        $model = Registry::CreateObject($this->modelClassName);
+        $model->load($record) ;
+        return $model;
+    }
+
     public function save(Model $obj) {
         $pk_name = $this->getPrimaryKey();
         

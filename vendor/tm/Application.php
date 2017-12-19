@@ -17,21 +17,27 @@ class Application extends Base{
     public $config;
 
 
-    public static $request;
+    public $request;
 
     public function __construct($config){
        
         session_start();
         
         $this->config = $config;
+
+        define('LANGUAGE', $this->config['lang']);
     }
     
     public function run(){
 
         if (!isset(self::$request)) {
-            self::$request = Registry::CreateObject(Request::className());  
+            $this->request = Registry::CreateObject(Request::className());  
         }
         
+        if (isset($this->config['use_csrf_token']) && $this->config['use_csrf_token']) {
+            $_SESSION['csrf_token'] = md5($this->getGuide());
+        }
+
         $router = Registry::CreateObject(Router::className(), [1 => $this->config]);
         
         $route = $router->getRoute(); 

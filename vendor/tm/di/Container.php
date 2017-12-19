@@ -79,7 +79,7 @@ class Container implements ContainerInterface
 
         $dependencies = $this->resolveDependencies($dependencies, $reflection);
         if (!$reflection->isInstantiable()) {
-            throw new \Exeption($reflection->name);
+            throw new \Exception($reflection->name);
         }
         if (empty($config)) {
             return $reflection->newInstanceArgs($dependencies);

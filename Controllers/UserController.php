@@ -8,7 +8,7 @@
 
 namespace Controllers;
 use tm\Controller;
-use tm\Registry;
+use tm\Registry as Reg;
 use Models\User;
 use Respect\Validation\Validator as v;
 use Respect\Validation\Exceptions\ValidationException;
@@ -27,10 +27,12 @@ class UserController extends Controller {
 
     public function actionLogin(){
         
-        if(isset($_POST) && !empty($_POST)){
+        $post = Reg::$app->request->post();
+
+        if(!empty($post)){
             
-            $login = Registry::$app->reqest->post('login');
-            $password = Registry::$app->reqest->post('password');
+            $login = $post['login'];
+            $password = $post['password'];
             /**
              * Here must be validations actions
              */
@@ -66,8 +68,9 @@ class UserController extends Controller {
     }
     
     public function actionSignup(){
-        
-        if(isset($_POST) && !empty($_POST)){
+        $post = Reg::$app->request->post();
+
+        if(!empty($post)){
         
             $formData = filter_input_array(
                 INPUT_POST,
@@ -83,7 +86,8 @@ class UserController extends Controller {
             ->attribute('password', v::stringType()->notEmpty());
 
             $user = new User();
-            $user->Load($formData);
+            $user->load($formData);
+            $user->hashPassword();
 
             try{
                 $validator->assert($user);
@@ -108,9 +112,12 @@ class UserController extends Controller {
                 exit();
                 
             }
-    
+            
             //Create new user and redirect to login page
-           if(!$user->CreateNewUser()){
+           
+            $success = $user->save();
+
+            if(!$success){
                 $this->errors[] = 'Error, please try again!';
                 $this->getErrors();
                 $this->GetView();

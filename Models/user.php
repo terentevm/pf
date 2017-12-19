@@ -14,10 +14,10 @@ class User extends Model{
     private $password;
     private $name;
     
-    public function __construct($login, $password, $name) {
+    public function __construct($id = null, $login = '', $password = '', $name = '') {
  
         $this->login = $login;
-        $this->password = $password; //password_hash($password, PASSWORD_DEFAULT);
+        $this->password = $password; 
         $this->name = $name;
     }
     
@@ -54,16 +54,19 @@ class User extends Model{
         $this->name = $name;
     }
     
-    public static function checkUnique($login) {
-        $db_rec = static::find()->where(['login: login'])->setParams(['login' => $login])->limit(1)->one();
+    public function checkUnique() {
+        $db_rec = static::find()->where(['login: login'])->asArray()->setParams(['login' => $this->login])->limit(1)->one();
         
         //if record with this login exist in database return false
         return empty($db_rec) ? true : false;
     }
     
+    public function hashPassword() {
+        $this->password = password_hash($this->password, PASSWORD_DEFAULT);
+    }
     
     public static function verify($login, $password) {
-       $db_rec = static::find()->where(['login: login'])->setParams(['login' => $login])->limit(1)->one();
+       $db_rec = static::find()->asArray()->where(['login: login'])->setParams(['login' => $login])->limit(1)->one();
        
        if (empty($db_rec)) {
            return false;

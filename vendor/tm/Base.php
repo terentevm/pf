@@ -30,6 +30,16 @@ abstract class Base
             return $this->$getter();
         }
         
-        throw new Exception('Getting unknown property: ' . get_class($this) . '::' . $name);
+        throw new \Exception('Getting unknown property: ' . get_class($this) . '::' . $name);
+    }
+
+    public function __set($name, $value) {
+        $setter = 'set' . $name;
+        
+        if (method_exists($this, $setter)) {
+            return $this->$setter($value);
+        }
+        
+        throw new \Exception('Setting unknown property, or property is read only: ' . get_class($this) . '::' . $name);
     }
 }

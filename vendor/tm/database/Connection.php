@@ -30,8 +30,8 @@ class Connection
         $db_config = require  dirname(__FILE__) . '/config_db.php';
         
         $this->dsn = $db_config['dsn'];
-        $this->user = $db_config['user'];
-        $this->password = $db_config['password'];
+       // $this->user = $db_config['user'];
+        //$this->password = $db_config['password'];
         
         $connOptions = $this->getConnectionOptions($db_config);
         
@@ -106,7 +106,7 @@ class Connection
         return [];
     }
 
-    public function prepare(string $sql) : bool{
+    public function prepare(string $sql) {
         try {
             $prepared = $this->pdo->prepare($sql);
             
@@ -121,7 +121,7 @@ class Connection
        
         if ($prepared instanceof \PDOStatement) {
             $this->stmt = $prepared; 
-            return true;
+            return $prepared;
         }
         
        return false; 

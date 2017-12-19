@@ -12,10 +12,10 @@ class UserMapper extends Mapper
     private $update_stmt = null;
     private $delete_stmt = null;
     
-    const SQL_CREATE = "INSERT INTO users (id, login, password, name) VALUES (:id, :login, :password, :name)";
+    private  $sql_create = "INSERT INTO users (id, login, password, name) VALUES (:id, :login, :password, :name)";
 
-    public function __construct() {
-        parent::__construct();
+    public function __construct($modelClassName) {
+        parent::__construct($modelClassName);
         
         
     }
@@ -32,10 +32,10 @@ class UserMapper extends Mapper
     protected function create(Model $obj) {
        
         if ($this->create_stmt === null) {
-            $this->create_stmt = $this->db->prepare(SQL_CREATE);
+            $this->create_stmt = $this->db->prepare($this->sql_create);
         }
         
-        $db_vars = mapModelToDb($obj);
+        $db_vars = $this->mapModelToDb($obj);
         
         $success = $this->create_stmt->execute($db_vars);
         
@@ -52,7 +52,7 @@ class UserMapper extends Mapper
     
     protected function mapModelToDb(Model $obj) {
         $db_arr = [
-            'id' => $obj.geId(),
+            'id' => $obj->getId(),
             'login' => $obj->getLogin(),
             'password' => $obj->getPassword(),
             'name' => $obj->getName()
