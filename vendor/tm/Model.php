@@ -18,6 +18,11 @@ abstract class Model extends Base{
         return  $success ; 
     }
 
+    public function delete() {
+        $success = Mapper::getMapper(get_called_class())->delete();
+        return  $success ;
+    }
+
     public function load(array $attributes) {
         
         foreach ($attributes as $attrName => $attrValue) {

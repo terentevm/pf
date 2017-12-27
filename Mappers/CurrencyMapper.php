@@ -10,18 +10,25 @@ use tm\Mapper;
  */
 class CurrencyMapper extends Mapper
 {
-    public static $db_columnes = ['id','code', 'short_name', 'name'];
-    
-    public static function setTable() {
+
+    public static $db_columnes = ['id','code', 'short_name', 'name', 'user_id'];
+
+    public static function setTable() { 
         return 'dic_currency';
     }
 
-    protected function create(\tm\Model $obj) {
-        
-    }
-
     protected function delete(\tm\Model $obj) {
+        if ($this->delete_stmt === null) {
+            $this->where = ['id = :id'];
+
+            $sql = $this->db->getQueryBuilder()->buildDelete($this);
+            $this->delete_stmt = $this->db->prepare($sql);
+        }
         
+        $param = $this->mapModelToDb($obj);
+        $success = $this->create_stmt->execute($param);
+
+        return $success; 
     }
 
     protected function getPrimaryKey() {
@@ -29,7 +36,32 @@ class CurrencyMapper extends Mapper
     }
 
     protected function update(\tm\Model $obj) {
+        if ($this->update_stmt === null) {
+            $this->where = ['id = :id'];
+
+            $sql = $this->db->getQueryBuilder()->buildUpdate($this);
+            $this->update_stmt = $this->db->prepare($sql);
+        }
         
+        $param = $this->mapModelToDb($obj);
+        $success = $this->create_stmt->execute($param);
+
+        return $success;      
     }
 
+    protected function mapModelToDb(Model $obj) {
+        $db_arr = [
+            'id' => $obj->getId(),
+            'code' => $obj->getCode(),
+            'name' => $obj->getName(),
+            'short_name' => $obj->getShort_name(),
+            'user_id' => $obj->getUser_id()
+        ];
+        
+        if (!isset($db_arr['id'])){
+            $db_arr['id'] = $this->getGuide();
+        }
+        
+        return $db_arr;
+    }
 }

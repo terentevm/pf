@@ -16,6 +16,10 @@ abstract class Mapper extends Base
     protected $modelClassName;
     protected static $mapperStorage = [];
     
+    private $create_stmt = null;
+    private $update_stmt = null;
+    private $delete_stmt = null;
+
     public function __construct($modelClassName) {
         if ($this->db === null) {
            $this->db = Connection::init(); 
@@ -183,8 +187,22 @@ abstract class Mapper extends Base
         return $success;
     }
     
-    abstract protected function create(Model $obj);
+    protected function create(Model $obj) {
+       
+        if ($this->create_stmt === null) {
+            $sql = $this->db->getQueryBuilder()->buildInsert($this);
+            $this->create_stmt = $this->db->prepare($sql);
+        }
+        
+        $param = $this->mapModelToDb($obj);
+        
+        $success = $this->create_stmt->execute($param);
+
+    }
+    
     abstract protected function update(Model $obj);
-    abstract protected function delete(Model $obj);
+
+    abstract public function delete(Model $obj);
+
     abstract protected function getPrimaryKey();
 }

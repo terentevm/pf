@@ -47,6 +47,31 @@ class QueryBuilder {
         return 'SELECT ' . $fields;
     }
 
+    public function buildInsert(Mapper $mapperInstance) {
+        
+        $fields = '(' . implode(',' ,$mapperInstance::$db_columnes) . ')';
+        $params = '(' . $this->performColumnesToParams($mapperInstance::$db_columnes) . ')';
+        
+        $sql = 'INSERT INTO ' . $mapperInstance::setTable() . ' ' . $fields . ' VALUES ' . $params;
+
+        return $sql;
+    }
+
+    public function buildUpdate(Mapper $mapperInstance) {
+        $fields = '(' . implode(',' ,$mapperInstance::$db_columnes) . ')';
+        $params = '(' . $this->performColumnesToParams($mapperInstance::$db_columnes) . ')';
+        $sql = 'UPDATE ' . $mapperInstance::setTable() . 'SET ' . $fields . ' VALUES ' . $params . $this->buildWhere();
+
+        return $sql;
+    }
+
+    public function buildDelete(Mapper $mapperInstance) {
+    
+        $sql = 'DELETE * FROM ' . $mapperInstance::setTable() . $this->buildWhere();
+
+        return $sql;
+    }
+
     public function buildFrom() {
         if (!method_exists($this->mapper, 'setTable')) {
             $className = get_class($this->mapper);
@@ -131,5 +156,14 @@ class QueryBuilder {
         
         return $cond_text;
         
+    }
+
+    protected function performColumnesToParams($columnes) {
+        
+        foreach ($columnes as &$col) {
+            $col = ':' . $col;
+        }
+
+        return implode(',' ,$columnes);
     }
 }

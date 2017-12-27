@@ -18,31 +18,21 @@ class Wallets extends Model {
     
     private $id = null;
     private $name = '';
-    private $user_id = '';
+    private $currency = null; 
     private $is_creditcard = 0; 
-    private $currency_id = '';
+    
     private $grace_period = 0;
     private $credit_limit = 0;
+    private $user_id = '';
     
-    use TraitModelFunc;
-    
-    public static function setTableName(){
-        return 'wallets';
+    public function __construct($id = '', $name = '', Model $currency, $is_creditcard = 0, $grace_period = 0,$credit_limit = 0, $user_id) {
+        $this->id = $id;
+        $this->name = $name;
+        $this->currency = $currency;
+        $this->is_creditcard = $is_creditcard;
+        $this->grace_period = $grace_period;
+        $this->credit_limit = $credit_limit;
+        $this->user_id = $user_id;
     }
     
-    public static function getForeignKeys() {
-        return [
-            'currency_id' => [
-                'key' => 'id',
-                'table' => 'dic_currency'
-            ],
-            'user_id' => [
-                'key' => 'id',
-                'table' => 'users'
-            ],
-        ];
-    }
-    public static function getPrimaryKeys(){
-        return ['id'];
-    }
 }

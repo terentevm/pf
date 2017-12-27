@@ -8,16 +8,9 @@ class UserMapper extends Mapper
 {
     public static $db_columnes = ['id', 'login', 'password','name'];
     
-    private $create_stmt = null;
-    private $update_stmt = null;
-    private $delete_stmt = null;
-    
-    private  $sql_create = "INSERT INTO users (id, login, password, name) VALUES (:id, :login, :password, :name)";
-
     public function __construct($modelClassName) {
         parent::__construct($modelClassName);
-        
-        
+               
     }
 
 
@@ -29,25 +22,34 @@ class UserMapper extends Mapper
         return 'id';
     }
     
-    protected function create(Model $obj) {
-       
-        if ($this->create_stmt === null) {
-            $this->create_stmt = $this->db->prepare($this->sql_create);
+    
+    protected function update(Model $obj) {
+    
+        if ($this->update_stmt === null) {
+            $this->where = ['id = :id'];
+
+            $sql = $this->db->getQueryBuilder()->buildUpdate($this);
+            $this->update_stmt = $this->db->prepare($sql);
         }
         
-        $db_vars = $this->mapModelToDb($obj);
-        
-        $success = $this->create_stmt->execute($db_vars);
-        
+        $param = $this->mapModelToDb($obj);
+        $success = $this->create_stmt->execute($param);
+
         return $success;
     }
     
-    protected function update(Model $obj) {
-            
-    }
-    
-    protected function delete(Model $obj) {
-            
+    public function delete(Model $obj) {
+        if ($this->delete_stmt === null) {
+            $this->where = ['id = :id'];
+
+            $sql = $this->db->getQueryBuilder()->buildDelete($this);
+            $this->delete_stmt = $this->db->prepare($sql);
+        }
+        
+        $param = $this->mapModelToDb($obj);
+        $success = $this->create_stmt->execute($param);
+
+        return $success;      
     }
     
     protected function mapModelToDb(Model $obj) {

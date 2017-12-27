@@ -8,13 +8,28 @@
 
 namespace Models;
 use tm\Model;
-use tm\TraitModelFunc;
+
 /**
  * Description of Currency
  *
  * @author terentyev.m
  */
 class Currency extends Model {
+   
+    private $id;
+    private $code = '';
+    private $name = '';
+    private $short_name = '';
+    private $user_id;
+    
+    public function __construct($id = '', $code = '', $name = '', $short_name = '', $user_id = '') {
+        $this->id = $id;
+        $this->code = $code;
+        $this->name = $name;
+        $this->short_name = $short_name;
+        $this->user_id = $user_id;
+    }
+
     function getId() {
         return $this->id;
     }
@@ -47,7 +62,7 @@ class Currency extends Model {
         $this->name = $name;
     }
 
-    function setShort_name($short_name) {
+    function setShort_Name($short_name) {
         $this->short_name = $short_name;
     }
 
@@ -55,31 +70,4 @@ class Currency extends Model {
         $this->user_id = $user_id;
     }
 
-        private $id;
-    private $code = '';
-    private $name = '';
-    private $short_name = '';
-    private $user_id;
-    
-    use TraitModelFunc;
-    
-
-    public static function setTableName(){
-        return 'dic_currency';
-    }
-    
-    public static function getForeignKeys() {
-        return [
-		'user_id' => [
-			'key' => 'id',
-			'table' => 'users'
-                    ]
-                ];
-    }
-    
-    public static function getPrimaryKeys(){
-        return ['id'];
-    }
-    
-    
 }
