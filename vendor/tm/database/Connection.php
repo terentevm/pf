@@ -30,8 +30,8 @@ class Connection
         $db_config = require  dirname(__FILE__) . '/config_db.php';
         
         $this->dsn = $db_config['dsn'];
-       // $this->user = $db_config['user'];
-        //$this->password = $db_config['password'];
+        $this->user = $db_config['user'];
+        $this->password = $db_config['password'];
         
         $connOptions = $this->getConnectionOptions($db_config);
         

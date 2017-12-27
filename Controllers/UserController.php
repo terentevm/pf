@@ -38,9 +38,9 @@ class UserController extends Controller {
              */
              
             
-            $success = User::verify($login, $password);
+            $user_id = User::verify($login, $password);
             
-            if(!$success){
+            if($user_id === false){
                 $this->errors[] = 'Invalid login or password';
                 $this->getErrors();
                 $this->GetView();
@@ -48,9 +48,8 @@ class UserController extends Controller {
                 exit();   
             }
             
-            $user->StartSession();
-            
-            $_SESSION['success'] = true;
+            Reg::$app->startSession(['user_id' => $user_id]);
+    
             header('Location: /site/index');
         }
         else{
@@ -59,12 +58,10 @@ class UserController extends Controller {
     }
 
     public function actionLogout(){
-        $user = new User();
-        $user->Load(['id' => $_SESSION['user_id']]);
-        $user->Logout();
         
-        session_destroy();
+        Reg::$app->endSession();
         header('Location: /user/login');
+        
     }
     
     public function actionSignup(){

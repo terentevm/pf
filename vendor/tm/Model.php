@@ -15,7 +15,7 @@ abstract class Model extends Base{
 
     public function save() {
         $success = Mapper::getMapper(get_called_class())->save($this); 
-        return  $success  
+        return  $success ; 
     }
 
     public function load(array $attributes) {

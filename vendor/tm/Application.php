@@ -47,7 +47,7 @@ class Application extends Base{
         $access_is_allowed = $access_manager->checkAccess($route);
         
         if (!$access_is_allowed) {
-            if (self::$request->isAjax()) {
+            if ($this->request->isAjax()) {
                 (new Response('Authorisation error', 401))->sendResponse();
                 die();
             }
@@ -58,5 +58,16 @@ class Application extends Base{
             
         }
         $router->route();
+    }
+
+    public function startSession($param) {
+        $_SESSION['success'] = true;
+        $_SESSION['user_id'] = $param['user_id'];
+    }
+
+    public function endSession() {
+        $_SESSION['success'] = false;
+        unset($_SESSION['user_id']);
+        session_destroy();
     }
 }

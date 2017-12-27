@@ -66,14 +66,14 @@ class User extends Model{
     }
     
     public static function verify($login, $password) {
-       $db_rec = static::find()->asArray()->where(['login: login'])->setParams(['login' => $login])->limit(1)->one();
+       $db_rec = static::find()->asArray()->where(['login = :login'])->setParams(['login' => $login])->limit(1)->one();
        
        if (empty($db_rec)) {
            return false;
        }
        
        if (password_verify($password, $db_rec['password'])) {
-           return true;
+           return $db_rec['id'];
        }
        
        return false;
