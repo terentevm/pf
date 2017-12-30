@@ -18,13 +18,13 @@ class SiteController extends Controller{
 
     public function actionIndex(){
         
-        $this->GetView();
+        return $this->createResponse(null,200,'');
      
     }
     
     public function actionSettings(){
         
-        $this->GetView();
+        return $this->createResponse(null,200,'');
      
     }
     public function actionTester(){

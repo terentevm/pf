@@ -20,8 +20,8 @@ class __TwigTemplate_244aad92c5068e796f5f5c49387edcebc6bf362d587a6acad920c3ee5c1
         $context['_seq'] = twig_ensure_traversable(($context["vars"] ?? null));
         foreach ($context['_seq'] as $context["_key"] => $context["element"]) {
             // line 2
-            echo "    <tr name=\"tr_1\" id=\"tr_1\">
-          <td class=\"hidden\">";
+            echo "    <tr class = \"clickable\" name=\"tr_1\" id=\"tr_1\">
+          <td class=\"hide\">";
             // line 3
             echo twig_escape_filter($this->env, twig_get_attribute($this->env, $this->getSourceContext(), $context["element"], "id", array()), "html", null, true);
             echo "</td>
@@ -62,6 +62,6 @@ class __TwigTemplate_244aad92c5068e796f5f5c49387edcebc6bf362d587a6acad920c3ee5c1
 
     public function getSourceContext()
     {
-        return new Twig_Source("", "currency_list_data.twig", "C:\\OSPanel\\domains\\localhost\\pf\\Views\\currency\\currency_list_data.twig");
+        return new Twig_Source("", "currency_list_data.twig", "E:\\OSPanel\\domains\\localhost\\pf\\Views\\currency\\currency_list_data.twig");
     }
 }

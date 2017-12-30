@@ -4,7 +4,7 @@ $(document).ready(function(){
            '/currency/GetListData',
             {offset: 0},
            function(){
-                $("td").dblclick(function () {
+               $("td").click(function () {
                 
                     var row = $(this).parent().index() + 1;
                     var id = $('table tr:nth-child(' + row + ')').find('td:nth-child(1)').html();
@@ -32,12 +32,11 @@ function getAjax(id =''){
                 $('#tbody').html(data);
                 stopLoadingAnimation(); 
 					   $("td").dblclick(function(){
-						   //console.log('test');
 						   var row = $(this).parent().index() + 1;
 						   var id = $('table tr:nth-child(' + row + ')').find('td:nth-child(1)').html();
-						   console.log(id);
 						   AddNew(id);
-					   });
+                       });
+
                     },
             error: function(xhr, desc, err){
                        console.log('test');

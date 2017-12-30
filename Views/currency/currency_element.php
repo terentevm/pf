@@ -2,7 +2,7 @@
 	
 	if(is_array($vars) && !empty($vars)){
 		
-		foreach ($vars[0] as $key => $value){
+		foreach ($vars as $key => $value){
 			$render_param[$key] = $value;	
 		}
 	}

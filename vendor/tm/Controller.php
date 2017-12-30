@@ -24,7 +24,7 @@ class Controller extends Base
         $this->view = $route['action'];
     }
 
-    public function createResponse($data, int $httpcode = 200, $msg = '') {
+    public function createResponse($data = null, int $httpcode = 200, $msg = '') {
         
         $body = View::getRenderer($this->route, $this->layout, $this->view)->render($data);
 

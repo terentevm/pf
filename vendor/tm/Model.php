@@ -16,7 +16,7 @@ abstract class Model extends Base{
     public static function findByUser($user_id, $limit = 50, $offset = 0) {
         
         $result = Mapper::getMapper(get_called_class())
-            ->where('user_id = :user_id')
+            ->where(['user_id = :user_id'])
             ->limit($limit)
             ->offset($offset)
             ->setParams(['user_id' => $user_id])
@@ -25,11 +25,15 @@ abstract class Model extends Base{
         return $result;    
     }
 
-    public function findById($id) {
+    public static function findById($id, $asArray = true) {
         $result = Mapper::getMapper(get_called_class())
-            ->where('id = :id')
-            ->setParams(['id' => $id])
-            ->one();
+            ->where(['id = :id'])
+            ->setParams(['id' => $id]);
+        if ($asArray === true) {
+            $result = $result->asArray();     
+        }
+        
+        $result = $result->one();
             
         return $result;
     }

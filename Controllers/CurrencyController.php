@@ -4,6 +4,7 @@ namespace Controllers;
 
 use tm\Controller;
 use Models\Currency;
+use tm\Registry;
 use tm\Validator as my_validator;
 use Respect\Validation\Validator as v;
 use Respect\Validation\Exceptions\ValidationException;
@@ -17,52 +18,44 @@ class CurrencyController extends Controller
         
         $this->view = 'currency_list';
 
-        $this->GetView();
+        return $this->createResponse();
     }
+    
     public function actionGetListData(){
         
         $this->view = 'currency_list_data';
 
-        if(isset($_POST['offset'])){
-            $this->offset = ( int )$_POST['offset'];
+        $post = Registry::$app->request->post();
+
+        if(isset($post['offset'])){
+            $this->offset = ( int )$post['offset'];
         }
       
-        $dic_elements = Currency::find('id, code, name, short_name')->where(['user_id', '=', $_SESSION['user_id']])->limit($this->limit, $this->offset)->selectAll();
-        $this->vars = $dic_elements;
-        $this->GetView();
+        $dic_elements = Currency::findByUser($_SESSION['user_id'], $this->limit, $this->offset);
+        
+        return $this->createResponse($dic_elements);
+
     }
     
     public function actionGetElement(){
-       
+        
+        $post = Registry::$app->request->post();
+
         $this->view = 'currency_element';
 		
-        if (isset($_POST['id'])){
-           /*$is_id = my_validator::uiid($_POST['id']);
-
-            if(!$is_id){
-                header('HTTP/1.1 400 Bad Request');
-                header('Content-Type: application/text; charset=UTF-8');
-                die("Incorrect id format");
-            }*/
+        if (isset($post['id'])){
 			
-            $dic_element = Currency::find()->where(['id', '=', $_POST['id']])->limit(1)->selectAll();
+            $dic_element = Currency::findById($post['id']);
             
             if (empty($dic_element)){
-                header(http_response_code(404));
-                header('Content-Type: application/text; charset=UTF-8');
-                die("element not found by id");   
+                return $this->createResponse(null, 404, 'Not found') ;
             }
 
-			$this->vars = $dic_element;
-            
-            $this->GetView();
-            exit();
+			return $this->createResponse($dic_element);
 
         }
 		
-        $this->vars = [];
-        //get form of new element
-        $this->GetView();
+        return $this->createResponse();
 
     }
 

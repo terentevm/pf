@@ -17,7 +17,7 @@ class CurrencyMapper extends Mapper
         return 'dic_currency';
     }
 
-    protected function delete(\tm\Model $obj) {
+    public function delete(\tm\Model $obj) {
         if ($this->delete_stmt === null) {
             $this->where = ['id = :id'];
 

@@ -16,7 +16,8 @@
     </style>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
    <link rel="stylesheet" href="/public/materialize/css/materialize.min.css">
-   <link href="/public/bootstrap/navmenu.css" rel="stylesheet">
+    <link href="/public/css/pf.css" rel="stylesheet">
+
     
     {% block script_head %}
         {% for link in head_js %}
@@ -42,6 +43,7 @@
     {% endfor %}
     {% endblock %}
 
+
     <ul id="slide-out" class="side-nav fixed light-green darken-2 hoverable">
     
     <div class="card no-padding light-green darken-2">
@@ -62,6 +64,7 @@
     <div class="container">
     {% block content %}{% endblock %}
     </div><!-- /.container -->
+    
     {% block script_body_end %}
     {% for link in body_end_js %}
       <script src="{{ link }}"></script>

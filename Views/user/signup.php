@@ -3,7 +3,7 @@
     if(isset($_SESSION['error'])){
         $render_param['error'] = $_SESSION['error'];   
     }
-    $render_param['isNotAjax'] = !$_SESSION['isAjax'];
+
     
     if(is_array($vars) && !empty($vars)){
 		

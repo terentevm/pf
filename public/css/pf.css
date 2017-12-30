@@ -1,87 +1,31 @@
+html, body {
+  height: 100%;
+}
+
+body {
+  padding: 50px 0 0 0;
+}
 .container {
-	background-color: #F5F3E5;
-}
-.border {
-list-style: none;
-padding: 0;
-height: 150px;
-}
-.border li {
-font-family: "Trebuchet MS", "Lucida Sans";
-padding: 7px 20px;
-margin-bottom: 10px;
-border-radius: 5px;
-border-left: 10px solid #337AB7; 
-box-shadow: 2px -2px 5px 0 rgba(0,0,0,.1),
-     -2px -2px 5px 0 rgba(0,0,0,.1),
-    2px 2px 5px 0 rgba(0,0,0,.1),
-    -2px 2px 5px 0 rgba(0,0,0,.1);
-font-size: 20px;
-letter-spacing: 2px;
-transition: 0.3s all linear;
-}
-.border li:nth-child(){border-color: #337AB7;}
-
-.border li:hover {border-left: 10px solid transparent;}
-.border li:nth-child():hover {border-right: 10px solid #337AB7;}
-
-
-.btn-primary {
-  color: #007bff;
-  background-color: transparent;
-  background-image: none;
-  border-color: #007bff;
+  max-width: 100%;
 }
 
-.btn-primary:hover {
-  color: #fff;
-  background-color: #007bff;
-  border-color: #007bff;
+@media (min-width: 992px) {
+  body {
+    padding: 0 0 0 300px;
+  }
+  .navmenu {
+    padding-top: 0;
+	background: #337AB7;
+  }
+  .navbar {
+    display: none !important; /* IE8 fix */
+    background: #1e5799; /* Old browsers */
+    background: -moz-linear-gradient(top, #1e5799 18%, #207cca 51%, #7db9e8 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, #1e5799 18%,#207cca 51%,#7db9e8 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, #1e5799 18%,#207cca 51%,#7db9e8 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1e5799', endColorstr='#7db9e8',GradientType=0 ); /* IE6-9 */
+  }
 }
-
-.btn-primary:focus, .btn-primary.focus {
-  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
-}
-
-.btn-primary.disabled, .btn-primary:disabled {
-  color: #007bff;
-  background-color: transparent;
-}
-
-.btn-primary:not([disabled]):not(.disabled):active, .btn-primary:not([disabled]):not(.disabled).active,
-.show > .btn-primary.dropdown-toggle {
-  color: #fff;
-  background-color: #007bff;
-  border-color: #007bff;
-  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
-}
-
-.btn-warning {
-  color: #ffc107;
-  background-color: transparent;
-  background-image: none;
-  border-color: #ffc107;
-}
-
-.btn-warning:hover {
-  color: #fff;
-  background-color: #ffc107;
-  border-color: #ffc107;
-}
-
-.btn-warning:focus, .btn-warning.focus {
-  box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.5);
-}
-
-.btn-outline-warning.disabled, .btn-outline-warning:disabled {
-  color: #ffc107;
-  background-color: transparent;
-}
-
-.btn-warning:not([disabled]):not(.disabled):active, .btn-warning:not([disabled]):not(.disabled).active,
-.show > .btn-warningg.dropdown-toggle {
-  color: #fff;
-  background-color: #ffc107;
-  border-color: #ffc107;
-  box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.5);
+tr.clickable:hover td {
+	cursor: pointer;
 }

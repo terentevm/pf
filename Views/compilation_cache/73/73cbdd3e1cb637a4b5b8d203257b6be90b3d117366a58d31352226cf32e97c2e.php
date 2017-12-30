@@ -38,9 +38,9 @@ class __TwigTemplate_fc0722e93634bc8f6dde5b5ebde9948d1d73e20f58be3407b2b75dab935
     </div>
     <div class=\"table-responsive\">
     <div class=\"row\"></div>
-    <table class=\"table table-bordered table-hover\">
+    <table class=\"table bordered table-hover highlight\">
       <tr class=\"spr_list_head\">
-          <th class=\"hidden\">id</th>
+          <th class=\"hide\">id</th>
           <th>Code</th>
           <th>Name</th>
           <th>Short name</th>
@@ -73,6 +73,6 @@ class __TwigTemplate_fc0722e93634bc8f6dde5b5ebde9948d1d73e20f58be3407b2b75dab935
 
     public function getSourceContext()
     {
-        return new Twig_Source("", "currency_list.twig", "C:\\OSPanel\\domains\\localhost\\pf\\Views\\currency\\currency_list.twig");
+        return new Twig_Source("", "currency_list.twig", "E:\\OSPanel\\domains\\localhost\\pf\\Views\\currency\\currency_list.twig");
     }
 }

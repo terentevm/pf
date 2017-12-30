@@ -4,6 +4,7 @@ namespace tm\renderers;
 
 use tm\View;
 use tm\renderers\RenderInterface;
+use tm\Registry;
 use Twig_Environment;
 use Twig_Loader_Filesystem;
 
@@ -32,7 +33,8 @@ class HtmlRender extends View implements RenderInterface
         $file_config = APP . "/config/config_view.php";
         $render_param = [];
         $this->setMeta($render_param);
-
+        $render_param['isNotAjax'] = !Registry::$app->request->isAjax();
+        
         if(is_file($file_config)){
             require $file_config;
             $head_js = $this->getIncludeJS($scripts, $this->view, 'head');
