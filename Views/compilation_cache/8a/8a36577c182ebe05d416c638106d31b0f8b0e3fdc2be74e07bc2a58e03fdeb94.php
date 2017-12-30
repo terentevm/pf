@@ -44,7 +44,10 @@ class __TwigTemplate_90c0741de61ee493223e375f738affeade42ac8da7552ff8903732a9bc0
    <div class=\"input-field\">
     <i class=\"material-icons prefix\">account_circle</i>
     <label for=\"exampleInputEmail1\">Email address</label>
-    <input type=\"email\" name=\"login\" class=\"form-control\" id=\"InputEmail1\" aria-describedby=\"emailHelp\" placeholder=\"Enter email\">
+    <input type=\"email\" name=\"login\" class=\"form-control\" id=\"InputEmail1\" aria-describedby=\"emailHelp\" placeholder=\"Enter email\" value = ";
+        // line 17
+        echo twig_escape_filter($this->env, ($context["login"] ?? null), "html", null, true);
+        echo ">
   </div>
   <div class=\"input-field\">
       <i class=\"material-icons prefix\">https</i>
@@ -92,7 +95,7 @@ class __TwigTemplate_90c0741de61ee493223e375f738affeade42ac8da7552ff8903732a9bc0
 
     public function getDebugInfo()
     {
-        return array (  70 => 32,  63 => 28,  59 => 26,  56 => 25,  42 => 13,  31 => 4,  28 => 3,  11 => 1,);
+        return array (  73 => 32,  66 => 28,  62 => 26,  59 => 25,  49 => 17,  42 => 13,  31 => 4,  28 => 3,  11 => 1,);
     }
 
     public function getSourceContext()

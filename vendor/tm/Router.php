@@ -63,7 +63,7 @@ class Router extends Base
         $action = $reflection->getMethod($action_name);
         
         try {
-            $action->invoke($controller);    
+            return $action->invoke($controller);    
         } catch (ReflectionException $ex) {
             die('404 Not found');
         }

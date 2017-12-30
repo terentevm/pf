@@ -16,16 +16,19 @@ namespace tm;
 class Response {
     
     private $http_code = 200;
-    private $response = '';
+    private $msg ='';
+    private $body ='';
     
-    public function __construct($response = '',int $http_code = 200) {
+    public function __construct(int $http_code = 200, $body = '', $msg ='') {
         $this->http_code = $http_code;
-        $this->response = $response;
+        $this->body = $body;
+        $this->msg = $msg;
     }
     
-    public function sendResponse() {
+    public function send() {
         header(http_response_code($this->http_code)); 
         
-        echo $this->response;
+        echo $this->body;
+    
     }
 }

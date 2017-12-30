@@ -10,12 +10,5 @@
 	$template = $twig->load('form_currency_element.html.twig');
 	$result = $template->render($render_param);
 
-	echo $result;
-
-exit();
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+	return $result;
 

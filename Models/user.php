@@ -55,7 +55,7 @@ class User extends Model{
     }
     
     public function checkUnique() {
-        $db_rec = static::find()->where(['login: login'])->asArray()->setParams(['login' => $this->login])->limit(1)->one();
+        $db_rec = static::find()->where(['login = :login'])->asArray()->setParams(['login' => $this->login])->limit(1)->one();
         
         //if record with this login exist in database return false
         return empty($db_rec) ? true : false;

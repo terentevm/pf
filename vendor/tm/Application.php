@@ -48,7 +48,7 @@ class Application extends Base{
         
         if (!$access_is_allowed) {
             if ($this->request->isAjax()) {
-                (new Response('Authorisation error', 401))->sendResponse();
+                (new Response(401,'' ,'Authorisation error'))->send();
                 die();
             }
             else {
@@ -57,7 +57,8 @@ class Application extends Base{
             }
             
         }
-        $router->route();
+        $response = $router->route();
+        $response->send();
     }
 
     public function startSession($param) {

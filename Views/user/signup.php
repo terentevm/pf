@@ -17,8 +17,4 @@
     
     unset($_SESSION['error']);    
     
-    echo $html;
-
-    if($_SESSION['isAjax']){
-      exit();
-    }
+    return $html;

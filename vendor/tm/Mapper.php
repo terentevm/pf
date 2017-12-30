@@ -67,6 +67,8 @@ abstract class Mapper extends Base
         list($sql, $params) = $this->db->getQueryBuilder()->build($this);
 
         $query_result = $this->db->queryOne($sql, $params);
+        
+        if ($query_result === false) return null;
 
         if ($this->asArray) {
             return $query_result;

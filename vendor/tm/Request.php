@@ -61,18 +61,16 @@ class Request extends Base
     }
     
     public function getHeaders($param_name = '') {
-        if ($param_name == '') {
-            return $this->headers;
-        }
-        else {
-            if (array_key_exists($param_name, $this->headers)) {
-                return $this->headers[$param_name];
-            }
-        }
-        
-        return null; //if given wrong header name
+        return $this->headers;
     }
     
+    public function getHeader($header_key) {
+        if (array_key_exists($header_key, $this->headers)) {
+            return $this->headers[$header_key];
+        }
+        return '';    
+    }
+
     public function setHeaders(array $headers = []) {
         if(empty($headers)) {
             $this->headers = $_SERVER;    
@@ -83,6 +81,18 @@ class Request extends Base
         
     }
 
+    public function getResponseType() {
+        $content_type = $this->getHeader('Content-Type');
+
+        if (\preg_match('/html|HTML/', $content_type)) {
+            return 'html';
+        }
+        elseif(\preg_match('/json|JSON/', $content_type)) {
+            return 'json';
+        }
+
+        return 'html';
+    }
 
     public function isAjax() {
         return isset($this->headers['HTTP_X_REQUESTED_WITH']) && $this->headers['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest';

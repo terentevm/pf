@@ -3,8 +3,10 @@
 namespace tm;
 
 use tm\Base;
+use tm\Response;
 
-Class Controller extends Base{
+class Controller extends Base
+{
     
     public static $default_controller = 'Site';
     
@@ -17,21 +19,20 @@ Class Controller extends Base{
     public $errors = [];
     public $rules = [];
     
-    public function __Construct($route){
+    public function __construct($route){
         $this->route = $route;
         $this->view = $route['action'];
     }
 
-    public function isAjax() {
-        return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest';
-    }
-    
-    public function GetView(){
-        $View_Obj = new View($this->route, $this->layout, $this->view);
-        $View_Obj->Render($this->vars);
+    public function createResponse($data, int $httpcode = 200, $msg = '') {
+        
+        $body = View::getRenderer($this->route, $this->layout, $this->view)->render($data);
+
+        return new Response($httpcode, $body,  $msg);
+
     }
 
-    public function Set($vars){
+    public function set($vars) {
         $this->vars = $vars;
     }
     

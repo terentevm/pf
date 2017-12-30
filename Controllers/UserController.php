@@ -43,9 +43,12 @@ class UserController extends Controller {
             if($user_id === false){
                 $this->errors[] = 'Invalid login or password';
                 $this->getErrors();
-                $this->GetView();
                 
-                exit();   
+                $inputed_data = [
+                    'login' => \htmlspecialchars($login)
+                ];
+                
+                return $this->createResponse($inputed_data, 401, '');  
             }
             
             Reg::$app->startSession(['user_id' => $user_id]);
@@ -53,7 +56,7 @@ class UserController extends Controller {
             header('Location: /site/index');
         }
         else{
-            $this->GetView();
+            return $this->createResponse(null, 200, '');
         }
     }
 
@@ -78,6 +81,12 @@ class UserController extends Controller {
                 ]
             );
             
+            $inputed_data = [
+                'login' => \htmlspecialchars($formData['login']),
+                'name' => \htmlspecialchars($formData['name'])
+            ];
+
+
             $validator = v::attribute('login', v::stringType()->notEmpty()->email())
             ->attribute('name', v::stringType()->notEmpty())
             ->attribute('password', v::stringType()->notEmpty());
@@ -91,23 +100,17 @@ class UserController extends Controller {
             } catch (ValidationException $exception) {
                 $this->errors = $exception->getMessages();
                 $this->getErrors();
-                $this->vars = $formData;
-                $this->GetView();
-                exit();
+                
+                return $this->createResponse($inputed_data, 400, 'Inputed data are invalid!');
             }
             
-            //проверяем уникальноть логина.
-            
-            
+            //check login unique.        
             
             if(!$user->CheckUnique()){
-                //выводим вид вместе с ошибкой
+                //output error
                 $this->errors[] = 'Login already taken';
                 $this->getErrors();
-                $this->GetView();
-                
-                exit();
-                
+                return $this->createResponse($inputed_data, 400, 'Login already taken');      
             }
             
             //Create new user and redirect to login page
@@ -117,15 +120,15 @@ class UserController extends Controller {
             if(!$success){
                 $this->errors[] = 'Error, please try again!';
                 $this->getErrors();
-                $this->GetView();
-                
-                exit();    
+                return $this->createResponse($inputed_data, 500, 'Error, please try again!');
            }
            
+           //redirect to login page
            header('Location: /user/login');
         }
-        else{
-            $this->GetView();
+        else {
+            // output registrqation form
+            return $this->createResponse(null, 200);
         }
     }
 }
