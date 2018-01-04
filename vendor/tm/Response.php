@@ -26,8 +26,10 @@ class Response {
     }
     
     public function send() {
+       
         header(http_response_code($this->http_code)); 
-        
+        header("Access-Control-Allow-Origin: *");
+        header("Access-Control-Allow-Headers: content-type");
         echo $this->body;
     
     }

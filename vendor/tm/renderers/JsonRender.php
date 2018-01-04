@@ -1,6 +1,6 @@
 <?php
 
-namespace tm\renderer;
+namespace tm\renderers;
 
 use tm\View;
 use tm\renderers\RenderInterface;
