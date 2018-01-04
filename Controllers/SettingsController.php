@@ -4,6 +4,7 @@ namespace Controllers;
 
 use tm\Controller;
 use tm\Validator;
+use tm\Registry;
 use Models\ProgramSettings;
 use Models\Wallets;
 use Models\Currency;
@@ -12,20 +13,24 @@ use Respect\Validation\Exceptions\ValidationException;
 
 class SettingsController extends Controller
 {
+    public $layout = 'material';
 
-    public function actionGetElement(){
-        
-        $this->view = 'settings';
-        
-        $settings = ProgramSettings::find()->where('user_id', '=', $_SESSION['user_id'])->selectAll();
-        $wallets =  Wallets::find()->where('user_id', '=', $_SESSION['user_id'])->selectAll();  
-        $currencies =  Currency::find()->where('user_id', '=', $_SESSION['user_id'])->selectAll(); 
+    public static $defaultAction = 'actionGetSettings';
 
-        $this->vars = [
-            'settings' => $settings,
-            'wallets' => $wallets,
-            'currencies' => $currencies
-        ];
+    public function actionGetSettings() {
+        $this->view = 'ProgramSettings';
+        
+        $post = $post = Registry::$app->request->post();
+
+        if (empty($post)) {
+            
+            $settings = ProgramSettings::getSettings($_SESSION['user_id']);
+
+            return $this->createResponse($settings);
+        }
+
+        
+
 
     }
 }

@@ -41,9 +41,10 @@ class Connection
     public static function init() {
         
         if (self::$instance === null) {
-            self::$instance = new self();
-            return self::$instance;
+            self::$instance = new self();    
         }
+
+        return self::$instance;
         
     }
 

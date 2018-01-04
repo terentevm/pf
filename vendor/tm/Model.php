@@ -13,16 +13,19 @@ abstract class Model extends Base{
         return Mapper::getMapper(get_called_class());
     }
 
-    public static function findByUser($user_id, $limit = 50, $offset = 0) {
+    public static function findByUser($user_id, $limit = 50, $offset = 0, $asArray = true) {
         
         $result = Mapper::getMapper(get_called_class())
             ->where(['user_id = :user_id'])
             ->limit($limit)
             ->offset($offset)
-            ->setParams(['user_id' => $user_id])
-            ->all();
+            ->setParams(['user_id' => $user_id]);
+            
+            if ($asArray === true) {
+                $result = $result->asArray();     
+            }
 
-        return $result;    
+        return $result->all();    
     }
 
     public static function findById($id, $asArray = true) {

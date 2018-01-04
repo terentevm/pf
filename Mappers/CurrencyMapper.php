@@ -11,7 +11,7 @@ use tm\Mapper;
 class CurrencyMapper extends Mapper
 {
 
-    public static $db_columnes = ['id','code', 'short_name', 'name', 'user_id'];
+    public static $db_columnes = ['id','code', 'short_name' , 'name'];
 
     public static function setTable() { 
         return 'dic_currency';
@@ -51,11 +51,10 @@ class CurrencyMapper extends Mapper
 
     protected function mapModelToDb(Model $obj) {
         $db_arr = [
-            'id' => $obj->getId(),
+            'id' => $obj->getUserId(),
             'code' => $obj->getCode(),
-            'name' => $obj->getName(),
             'short_name' => $obj->getShort_name(),
-            'user_id' => $obj->getUser_id()
+            'name' => $obj->getName()
         ];
         
         if (!isset($db_arr['id'])){
