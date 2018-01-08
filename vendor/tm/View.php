@@ -10,9 +10,7 @@ use tm\renderers\HtmlRender;
 class View extends Base
 {
     
-    public static function getRenderer($route, $layout = '', $view = '') {
-        
-        $response_type = \tm\Registry::$app->request->getResponseType();
+    public static function getRenderer($response_type,$route, $layout = '', $view = '') {
         
         switch ($response_type) {
             case 'json' : 

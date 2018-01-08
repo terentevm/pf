@@ -101,7 +101,7 @@ class UserController extends Controller {
                 $this->errors = $exception->getMessages();
                 $this->getErrors();
                 
-                return $this->createResponse($inputed_data, 400, 'Inputed data are invalid!');
+                return $this->createResponse("$inputed_data", 400, 'Inputed data are invalid!');
             }
             
             //check login unique.        
@@ -123,12 +123,16 @@ class UserController extends Controller {
                 return $this->createResponse($inputed_data, 500, 'Error, please try again!');
            }
            
+           //if data are saved, create response with code 200
+
+           return $this->createResponse("User has been registered successful!", 200);
+
            //redirect to login page
-           header('Location: /user/login');
+           //header('Location: /user/login');
         }
         else {
             // output registrqation form
-            return $this->createResponse(null, 200);
+            return $this->createResponse("OK", 200);
         }
     }
 }

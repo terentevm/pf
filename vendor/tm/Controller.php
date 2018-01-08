@@ -3,7 +3,8 @@
 namespace tm;
 
 use tm\Base;
-use tm\Response;
+use tm\Registry;
+use tm\Request;
 
 class Controller extends Base
 {
@@ -26,9 +27,13 @@ class Controller extends Base
 
     public function createResponse($data = null, int $httpcode = 200, $msg = '') {
         
-        $body = View::getRenderer($this->route, $this->layout, $this->view)->render($data);
+        $reqType = Registry::$app->request->getResponseType();
+        $body = View::getRenderer($reqType,$this->route, $this->layout, $this->view)->render($data);
 
-        return new Response($httpcode, $body,  $msg);
+        $response = new Response($httpcode, $body);
+        $response->setContentType($response->createContentType($reqType));
+        
+        return $response;
 
     }
 

@@ -11,6 +11,8 @@ use tm\Registry;
 use tm\QueryBuilder;
 use tm\IncomeCollection;
 use Models\Income;
+use tm\Response;
+use tm\Request;
 
 class SiteController extends Controller{
 
@@ -73,19 +75,24 @@ class SiteController extends Controller{
     
     
     public function actionApi() {
-        $arr = [
-            'FirstName' => 'Mikhail',
-            'SecondName' => 'Terentev',
-            'Age' => 30
-        ];
         
-        $app = Registry::$app;
-        $req = $app::$request;
-        $content_type = $req->getHeaders('CONTENT_TYPE');
+        $respType = Registry::$app->request->getResponseType(); 
         
-        header(http_response_code(404));
-        echo 'Вы запросили ',$content_type;
-        //echo json_encode($arr);
+
+        if ($respType === 'json') {
+            $response = \json_encode('Вы запросили json формат',JSON_UNESCAPED_UNICODE);
+            $ct = "application/json";
+        }
+        else {
+            $response = '<p>' . 'Вы запросили html формат' . '</p>';
+            $ct = "text/html";
+        }
+        
+        $pesponse = new Response(200, $response);
+        $pesponse->setContentType($ct);
+
+        return $pesponse;
+
     }
 
     public function actionVue() {

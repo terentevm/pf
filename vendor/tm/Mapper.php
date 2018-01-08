@@ -200,6 +200,8 @@ abstract class Mapper extends Base
         
         $success = $this->create_stmt->execute($param);
 
+        return $success;
+
     }
     
     abstract protected function update(Model $obj);

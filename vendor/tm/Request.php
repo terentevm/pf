@@ -82,7 +82,7 @@ class Request extends Base
     }
 
     public function getResponseType() {
-        $content_type = $this->getHeader('CONTENT_TYPE');
+        $content_type = $this->getHeader('HTTP_ACCEPT');
 
         if (\preg_match('/html|HTML/', $content_type)) {
             return 'html';
