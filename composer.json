@@ -1,10 +1,13 @@
 {
     "config": {
-        "COMPOSER_CAFILE": "c:/php7/DevicelockInc.pem",
-		"cafile": "c:/php7/DevicelockInc.pem"
+        "COMPOSER_CAFILE": "E:/OSPanel/modules/php/PHP-7.1-x64/DevicelockInc.pem",
+		"cafile": "E:/OSPanel/modules/php/PHP-7.1-x64/DevicelockInc.pem",
+        "disable-tls": true,
+        "secure-http": false
     },
     "require": {
         "twig/twig": "~2.0",
         "respect/validation": "*"
     }
+	
 }

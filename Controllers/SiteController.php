@@ -13,6 +13,7 @@ use tm\IncomeCollection;
 use Models\Income;
 use tm\Response;
 use tm\Request;
+use tm\database\Table;
 
 class SiteController extends Controller{
 
@@ -105,5 +106,19 @@ class SiteController extends Controller{
 
         return $this->createResponse($wallets);
         
+    }
+
+    public function actionTable() {
+
+        $table = new Table("my_table");
+        $sql = $table->addColumn("id", "VARCHAR", "36", true, true)
+            ->addColumn("name", "VARCHAR", "150", true)
+            ->addColumn("user_id", "VARCHAR", "36", true)
+            ->addColumn("age", "INT", "3")
+            ->addColumn("salary", "DOUBLE", "15,2")
+            ->addForeignKey('user_id', 'users', 'id')
+            ->buildSQL();
+
+            die($sql);
     }
 }
