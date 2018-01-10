@@ -14,6 +14,7 @@ use Models\Income;
 use tm\Response;
 use tm\Request;
 use tm\database\Table;
+use tm\auth\JWT;
 
 class SiteController extends Controller{
 
@@ -120,5 +121,23 @@ class SiteController extends Controller{
             ->buildSQL();
 
             die($sql);
+    }
+
+    public function actionJwt() {
+        
+        $payload = [
+            'user_id' => 'asdsa778d-asdsf8d-f777dsf',
+            'user_name' => 'Mikhail'
+        ];
+
+        $jwt = new JWT($payload);
+
+        //$token = $jwt->createToken();
+
+        $tok ='eyJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJ1c2VyX2lkIjoiYXNkc2E3NzhkLWFzZHNmOGQtZjc3N2RzZiIsInVzZXJfbmFtZSI6Ik1pa2hhaWwifQ.R1Zvuy57HachvEOlyb-8gvwNk2jlVnhUD0O_g9z5fl8';
+
+        $success = $jwt->verifyJWT($tok);
+
+        die($success);
     }
 }
