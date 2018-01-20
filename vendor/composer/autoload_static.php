@@ -23,6 +23,10 @@ class ComposerStaticInitf49c5f2c3fe12407a8bfabd4b87e24aa
         array (
             'Respect\\Validation\\' => 19,
         ),
+        'F' => 
+        array (
+            'Firebase\\JWT\\' => 13,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
@@ -37,6 +41,10 @@ class ComposerStaticInitf49c5f2c3fe12407a8bfabd4b87e24aa
         'Respect\\Validation\\' => 
         array (
             0 => __DIR__ . '/..' . '/respect/validation/library',
+        ),
+        'Firebase\\JWT\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/firebase/php-jwt/src',
         ),
     );
 

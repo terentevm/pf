@@ -9,4 +9,5 @@ return array(
     'Twig\\' => array($vendorDir . '/twig/twig/src'),
     'Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),
     'Respect\\Validation\\' => array($vendorDir . '/respect/validation/library'),
+    'Firebase\\JWT\\' => array($vendorDir . '/firebase/php-jwt/src'),
 );

@@ -14,7 +14,7 @@ use Models\Income;
 use tm\Response;
 use tm\Request;
 use tm\database\Table;
-use tm\auth\JWT;
+use Firebase\JWT\JWT;
 
 class SiteController extends Controller{
 
@@ -124,20 +124,36 @@ class SiteController extends Controller{
     }
 
     public function actionJwt() {
+        $config = Registry::$app->config;
         
-        $payload = [
+        $jwt_key = $config['jwt_key'];
+        
+        $token = [
+            'exp' => time(),
             'user_id' => 'asdsa778d-asdsf8d-f777dsf',
             'user_name' => 'Mikhail'
         ];
 
-        $jwt = new JWT($payload);
-
-        //$token = $jwt->createToken();
-
-        $tok ='eyJ0eXBlIjoiand0IiwiYWxnIjoiSFMyNTYifQ.eyJ1c2VyX2lkIjoiYXNkc2E3NzhkLWFzZHNmOGQtZjc3N2RzZiIsInVzZXJfbmFtZSI6Ik1pa2hhaWwifQ.R1Zvuy57HachvEOlyb-8gvwNk2jlVnhUD0O_g9z5fl8';
-
-        $success = $jwt->verifyJWT($tok);
-
-        die($success);
+        $jwt = JWT::encode($token, $jwt_key);
+        
+        $decoded = JWT::decode($jwt, $jwt_key, array('HS256'));
+        echo $jwt . '</br>';
+        
+        die();
     }
+    
+    public function actionJwtverify() {
+        $jwt = $_GET['jwt'];
+        $config = Registry::$app->config;
+        
+        $jwt_key = $config['jwt_key'];
+       
+        
+        $decoded = JWT::decode($jwt, $jwt_key, array('HS256'));
+        
+        print_r($decoded);
+        
+        die();
+    }
+    
 }

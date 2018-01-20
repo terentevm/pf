@@ -42,7 +42,7 @@ class Application extends Base{
         
         $route = $router->getRoute(); 
         
-        $access_manager = AccessManager::getAccessManager($route);
+        $access_manager = AccessManager::getAccessManager($route, $this->config);
         
         $access_is_allowed = $access_manager->checkAccess($route);
         

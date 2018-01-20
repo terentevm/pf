@@ -14,9 +14,14 @@ use tm\Registry;
  *
  * @author terentyev.m
  */
-class AccessManager {
+class AccessManager 
+{
 
-    public static function getAccessManager($route) {
+    public static function getAccessManager($route, array $config) {
+        if(isset($config['http_auth']) && $config['http_auth'] === true) {
+            return Registry::CreateObject('tm\auth\HttpAuth', [$route]);     
+        }
+        
         return Registry::CreateObject('tm\auth\StandartAuth', [$route]);    
     }
 }
