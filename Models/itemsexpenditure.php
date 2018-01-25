@@ -8,74 +8,79 @@
 
 namespace Models;
 use tm\Model;
-use tm\TraitModelFunc;
+
 /**
  * Description of itemsexpenditure
  *
  * @author terentyev.m
  */
-class Itemsexpenditure extends Model {
-    public $table = 'dic_items_expenditure';
+class Itemsexpenditure extends Model
+{
+    private $id = null;
+    private $parent = null;
+    private $name = '';
+    private $comment = '';
+    private $isNotActive = true;
     
-    public $attributes = [
-        'id' => '',
-        'name' => '',
-        'user_id' => '',
-        'not_active' => 0,
-        'comment' => '',
-        'parent_id' => NULL
-    ];
-    
-    use TraitModelFunc;
-
-    public function GetHierarhicalList(){
-        $tree = [];
-        
-        $this->CreateTree(NULL, $_SESSION['user_id'],$tree);
-        
-        return $tree;
+    public function __construct($id = null, $name = '', $parent = null, $comment = '', $isNotActive = false) {
+        $this->id = $id;
+        $this->parent = $parent;
+        $this->name = $name;
+        $this->comment = $comment;
+        $this->isNotActive = $isNotActive;
     }
     
-    //recursive function
-    public function CreateTree($parent_id, $user_id, & $tree = []){
-        
-        if($parent_id === NULL){
-            $query_parent_id = " parent_id IS NULL";
-            $param = [
-                'user_id' => $user_id
-            ];
-        }
-        else{
-            $query_parent_id = " parent_id = :parent_id";
-            $param = [
-                'user_id' => $user_id,
-                'parent_id' => $parent_id
-            ];
-        }
-        
-        $sql = "Select id, parent_id, name, not_active, comment FROM dic_items_expenditure WHERE user_id = :user_id AND" . $query_parent_id;
-        
-        
-        
-        $result = $this->pdo->Query($sql, $param);
-        
-        if(!empty($result)){
-            foreach ($result as $element){
-                
-                $tree_str = [
-                    'elements' => $element,
-                    'childs' => []
-                ];
-                
-                $parent_id = $element['id'];
-                $this->CreateTree($parent_id, $user_id, $tree_str['childs']);
-                
-                $tree[] = $tree_str;
+    function getId() {
+        return $this->id;
+    }
+
+    function getParent() {
+        return $this->parent;
+    }
+
+    function getName() {
+        return $this->name;
+    }
+
+    function getComment() {
+        return $this->comment;
+    }
+
+    function getIsNotActive() {
+        return $this->isNotActive;
+    }
+
+    function setId($id) {
+        $this->id = $id;
+    }
+
+    function setParent(Itemsexpenditure $parent) {
+        $this->parent = $parent;
+    }
+
+    function setName($name) {
+        $this->name = $name;
+    }
+
+    function setComment($comment) {
+        $this->comment = $comment;
+    }
+
+    function setIsNotActive($isNotActive) {
+        $this->isNotActive = $isNotActive;
+    }
+
+    public static function findByParentId($parent_id, $user_id, $limit = 50, $offset = 0 ,$asArray = true) {
+        $result = Mapper::getMapper(get_called_class())
+            ->where(['user_id = :user_id', 'parent_id = :parent_id'])
+            ->limit($limit)
+            ->offset($offset)
+            ->setParams(['user_id' => $user_id, 'parent_id' => $parent_id]);
+            
+            if ($asArray === true) {
+                $result = $result->asArray();     
             }
-               
-        }
-        else{
-            return;
-        }
+
+        return $result->all();  
     }
 }

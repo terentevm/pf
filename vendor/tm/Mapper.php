@@ -138,11 +138,9 @@ abstract class Mapper extends Base
     }
     
     public function getKeysArray(&$data, $column_key) {
-        //if (array_key_exists($column_key, $data)) {
-            return array_column($data, $column_key);
-      //  }
-        
-      //  return null; //wrong key name
+    
+        return array_column($data, $column_key);
+
     }
     
     protected function addRelationsToResult(&$primary_arr,$relations_arr, $f_key, $table_column,$relation_name) {

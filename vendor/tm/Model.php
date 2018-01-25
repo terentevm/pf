@@ -40,7 +40,7 @@ abstract class Model extends Base{
             
         return $result;
     }
-
+    
     public function save() {
         $success = Mapper::getMapper(get_called_class())->save($this); 
         return  $success ; 

@@ -15,8 +15,9 @@ class Application extends Base{
     private static $instance; 
 
     public $config;
-
-
+    
+    public $user_id = null;
+    public $access_manager = null;
     public $request;
 
     public function __construct($config){
@@ -42,9 +43,9 @@ class Application extends Base{
         
         $route = $router->getRoute(); 
         
-        $access_manager = AccessManager::getAccessManager($route, $this->config);
+        $this->access_manager = AccessManager::getAccessManager($route, $this->config);
         
-        $access_is_allowed = $access_manager->checkAccess($route);
+        $access_is_allowed = $this->access_manager->checkAccess($route);
         
         if (!$access_is_allowed) {
             if ($this->request->isAjax()) {
