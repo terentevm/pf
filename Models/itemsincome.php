@@ -17,6 +17,11 @@ use tm\Model;
  */
 class Itemsincome extends Model
 {
-    
-    
+ 
+    private $id = null;
+    private $name = '';
+    private $notActive = 0;
+    private $comment = '';
+    private $user = null;
+    private $parent = null;
 }

@@ -20,9 +20,12 @@ class Controller extends Base
     public $errors = [];
     public $rules = [];
     
+    
+    
     public function __construct($route){
         $this->route = $route;
         $this->view = $route['action'];
+       
     }
 
     public function createResponse($data = null, int $httpcode = 200, $msg = '') {

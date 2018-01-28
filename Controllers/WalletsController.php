@@ -23,6 +23,7 @@ class WalletsController extends Controller
 {
     private $limit = 50;
     private $offset = 0;
+    public static $classModel = '\models\Wallets';
     
     public function actionGetList() {
         

@@ -41,20 +41,26 @@ abstract class Model extends Base{
         return $result;
     }
     
-    public function save() {
-        $success = Mapper::getMapper(get_called_class())->save($this); 
+    public function save($upload_mode = false) {
+        $success = Mapper::getMapper(get_called_class())->save($this, $upload_mode); 
         return  $success ; 
     }
 
     public function delete() {
-        $success = Mapper::getMapper(get_called_class())->delete();
+        $mapper = Mapper::getMapper(get_called_class());
+        $success = $mapper->delete($this);
         return  $success ;
     }
 
     public function load(array $attributes) {
         
         foreach ($attributes as $attrName => $attrValue) {
-            $this->$attrName = $attrValue;
+            $setter = 'set' . ucfirst($attrName);
+            if (method_exists($this, $setter)) {
+                $this->$attrName = $attrValue;   
+            }
+            
+            
         }
         
     }

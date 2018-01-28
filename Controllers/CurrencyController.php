@@ -2,79 +2,48 @@
 
 namespace Controllers;
 
-use tm\Controller;
+use tm\RestController;
 use Models\Currency;
 use tm\Registry;
-use tm\Validator as my_validator;
 use Respect\Validation\Validator as v;
 use Respect\Validation\Exceptions\ValidationException;
 
-class CurrencyController extends Controller
+class CurrencyController extends RestController
 {
     private $limit = 50;
     private $offset = 0;
-
-    public function actionGetList(){
-        
-        $this->view = 'currency_list';
-
-        return $this->createResponse();
-    }
     
-    public function actionGetListData(){
-        
-        $this->view = 'currency_list_data';
-
-        $post = Registry::$app->request->post();
-
-        if(isset($post['offset'])){
-            $this->offset = ( int )$post['offset'];
-        }
-      
-        $dic_elements = Currency::findByUser($_SESSION['user_id'], $this->limit, $this->offset);
-        
-        return $this->createResponse($dic_elements);
-
-    }
+    public static $classModel = '\models\Currency';
     
-    public function actionGetElement(){
+    /*public function actionCreate(){
         
-        $post = Registry::$app->request->post();
-
-        $this->view = 'currency_element';
-		
-        if (isset($post['id'])){
-			
-            $dic_element = Currency::findById($post['id']);
-            
-            if (empty($dic_element)){
-                return $this->createResponse(null, 404, 'Not found') ;
-            }
-
-			return $this->createResponse($dic_element);
-
+        $post = Registry::$app->post();
+        
+        if (!empty($post)) {
+            return $this->createResponse("No data for save", 400, '');
         }
-		
-        return $this->createResponse();
-
-    }
-
-    public function actionSaveElement(){
-
+        
+        $filters = [
+            'code' => FILTER_SANITIZE_STRING,
+            'name' => FILTER_SANITIZE_STRING,
+            'short_name' => FILTER_SANITIZE_STRING
+            ];
+        
+        $inputData = filter_var_array($post, $filters);
+        
+        if ($inputData === false || is_null($inputData)) {
+            return $this->createResponse("Data consists errors", 400, '');   
+        }
+        
         $validator = v::attribute('code', v::stringType()->notEmpty())
                     ->attribute('name', v::stringType()->notEmpty())
                     ->attribute('short_name', v::stringType()->notEmpty());
 
-        $inputData = filter_input_array(
-            INPUT_POST,
-            [
-                'code' => FILTER_SANITIZE_STRING,
-                'name' => FILTER_SANITIZE_STRING,
-                'short_name' => FILTER_SANITIZE_STRING
-            ]
-        );
         $currency = new Currency();
-        $currency->load($_POST);
+        
+        foreach ($inputData as $key => $value) {
+            $currency->$key = $value;  
+        }
         
         try{
             $validator->assert($currency);
@@ -108,6 +77,6 @@ class CurrencyController extends Controller
 			header(http_response_code(500));	
 		}
         
-    }
+    }*/
 
 }

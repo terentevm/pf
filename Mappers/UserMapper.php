@@ -46,13 +46,14 @@ class UserMapper extends Mapper
             $this->delete_stmt = $this->db->prepare($sql);
         }
         
-        $param = $this->mapModelToDb($obj);
-        $success = $this->create_stmt->execute($param);
+        //$param = $this->mapModelToDb($obj);
+        $param = ['id' => $obj->getId()];
+        $success = $this->delete_stmt->execute($param);
 
         return $success;      
     }
     
-    protected function mapModelToDb(Model $obj) {
+    public function mapModelToDb(Model $obj) {
         $db_arr = [
             'id' => $obj->getId(),
             'login' => $obj->getLogin(),

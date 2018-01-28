@@ -16,9 +16,9 @@ abstract class Mapper extends Base
     protected $modelClassName;
     protected static $mapperStorage = [];
     
-    private $create_stmt = null;
-    private $update_stmt = null;
-    private $delete_stmt = null;
+    protected $create_stmt = null;
+    protected $update_stmt = null;
+    protected $delete_stmt = null;
 
     public function __construct($modelClassName) {
         if ($this->db === null) {
@@ -172,12 +172,12 @@ abstract class Mapper extends Base
         return $model;
     }
 
-    public function save(Model $obj) {
+    public function save(Model $obj, $upload_mode = false) {
         $pk_name = $this->getPrimaryKey();
         
         $pk_val = $obj->$pk_name;
         
-        if (is_null($pk_val) || empty($pk_val)) {
+        if (is_null($pk_val) || empty($pk_val) || $upload_mode === true) {
             $success = $this->create($obj);
         }
         else {
@@ -195,7 +195,7 @@ abstract class Mapper extends Base
         }
         
         $param = $this->mapModelToDb($obj);
-        
+                        
         $success = $this->create_stmt->execute($param);
 
         return $success;

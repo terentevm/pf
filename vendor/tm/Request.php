@@ -43,14 +43,30 @@ class Request extends Base
     }
 
     public function set_post_params(array $params = []) {
+        $input_stream = file_get_contents('php://input');
         if (empty($params)) {
-            $this->post = $_POST;   
+            if (isset($_POST) && !empty($_POST)) {
+                $this->post = $_POST;    
+            }
+            elseif (!empty ($input_stream)) {
+                $this->setPostFromInputSteam($input_stream);
+            }   
+            
         }
         else {
             $this->post = $params;   
         }  
     }
-
+    
+    
+     private function setPostFromInputSteam(string $input_stream) {
+        $params = json_decode($input_stream, true);
+        
+        if (is_array($params) && !empty($params)) {
+            $this->post = $params;    
+        }
+    }
+    
     public function set_files_params(array $files = []) {
         if (empty($files)) {
             $this->files = $_FILES;   

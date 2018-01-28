@@ -2,16 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/C:/OSPanel/domains/localhost/pf/vendor/tm/CollectionsInterface.php</file>
-            <file>file:/C:/OSPanel/domains/localhost/pf/vendor/tm/auth/AccessManager.php</file>
-            <file>file:/C:/OSPanel/domains/localhost/pf/vendor/tm/auth/StandartAuth.php</file>
-            <file>file:/C:/OSPanel/domains/localhost/pf/vendor/tm/CollectionAbstract.php</file>
-            <file>file:/C:/OSPanel/domains/localhost/pf/vendor/tm/Application.php</file>
-            <file>file:/C:/OSPanel/domains/localhost/pf/vendor/tm/Request.php</file>
-            <file>file:/C:/OSPanel/domains/localhost/pf/vendor/tm/auth/HttpAuth.php</file>
-            <file>file:/C:/OSPanel/domains/localhost/pf/Controllers/SiteController.php</file>
-            <file>file:/C:/OSPanel/domains/localhost/pf/vendor/tm/auth/JWT.php</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

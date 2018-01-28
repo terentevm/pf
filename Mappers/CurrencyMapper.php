@@ -3,6 +3,7 @@
 namespace mappers;
 
 use tm\Mapper;
+use tm\Model;
 /**
  * Description of CurrencyMapper
  *
@@ -11,10 +12,10 @@ use tm\Mapper;
 class CurrencyMapper extends Mapper
 {
 
-    public static $db_columnes = ['id','code', 'short_name' , 'name'];
+    public static $db_columnes = ['id', 'user_id','code', 'short_name' , 'name'];
 
     public static function setTable() { 
-        return 'dic_currency';
+        return 'ref_currency';
     }
 
     public function delete(\tm\Model $obj) {
@@ -48,10 +49,11 @@ class CurrencyMapper extends Mapper
 
         return $success;      
     }
-
-    protected function mapModelToDb(Model $obj) {
+    
+    public function mapModelToDb(Model $obj) {
         $db_arr = [
-            'id' => $obj->getUserId(),
+            'id' => $obj->getId(),
+            'user_id' => $obj->getUser_Id(),
             'code' => $obj->getCode(),
             'short_name' => $obj->getShort_name(),
             'name' => $obj->getName()

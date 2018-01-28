@@ -51,7 +51,7 @@ class HttpAuth implements AccessInterface
     }
     
     private function setUserId($data) {
-        Registry::$app->user_id = $data['user_id'] ?? null;
+        Registry::$app->user_id = $data->user_id ?? null;
     }
     
     public function generateNewToken($user_id) : string {

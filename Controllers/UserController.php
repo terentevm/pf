@@ -8,6 +8,8 @@
 
 namespace Controllers;
 use tm\Controller;
+
+use tm\auth\HttpAuth;
 use tm\Registry as Reg;
 use Models\User;
 use Respect\Validation\Validator as v;
@@ -51,9 +53,15 @@ class UserController extends Controller {
                 return $this->createResponse($inputed_data, 401, '');  
             }
             
-            Reg::$app->startSession(['user_id' => $user_id]);
-    
-            header('Location: /site/index');
+            if (Reg::$app->config['use_sessions'] === true) {
+                Reg::$app->startSession(['user_id' => $user_id]);
+                header('Location: /site/index');
+                die();
+            }
+            
+            $token = Reg::$app->access_manager->generateNewToken($user_id);
+            return $this->createResponse(['jwt' => $token], 200, '');
+            
         }
         else{
             return $this->createResponse(null, 200, '');
@@ -71,15 +79,6 @@ class UserController extends Controller {
         $post = Reg::$app->request->post();
 
         if(!empty($post)){
-        
-            $formData = filter_input_array(
-                INPUT_POST,
-                [
-                    'login' => FILTER_SANITIZE_EMAIL,
-                    'name' => FILTER_SANITIZE_STRING,
-                    'password' => FILTER_DEFAULT
-                ]
-            );
             
             $inputed_data = [
                 'login' => \htmlspecialchars($formData['login']),
@@ -92,7 +91,9 @@ class UserController extends Controller {
             ->attribute('password', v::stringType()->notEmpty());
 
             $user = new User();
-            $user->load($formData);
+            $user->setLogin(\filter_var($post['login'], FILTER_SANITIZE_EMAIL));
+            $user->setPassword(\filter_var($post['password'], FILTER_SANITIZE_STRING));
+            $user->setName(\filter_var($post['name'], FILTER_DEFAULT));
             $user->hashPassword();
 
             try{
@@ -134,5 +135,28 @@ class UserController extends Controller {
             // output registrqation form
             return $this->createResponse("OK", 200);
         }
+    }
+    
+    public function actionDelete() {
+        $post = Reg::$app->request->post();
+        
+        if (!empty($post) && isset($post['login'])) {
+        
+            $login = \filter_var($post['login'], FILTER_SANITIZE_EMAIL);
+            
+            $user = User::find()->where(['login = :login'])->setParams(['login' => $login])->limit(1)->one();
+            
+            if (is_object($user) && $user instanceof User) {
+                $delited = $user->delete();
+                
+                if ($delited === true) {
+                    return $this->createResponse("User has been deleted successfully!", 200);    
+                }
+                
+                return $this->createResponse("error", 400); 
+            }
+        }
+        return $this->createResponse("Login hasn't been transfered! Delete field!", 400);    
+        
     }
 }

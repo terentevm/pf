@@ -66,8 +66,8 @@ class QueryBuilder {
     }
 
     public function buildDelete(Mapper $mapperInstance) {
-    
-        $sql = 'DELETE * FROM ' . $mapperInstance::setTable() . $this->buildWhere();
+        $this->mapper = $mapperInstance;
+        $sql = 'DELETE FROM ' . $mapperInstance::setTable() . $this->buildWhere();
 
         return $sql;
     }
@@ -83,7 +83,7 @@ class QueryBuilder {
 
     public function buildWhere(){
         if ($this->mapper->where !== null) {
-            return "WHERE " . $this->buildCondition($this->mapper->where);
+            return " WHERE " . $this->buildCondition($this->mapper->where);
         }
         
         return '';

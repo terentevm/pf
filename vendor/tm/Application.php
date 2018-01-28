@@ -58,6 +58,8 @@ class Application extends Base{
             }
             
         }
+       
+        
         $response = $router->route();
         $response->send();
     }
