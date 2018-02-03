@@ -16,7 +16,7 @@ abstract class CollectionAbstract implements CollectionsInterface
     protected $owner = null; //model instance
     
 
-    public function add(array $row) {
+    public function add($row) {
         
         $this->storage[] = $row;
     }

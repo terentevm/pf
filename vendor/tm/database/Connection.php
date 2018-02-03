@@ -199,4 +199,8 @@ class Connection
     public function rollBackTransaction() :bool {
         return $this->pdo->rollBack();
     }
+    
+    public function lastInsertedId(){
+        return $this->pdo->lastInsertId();
+    }
 }

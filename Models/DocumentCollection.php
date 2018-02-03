@@ -4,7 +4,7 @@ namespace Models;
 use tm\Model;
 use tm\CollectionAbstract;
 
-class IncomeCollection extends CollectionAbstract
+class DocumentCollection extends CollectionAbstract
 {
     public function __construct(Model $owner) {
         $this->owner = $owner;

@@ -7,9 +7,9 @@ interface CollectionsInterface
 
     /**
      * add new row to collection
-     * @param array row
+     * @param mixed row
      */
-    public function add(array $row);
+    public function add($row);
     
     /**
      * return array row by index

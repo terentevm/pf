@@ -14,7 +14,7 @@ use tm\Registry as Reg;
 use Models\User;
 use Respect\Validation\Validator as v;
 use Respect\Validation\Exceptions\ValidationException;
-use Respect\Validation\Exceptions\NestedValidationExceptionInterface;
+use Respect\Validation\Exceptions\NestedValidationException;
 /**
  * Description of User
  *
@@ -38,7 +38,17 @@ class UserController extends Controller {
             /**
              * Here must be validations actions
              */
-             
+            
+            //$login_valid = v::stringType()->notEmpty()->email()->validate($login);
+            $userValidator = v::attribute('login', v::stringType()->notEmpty()->email())
+                    ->attribute('password', v::stringType()->notEmpty());
+                    
+            try {
+                $userValidator->assert($post);
+            } catch(NestedValidationException $exception) {
+                $msgs =  $exception->getFullMessage();
+                $msgs2 = $exception->getMessages();
+            }
             
             $user_id = User::verify($login, $password);
             

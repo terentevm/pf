@@ -14,68 +14,73 @@ use tm\Model;
  *
  * @author terentyev.m
  */
-class Itemsexpenditure extends Model
+class ItemsExpenditure extends Model
 {
     private $id = null;
-    private $parent = null;
     private $name = '';
+    private $notActive = 0;
     private $comment = '';
-    private $isNotActive = true;
+    private $user_id = null;
+    private $parentId = null;
     
-    public function __construct($id = null, $name = '', $parent = null, $comment = '', $isNotActive = false) {
-        $this->id = $id;
-        $this->parent = $parent;
-        $this->name = $name;
-        $this->comment = $comment;
-        $this->isNotActive = $isNotActive;
-    }
-    
-    function getId() {
+    public function getId() {
         return $this->id;
     }
 
-    function getParent() {
-        return $this->parent;
-    }
-
-    function getName() {
+    public function getName() {
         return $this->name;
     }
 
-    function getComment() {
+    public function getNotActive() {
+        return $this->notActive;
+    }
+
+    public function getComment() {
         return $this->comment;
     }
 
-    function getIsNotActive() {
-        return $this->isNotActive;
+    public function getUser_id() {
+        return $this->user_id;
     }
 
-    function setId($id) {
+    public function getParentId() {
+        return $this->parentId;
+    }
+
+    public function setId($id) {
         $this->id = $id;
     }
 
-    function setParent(Itemsexpenditure $parent) {
-        $this->parent = $parent;
-    }
-
-    function setName($name) {
+    public function setName($name) {
         $this->name = $name;
     }
 
-    function setComment($comment) {
+    public function setNotActive($notActive) {
+        $this->notActive = $notActive;
+    }
+
+    public function setComment($comment) {
         $this->comment = $comment;
     }
 
-    function setIsNotActive($isNotActive) {
-        $this->isNotActive = $isNotActive;
+    public function setUser_id($user_id) {
+        $this->user_id = $user_id;
     }
 
-    public static function findByParentId($parent_id, $user_id, $limit = 50, $offset = 0 ,$asArray = true) {
+    public function setParentId($parentId) {
+        if (!empty($parentId)  && !is_null($parentId)) {
+            $this->parentId = $parentId;    
+        }
+        
+    }
+
+
+    public static function findByParentId($parentId, $user_id, $limit = 50, $offset = 0 ,$asArray = true) {
         $result = Mapper::getMapper(get_called_class())
             ->where(['user_id = :user_id', 'parent_id = :parent_id'])
             ->limit($limit)
             ->offset($offset)
-            ->setParams(['user_id' => $user_id, 'parent_id' => $parent_id]);
+            ->setParams(['user_id' => $user_id, 'parent_id' => $parentId]);
             
             if ($asArray === true) {
                 $result = $result->asArray();     

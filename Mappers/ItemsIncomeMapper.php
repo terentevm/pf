@@ -5,15 +5,16 @@ namespace mappers;
 use tm\Mapper;
 use tm\Model;
 
-class ItemsExpenditureMapper extends Mapper
+class ItemsIncomeMapper extends Mapper
 {
-    public static $db_columnes = ['id', 'user_id','name', 'not_active', 'parent_id', 'comment'];
     
-    public static function setTable() {
-        return "ref_items_expenditure";
+    public static $db_columnes = ['id', 'user_id','name', 'not_active', 'parent_id', 'comment'];
+
+    public static function setTable() { 
+        return 'ref_items_income';
     }
     
-   public function delete(Model $obj) {
+    public function delete(Model $obj) {
         if ($this->delete_stmt === null) {
             $this->where = ['id = :id'];
 

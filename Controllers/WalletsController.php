@@ -8,7 +8,7 @@
 
 namespace Controllers;
 
-use tm\Controller;
+use tm\RestController;
 use tm\Validator;
 use Models\Wallets;
 use Models\Currency;
@@ -19,7 +19,7 @@ use Respect\Validation\Exceptions\ValidationException;
  *
  * @author terentyev.m
  */
-class WalletsController extends Controller
+class WalletsController extends RestController
 {
     private $limit = 50;
     private $offset = 0;

@@ -207,4 +207,5 @@ abstract class Mapper extends Base
     abstract public function delete(Model $obj);
 
     abstract protected function getPrimaryKey();
+    abstract  public function mapModelToDb(Model $obj);
 }

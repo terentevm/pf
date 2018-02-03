@@ -26,7 +26,7 @@ class Wallets extends Model {
     private $credit_limit = 0;
     private $user_id = '';
     
-    public function __construct($user_id, $name, $currency_id ,$id = null ,Model $currency = null, $is_creditcard = 0, $grace_period = 0,$credit_limit = 0) {
+    public function __construct($user_id = "", $name ="", $currency_id = "" ,$id = null ,Model $currency = null, $is_creditcard = 0, $grace_period = 0,$credit_limit = 0) {
         $this->id = $id;
         $this->name = $name;
         $this->currency = $currency;
