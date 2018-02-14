@@ -57,10 +57,14 @@ class QueryBuilder {
         return $sql;
     }
 
-    public function buildUpdate(Mapper $mapperInstance) {
-        $fields = '(' . implode(',' ,$mapperInstance::$db_columnes) . ')';
-        $params = '(' . $this->performColumnesToParams($mapperInstance::$db_columnes) . ')';
-        $sql = 'UPDATE ' . $mapperInstance::setTable() . 'SET ' . $fields . ' VALUES ' . $params . $this->buildWhere();
+    public function buildUpdate(Mapper $mapperInstance, $colsForUpdate) {
+        
+        $colNames = '(' . implode(',' , array_keys($colsForUpdate)) . ')';
+        $colValues = '(' . implode(',' , array_values($colsForUpdate)) . ')';
+
+        $params = '(' . $this->performColumnesToParams($colsForUpdate) . ')';
+       
+        $sql = 'UPDATE ' . $mapperInstance::setTable() . 'SET ' . $colNames . ' VALUES ' . $params . $this->buildWhere();
 
         return $sql;
     }

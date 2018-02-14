@@ -113,4 +113,8 @@ class Request extends Base
     public function isAjax() {
         return isset($this->headers['HTTP_X_REQUESTED_WITH']) && $this->headers['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest';
     }
+
+    public function getRequestMethod() {
+        return $this->headers['REQUEST_METHOD'];    
+    }
 }

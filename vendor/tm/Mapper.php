@@ -79,6 +79,15 @@ abstract class Mapper extends Base
         return $model;
     }
 
+    public function update(array $colsForUpdate) {
+        
+        $sql = $this->db->getQueryBuilder()->buildUpdate($this);
+        $this->update_stmt = $this->db->prepare($sql);
+        
+        $success =  $this->update_stmt->execute($colsForUpdate);
+
+    }
+
     public function processRelations(&$data) {
         if (empty($this->with)) {
             return $data;
@@ -201,8 +210,7 @@ abstract class Mapper extends Base
         return $success;
 
     }
-    
-    abstract protected function update(Model $obj);
+
 
     abstract public function delete(Model $obj);
 
