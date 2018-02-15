@@ -23,7 +23,7 @@ class WalletsController extends RestController
 {
     private $limit = 50;
     private $offset = 0;
-    public static $classModel = '\models\Wallets';
+    public static $classModel = '\models\Wallet';
     
     public function actionGetList() {
         

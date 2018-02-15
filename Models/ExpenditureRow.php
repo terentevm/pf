@@ -19,6 +19,8 @@ class ExpenditureRow extends Model
     private $sum = 0;
     private $comment = '';
     
+    private $ItemExpenditure = null;
+
     public function __construct($docId, $item_id, $sum, $comment) {
         $this->docId = $docId;
         $this->item_id = $item_id;
@@ -66,6 +68,13 @@ class ExpenditureRow extends Model
         $this->comment = $comment;
     }
 
+    public function setItemExpenditure($item) {
+        $this->ItemExpenditure = $item;
+    }
+
+    public function getItemExpenditure() {
+        return $this->ItemExpenditure;
+    }
 
     
 }

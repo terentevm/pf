@@ -25,6 +25,8 @@ class Expenditure extends Model
     private $rows = null;
     private $comment = '';
     
+    private $Wallet = null;
+
     public function getId() {
         return $this->id;
     }
@@ -80,6 +82,12 @@ class Expenditure extends Model
         $this->comment = $comment;
     }
 
+    public function setWallet($Wallet) {
+        $this->Wallet = $Wallet;
+    }
 
+    public function getWallet() {
+        return $this->Wallet;
+    }
 
 }

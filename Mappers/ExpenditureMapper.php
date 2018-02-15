@@ -18,6 +18,13 @@ class ExpenditureMapper extends Mapper
         return 'doc_expend';
     }
     
+    public static function getWallet() {
+        return [
+                'f_key' => 'wallet_id',
+                'table_col' => 'id'
+            ];
+    }
+
     public function delete(Model $obj) {
         
     }

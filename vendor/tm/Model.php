@@ -46,6 +46,21 @@ abstract class Model extends Base{
         return  $success ; 
     }
 
+    public function update() {
+        
+        if ($this->id === null) {
+            return false;
+        }
+
+        $mapper = Mapper::getMapper(get_called_class());
+
+        $colsForUpdate = $mapper->mapModelToDb($this);
+
+        $success = $mapper->where(['id = :id'])
+            ->setParams(['id' => $id])
+            ->update($colsForUpdate);
+    }
+
     public function delete() {
         $mapper = Mapper::getMapper(get_called_class());
         $success = $mapper->delete($this);
