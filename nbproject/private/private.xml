@@ -3,13 +3,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/OSPanel/domains/localhost/pf/Models/wallets.php</file>
-            <file>file:/C:/OSPanel/domains/localhost/pf/vendor/tm/Router.php</file>
-            <file>file:/C:/OSPanel/domains/localhost/pf/Mappers/CurrencyMapper.php</file>
-            <file>file:/C:/OSPanel/domains/localhost/pf/Controllers/UserController.php</file>
-            <file>file:/C:/OSPanel/domains/localhost/pf/vendor/tm/Model.php</file>
-            <file>file:/C:/OSPanel/domains/localhost/pf/vendor/tm/RestController.php</file>
-            <file>file:/C:/OSPanel/domains/localhost/pf/Mappers/WalletsMapper.php</file>
+            <file>file:/C:/OSPanel/domains/localhost/pf/Models/Expenditure.php</file>
+            <file>file:/C:/OSPanel/domains/localhost/pf/Mappers/IncomeRowMapper.php</file>
+            <file>file:/C:/OSPanel/domains/localhost/pf/Controllers/ExpenditureController.php</file>
+            <file>file:/C:/OSPanel/domains/localhost/pf/Controllers/IncomeController.php</file>
+            <file>file:/C:/OSPanel/domains/localhost/pf/Models/Income.php</file>
+            <file>file:/C:/OSPanel/domains/localhost/pf/Mappers/IncomeMapper.php</file>
+            <file>file:/C:/OSPanel/domains/localhost/pf/Models/IncomeRow.php</file>
+            <file>file:/C:/OSPanel/domains/localhost/pf/Mappers/ExpenditureMapper.php</file>
         </group>
     </open-files>
 </project-private>

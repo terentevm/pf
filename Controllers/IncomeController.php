@@ -10,7 +10,7 @@ namespace Controllers;
 
 use tm\RestController;
 
-class ExpenditureController extends RestController
+class IncomeController extends RestController
 {
-    public static $classModel = '\models\Expenditure';
+    public static $classModel = '\models\Income';
 }
