@@ -27,6 +27,13 @@ class ExpenditureRowMapper extends Mapper
         return 'id';
     }
 
+    public static function getItemsExpenditure() {
+        return [
+                'f_key' => 'item_id',
+                'table_col' => 'id'
+            ];
+    }
+
     public function mapModelToDb(Model $obj) {
         $db_arr = [
             'id' => $obj->getId(),

@@ -11,6 +11,8 @@ trait MapperTrait
     public $offset;
 
     public $where;
+
+    public $orderBy = [];
    
     public $asArray = false;
 
@@ -65,6 +67,15 @@ trait MapperTrait
 
         return $this;
     } 
+
+    public function orderBy(string $column, $order = 'ASC') {
+        
+        if (array_key_exists($column, $this->orderBy) === false) {
+            $this->orderBy[$column] = $column . ' ' . $order;   
+        }
+        
+        return $this;
+    }
 
     public function limit($limit) {
         $this->limit = $limit;

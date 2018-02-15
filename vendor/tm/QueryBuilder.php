@@ -85,12 +85,20 @@ class QueryBuilder {
         return 'FROM ' . $this->mapper::setTable();
     }
 
-    public function buildWhere(){
+    public function buildWhere() {
         if ($this->mapper->where !== null) {
             return " WHERE " . $this->buildCondition($this->mapper->where);
         }
         
         return '';
+    }
+
+    public function buildOrderBy() {
+        if (empty($this->mapper->orderBy)) {
+            return '';
+        }
+
+        return ' ORDER BY ' . \implode(',', $this->mapper->orderBy);
     }
 
     public function buildCondition($condition) {
@@ -129,7 +137,7 @@ class QueryBuilder {
 
     public function buildLimit() {
         if ($this->mapper->limit !== null) {
-            return 'LIMIT ' . $this->mapper->limit;
+            return ' LIMIT ' . $this->mapper->limit;
         }
 
         return '';
@@ -138,7 +146,7 @@ class QueryBuilder {
 
     public function buildOffset() {
         if ($this->mapper->offset !== null) {
-            return 'OFFSET ' . $this->mapper->offset;
+            return ' OFFSET ' . $this->mapper->offset;
         }
 
         return '';
