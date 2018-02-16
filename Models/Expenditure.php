@@ -11,6 +11,7 @@ namespace Models;
 use tm\Model;
 use Models\DocumentCollection;
 use Models\ExpenditureRow;
+
 /**
  * Description of Expenditure
  *
@@ -44,6 +45,19 @@ class Expenditure extends Model
     }
 
     public function getRows() {
+        
+        if ($this->rows === null) {
+            
+            $param = [
+                'doc_id' => $this->id
+            ];
+            
+            $rows = ExpenditureRow::find()->with('ItemExpenditure')->where(['doc_id = :doc_id'])->setParams($param)->All();
+
+            $this->setRows($rows);
+
+        }
+        
         return $this->rows;
     }
 

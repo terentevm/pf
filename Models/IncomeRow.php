@@ -23,6 +23,9 @@ class IncomeRow extends Model
     private $sum = 0;
     private $comment = '';
     
+    private $ItemIncome = null;
+    private $Wallet = null;
+
     public function __construct($docId, $item_id, $wallet_id, $sum, $comment) {
         $this->docId = $docId;
         $this->item_id = $item_id;
@@ -79,5 +82,20 @@ class IncomeRow extends Model
         $this->comment = $comment;
     }
 
+    public function setItemIncome($ItemIncome) {
+        $this->ItemIncome= $ItemIncome;
+    }
+    
+    public function setWallet($Wallet) {
+        $this->Wallet = $Wallet;
+    }
 
+
+    public function getItemIncome() {
+        return $this->ItemIncome;
+    }
+    
+    public function getWallet() {
+        return $this->Wallet;
+    }
 }

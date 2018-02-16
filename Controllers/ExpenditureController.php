@@ -9,16 +9,13 @@
 namespace Controllers;
 
 use tm\RestController;
-<<<<<<< HEAD
 
-=======
 use tm\helpers\DateHelper;
 /**
  * Description of ExpenditureController
  *
  * @author terentyev.m
  */
->>>>>>> a08218ea76d5c3686e9f8551328198f076990635
 class ExpenditureController extends RestController
 {
     public static $classModel = '\models\Expenditure';
@@ -58,6 +55,19 @@ class ExpenditureController extends RestController
         $result = $finder->all();
 
         return $this->createResponse($result, 200);
+    }
+
+    public function actionShow() {
+        $get = Reg::$app->request->get();  
+        
+        if (!isset($get['id'])) {
+            return $this->createResponse('Not found', 404); 
+        }
+
+        $modelObj = static::$classModel::findById($get['id']);
+        $modelObj->getRows();
+
+        return $this->createResponse($modelObj, 200); 
     }
 
 }

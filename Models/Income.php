@@ -33,6 +33,18 @@ class Income extends Model
     }
 
     public function getRows() {
+        if ($this->rows === null) {
+            
+            $param = [
+                'doc_id' => $this->id
+            ];
+            
+            $rows = IncomeRow::find()->with(['ItemsIncome', 'Wallet'])->where(['doc_id = :doc_id'])->setParams($param)->All();
+
+            $this->setRows($rows);
+
+        }
+        
         return $this->rows;
     }
 
