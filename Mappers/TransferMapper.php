@@ -11,36 +11,30 @@ namespace mappers;
 use tm\Mapper;
 use tm\Model;
 
-class ExpenditureRowMapper extends Mapper
+class TransferMapper extends Mapper
 {
-    public static $db_columnes = ['id', 'doc_id', 'item_id', 'sum', 'comment'];
+
+    public static $db_columnes = ['id', 'user_id' ,'date', 'wallet_id_from', 'wallet_id_to', 'sumFrom', 'sumTo' ,'comment'];
     
     public static function setTable() { 
-        return 'doc_expend_rows';
+        return 'doc_transfers';
     }
-    
-    public function delete(Model $obj) {
-        
-    }
+ 
 
     protected function getPrimaryKey() {
         return 'id';
     }
 
-    public static function getItemsExpenditure() {
-        return [
-                'f_key' => 'item_id',
-                'table_col' => 'id'
-            ];
-    }
-
     public function mapModelToDb(Model $obj) {
         $db_arr = [
             'id' => $obj->getId(),
-            'doc_id' => $obj->getDocId(),
-            'item_id' => $obj->getItem_id(),
-            'sum' => $obj->getSum(),
-            'comment' => $obj->getComment()
+            'user_id' => $obj->getUser_id(),
+            'date' => $obj->getDate(),
+            'wallet_id_from' => $obj->getWallet_id_from(),
+            'wallet_id_to' => $obj->getWallet_id_to(),
+            'sumFrom' => $obj->getSumFrom(),
+            'sumTo' => $obj->getSumTo(),
+            'comment' =>$obj->getComment()
         ];
         
         if (!isset($db_arr['id'])){
@@ -49,6 +43,9 @@ class ExpenditureRowMapper extends Mapper
         
         return $db_arr;
     }
-
-
+    
+       
+    public function delete(Model $obj) {
+        
+    }
 }

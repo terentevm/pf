@@ -36,8 +36,12 @@ class RestController extends Controller
         return $this->createResponse($result, 200);
     }
     
-    public function actionShow($id) {
+    public function actionShow() {
+        $get = Reg::$app->request->get();  
         
+        if (!isset($get['id'])) {
+            return $this->createResponse('Not found', 404); 
+        }
         $className = self::$classModel;    
         
         $result = $className::findById($id, false);

@@ -200,7 +200,20 @@ class Connection
         return $this->pdo->rollBack();
     }
     
+    public function transactionExists() {
+        return $this->pdo->inTransaction();
+    }
+
+
     public function lastInsertedId(){
         return $this->pdo->lastInsertId();
+    }
+    
+    public function callStoredProcedure($id) {
+        $sql = "CALL regTransfer(:id)";
+        
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam('id', $id);
+        $result = $stmt->execute();
     }
 }

@@ -42,7 +42,7 @@ abstract class Model extends Base{
     }
     
     public function save($upload_mode = false) {
-        $success = Mapper::getMapper(get_called_class())->save($this, $upload_mode); 
+        $success = Mapper::getMapper(get_called_class())->save($this, $upload_mode, true); 
         return  $success ; 
     }
 

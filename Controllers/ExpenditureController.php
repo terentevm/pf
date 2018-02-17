@@ -27,7 +27,7 @@ class ExpenditureController extends RestController
         $offset = $get['offset'] ?? 0;
 
         $arrPeriod = DateHelper::getPeriodFromRequest(Reg::$app->request);
-        $finder = static::$classModel::find();
+        $finder = self::$classModel::find();
         $finder->with('Wallet');
 
         $finder->where(['user_id = :user_id'])->setParams(['user_id' => $this->user_id]);

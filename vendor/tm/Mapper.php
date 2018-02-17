@@ -181,13 +181,25 @@ abstract class Mapper extends Base
         return $model;
     }
 
-    public function save(Model $obj, $upload_mode = false) {
+    public function save(Model $obj, $upload_mode = false, $useTransaction = false) {
         $pk_name = $this->getPrimaryKey();
         
         $pk_val = $obj->$pk_name;
         
         if (is_null($pk_val) || empty($pk_val) || $upload_mode === true) {
+            if (!$this->db->transactionExists() && $useTransaction) {
+                $this->db->beginTransaction();    
+            }
+            
             $success = $this->create($obj);
+            
+            if ($success) {
+                $success = $this->afterSave($obj);   
+            }
+            if ($this->db->transactionExists() && $useTransaction){
+                $this->db->commitTransaction();    
+            }
+            
         }
         else {
             $success = $this->update($obj);
@@ -206,11 +218,18 @@ abstract class Mapper extends Base
         $param = $this->mapModelToDb($obj);
                         
         $success = $this->create_stmt->execute($param);
-
+        
         return $success;
 
     }
 
+    protected function afterSave($obj) {
+        return true;
+    }
+    
+    protected function afterUpdate($obj) {
+        return true;    
+    }
 
     abstract public function delete(Model $obj);
 

@@ -44,7 +44,4 @@ class IncomeRowMapper extends Mapper
         return $db_arr;
     }
 
-    protected function update(Model $obj) {
-        
-    }
 }
