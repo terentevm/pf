@@ -58,16 +58,12 @@ class ExpenditureMapper extends Mapper
         }
         
         $param = $this->mapModelToDb($obj);
-        
-      //  $this->db->beginTransaction();
-        
                         
         $success = $this->create_stmt->execute($param);
         
         if ($success !== true) {
             return false;
         }
-        
         
         foreach ($obj->rows->strings() as $row) {
             $row->setDocId($param['id']);
@@ -80,48 +76,16 @@ class ExpenditureMapper extends Mapper
             }
         }
         
-        
-       // $this->db->commitTransaction();
-        
         return $success;
     }
     
     protected function afterSave($obj) {
-        $sql = "insert into regMoneyTrans (date, expend_id, wallet_id, currensy_id, sum)
-        SELECT * FROM (
-    SELECT 
-	doc.date as date,
-    sub1.doc_id as expend_id,
-    doc.wallet_id as wallet_id,
-    wal.currency_id as currensy_id,
-    sum(sub1.sum) as sum
-FROM (SELECT
-    doc_id as doc_id,
-    item_id as item_id,
-    SUM(sum * -1 ) as sum
-FROM
-	doc_expend_rows
-where doc_id = :doc_id
-group by
-	doc_id, item_id) as sub1
-    
-left join doc_expend as doc ON sub1.doc_id = doc.id
-left join wallets as wal ON doc.wallet_id = wal.id
-
-group by
-	doc.date,
-    sub1.doc_id,
-    doc.wallet_id,
-    wal.currency_id
-    ) as temp";
-        
-        $stmt = $this->db->prepare($sql);
-        $param = [
-            'doc_id' => $obj->getId()
-        ];
-        
-        $success = $stmt->execute($param);
-        
-        return $success;
+       $regMoney = new \Models\RegMoneyTransactions();
+       $regMoney->loadModel($obj);
+       $success = $regMoney->save(false);
+       
+       unset($regMoney);
+       
+       return $success;
     }
 }

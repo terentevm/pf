@@ -196,8 +196,15 @@ abstract class Mapper extends Base
             if ($success) {
                 $success = $this->afterSave($obj);   
             }
+            
             if ($this->db->transactionExists() && $useTransaction){
-                $this->db->commitTransaction();    
+                if ($success) {
+                    $this->db->commitTransaction();   
+                }
+                else {
+                    $this->db->rollBackTransaction();
+                }
+                    
             }
             
         }

@@ -42,10 +42,6 @@ class IncomeMapper extends Mapper
         return $db_arr;
     }
 
-    protected function update(Model $obj) {
-        
-    }
-
     protected function create(Model $obj) {
          
         if ($this->create_stmt === null) {
@@ -54,10 +50,7 @@ class IncomeMapper extends Mapper
         }
         
         $param = $this->mapModelToDb($obj);
-        
-        $this->db->beginTransaction();
-        
-                        
+                      
         $success = $this->create_stmt->execute($param);
         
         if ($success !== true) {
@@ -70,14 +63,21 @@ class IncomeMapper extends Mapper
             $saved = $row_mapper->save($row);
             
             if ($saved === false){
-                $this->db->rollBackTransaction();
+                
                 return false;
             }
         }
-        
-        
-        $this->db->commitTransaction();
-        
+
         return $success;
+    }
+    
+    protected function afterSave($obj) {
+       $regMoney = new \Models\RegMoneyTransactions();
+       $regMoney->loadModel($obj);
+       $success = $regMoney->save(false);
+       
+       unset($regMoney);
+       
+       return $success;
     }
 }
