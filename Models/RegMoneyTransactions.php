@@ -14,8 +14,6 @@ use Models\Income;
 use Models\Transfer;
 use Models\ChangeBalance;
 
-use Models\DocumentCollection;
-
 class RegMoneyTransactions extends Model
 {
 
@@ -43,6 +41,8 @@ class RegMoneyTransactions extends Model
      */
     public function loadModel(Model $model) {
         
+		$this->rows = array();
+		
         $this->modelId = $model->getId();
         
         if ($model instanceof Expenditure) {
@@ -58,6 +58,9 @@ class RegMoneyTransactions extends Model
         elseif ($model instanceof ChangeBalance) {
             $this->condCol = 'cb_id'; 
         }
+		else {
+			throw new \Exception('Instance of model: ' . get_class($model) . " doesn't support for saving to the moneys register!" );
+		}
     }
     
     private function loadExpenditure($model) {
@@ -103,4 +106,45 @@ class RegMoneyTransactions extends Model
         }
         
     }
+	
+	private function loadTransfer($model) {
+		
+		$this->rows[] = [
+                'date' => $model->getDate(),
+                'wallet_id' => $model->getWallet_id_from(),
+                'sum' => $row->getSumFrom() * -1,
+                'expend_id' => null,
+                'income_id' => null,
+                'transfer_id' => $model->getId(),
+                'cb_id' => null
+            ];
+				
+		$this->rows[] = [
+                'date' => $model->getDate(),
+                'wallet_id' => $model->getWallet_id_to(),
+                'sum' => $row->getSumTo(),
+                'expend_id' => null,
+                'income_id' => null,
+                'transfer_id' => $model->getId(),
+                'cb_id' => null
+            ];
+	}
+	
+	public function loadChangeBalance($model) {
+		
+		$sum = ($model->getSumExpend() > 0) ? $model->getSumExpend() : $model->getSumIncome();
+		
+		$this->rows[] = [
+                'date' => $model->getDate(),
+                'wallet_id' => $model->getWallet_id(),
+				'sum' => $sum,
+                'expend_id' => null,
+                'income_id' => null,
+                'transfer_id' => null,
+                'cb_id' => $model->getId()
+            ];
+
+				
+	}
+	
 }
