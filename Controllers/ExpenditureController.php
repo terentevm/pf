@@ -19,7 +19,7 @@ use tm\helpers\DateHelper;
 class ExpenditureController extends RestController
 {
     public static $classModel = '\models\Expenditure';
-
+	
     public function actionIdex() {
         $get = Reg::$app->request->get();
         
