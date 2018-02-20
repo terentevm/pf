@@ -9,7 +9,7 @@ use tm\Model;
  *
  * @author terentyev.m
  */
-class WalletsMapper extends Mapper
+class WalletMapper extends Mapper
 {
     public static $db_columnes = ['id', 'user_id' ,'name', 'currency_id', 'is_creditcard', 'grace_period', 'credit_limit'];
     
@@ -26,20 +26,6 @@ class WalletsMapper extends Mapper
                 'f_key' => 'currency_id',
                 'table_col' => 'id'
             ];
-    }
-
-    protected function update(\tm\Model $obj) {
-        if ($this->update_stmt === null) {
-            $this->where = ['id = :id'];
-
-            $sql = $this->db->getQueryBuilder()->buildUpdate($this);
-            $this->update_stmt = $this->db->prepare($sql);
-        }
-        
-        $param = $this->mapModelToDb($obj);
-        $success = $this->create_stmt->execute($param);
-
-        return $success;
     }
 
     public function delete(\tm\Model $obj) {

@@ -9,19 +9,50 @@
 namespace Controllers;
 
 use tm\RestController;
-
+use tm\Registry as Reg;
 use tm\helpers\DateHelper;
-/**
- * Description of ExpenditureController
- *
- * @author terentyev.m
- */
+use Respect\Validation\Validator as v;
+
 class ExpenditureController extends RestController
 {
     public static $classModel = '\models\Expenditure';
-	
-    public function actionIdex() {
+    
+    public function getAllowedParams_GET() {
         $get = Reg::$app->request->get();
+        
+        $get_params = [];
+        
+        if (isset($get['limit']) && v::intVal()->between(1, 100)->validate($get['limit'])) {
+            $get_params['limit'] = $get['limit']; 
+        }
+        else {
+            $get_params['limit'] = $this->limit;    
+        }
+        
+        if (isset($get['offset']) && v::intVal()->between(1, 100)->validate($get['limit'])) {
+            $get_params['offset'] = $get['offset'];    
+        }
+        else {
+            $get_params['offset'] = $this->offset;    
+        }
+        
+        if (isset($get['dateFrom']) && v::date('Y-m-d')->validate($get['dateFrom'])) {
+            $get_params['dateFrom'] = $get['dateFrom'];    
+        }
+        
+        if (isset($get['dateTo']) && v::date('Y-m-d')->validate($get['dateTo'])) {
+            $get_params['dateTo'] = $get['dateTo'];    
+        }
+        
+        if (isset($get['wallet_id']) && v::stringType()->length(36, null)->validate($get['wallet_id'])) {
+            $get_params['wallet_id'] = $get['wallet_id'];    
+        }
+        
+    }
+    
+    public function actionIndex() {
+        
+        $get = $this->getAllowedParams_GET();
         
         $limit = $get['limit'] ?? 50;
         $offset = $get['offset'] ?? 0;

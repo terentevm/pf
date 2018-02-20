@@ -7,7 +7,7 @@ class DateHelper
     
     
     public function validateDate($date, $format = 'Y-m-d H:i:s') {
-        $d = DateTime::createFromFormat($format, $date);
+        $d = \DateTime::createFromFormat($format, $date);
         return $d && $d->format($format) == $date;
     }
 
@@ -34,35 +34,35 @@ class DateHelper
     }
 
     public static function startOfDay($date, $format = 'Y-m-d H:i:s') {
-        $d = DateTime::createFromFormat($format, $date);
+        $d = \DateTime::createFromFormat($format, $date);
         $d->setTime(0,0,0);
 
         return $d->format($format);
     }
 
     public static function endOfDay($date, $format = 'Y-m-d H:i:s') {
-        $d = DateTime::createFromFormat($format, $date);
+        $d = \DateTime::createFromFormat($format, $date);
         $d->setTime(23, 59, 59);
 
         return $d->format($format);    
     }
 
     public static function startOfWeek($date, $format = 'Y-m-d H:i:s') {
-        $d = DateTime::createFromFormat($format, $date);
+        $d = \DateTime::createFromFormat($format, $date);
         $d->setTime(0,0,0);
         $d->modify("monday this week");
         return $d->format($format);
     }
 
     public static function endOfWeek($date, $format = 'Y-m-d H:i:s') {
-        $d = DateTime::createFromFormat($format, $date);
+        $d = \DateTime::createFromFormat($format, $date);
         $d->setTime(0,0,0);
         $d->modify("sunday this week");
         return $d->format($format);
     }
 
     public static function startOfMonth($date, $format = 'Y-m-d H:i:s') {
-        $d = DateTime::createFromFormat($format, $date);
+        $d = \DateTime::createFromFormat($format, $date);
         $d->setTime(0,0,0);
         $d->modify("first day of");
 
@@ -70,7 +70,7 @@ class DateHelper
     }
 
     public static function endOfMonth($date, $format = 'Y-m-d H:i:s') {
-        $d = DateTime::createFromFormat($format, $date);
+        $d = \DateTime::createFromFormat($format, $date);
         $d->setTime(23, 59, 59);
         $d->modify("last day of");
 
@@ -78,7 +78,7 @@ class DateHelper
     }
 
     public static function startOfYear($date, $format = 'Y-m-d H:i:s') {
-        $d = DateTime::createFromFormat($format, $date);
+        $d = \DateTime::createFromFormat($format, $date);
         $d->setDate($d->format("Y"), 1, 1);
         $d->setTime(0,0,0);
     
@@ -87,7 +87,7 @@ class DateHelper
     }
 
     public static function endOfYear($date, $format = 'Y-m-d H:i:s') {
-        $d = DateTime::createFromFormat($format, $date);
+        $d = \DateTime::createFromFormat($format, $date);
         $d->setDate($d->format("Y"), 12, 31);
         $d->setTime(23, 59, 59);
   
@@ -95,7 +95,7 @@ class DateHelper
         return $d->format($format);    
     }
 
-    public function getPeriodFromRequest($request, $paramFrom = 'dateFrom', $paramTo = 'dateTo')
+    public static function getPeriodFromRequest($request, $paramFrom = 'dateFrom', $paramTo = 'dateTo')
 	{
 		$get = $request->get();
         
@@ -106,15 +106,15 @@ class DateHelper
 			
 		if (isset($get['dtype'])) {
 			
-			if (allowedPeriodType($get['dtype'])) {
+			if (self::allowedPeriodType($get['dtype'])) {
 				if ($get['dtype'] == 'period') {
 					$dateFrom = $get[$paramFrom] ?? null;
 					$dateTo = $get[$paramTo] ?? null;
 					if (!is_null($dateFrom)) {
-						$arrPeriod['dateFrom'] = DateHelper::startOfPeriod($dateFrom, "day", 'Y-m-d');	
+						$arrPeriod['dateFrom'] = self::startOfPeriod($dateFrom, "day", 'Y-m-d');	
 					}
 					if (!is_null($dateTo)) {
-						$arrPeriod['dateTo'] = DateHelper::endOfPeriod($dateTo , "day", 'Y-m-d');	
+						$arrPeriod['dateTo'] = self::endOfPeriod($dateTo , "day", 'Y-m-d');	
 					}
 					
 				}
@@ -122,8 +122,8 @@ class DateHelper
 					
 					$dateFrom = $get[$paramFrom] ?? null;
 					if (!is_null($dateFrom)) {
-						$arrPeriod['dateFrom'] = DateHelper::startOfPeriod($dateFrom , $get['dtype'], 'Y-m-d');	
-						$arrPeriod['dateTo'] = DateHelper::endOfPeriod($dateFrom , $get['dtype'], 'Y-m-d');	
+						$arrPeriod['dateFrom'] = self::startOfPeriod($dateFrom , $get['dtype'], 'Y-m-d');	
+						$arrPeriod['dateTo'] = self::endOfPeriod($dateFrom , $get['dtype'], 'Y-m-d');	
 					}
 				}
 			}
@@ -134,7 +134,7 @@ class DateHelper
 		return $arrPeriod;
 	}
 	
-	function allowedPeriodType($type) {
+	public static function allowedPeriodType($type) {
 		$allowed = ['period', 'day', 'week', 'month', 'year'];
 		
 		return array_search(strtolower($type), $allowed) === false ? false : true;

@@ -12,6 +12,9 @@ class RestController extends Controller
     
     protected $user_id = null;
     
+    protected $limit = 50;
+    protected $offset = 0;
+    
     public function __construct($route) {
         parent::__construct($route);
         $this->user_id = Reg::$app->user_id;

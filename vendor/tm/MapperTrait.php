@@ -93,7 +93,20 @@ trait MapperTrait
     }
 
     public function setParams(array $params) {
-        $this->params = $params;
+        
+        foreach ($params as $key => $value) {
+            $this->setParam($key,  $value);
+        }
+        
+        return $this;
+    }
+    
+    public function setParam($name, $value) {
+        
+        if (is_string($name) && !empty($name)) {
+            $this->params[$name] = $value;    
+        }
+        
         return $this;
     }
 
