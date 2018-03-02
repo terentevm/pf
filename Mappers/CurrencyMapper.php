@@ -36,19 +36,6 @@ class CurrencyMapper extends Mapper
         return 'id';
     }
 
-    protected function update(\tm\Model $obj) {
-        if ($this->update_stmt === null) {
-            $this->where = ['id = :id'];
-
-            $sql = $this->db->getQueryBuilder()->buildUpdate($this);
-            $this->update_stmt = $this->db->prepare($sql);
-        }
-        
-        $param = $this->mapModelToDb($obj);
-        $success = $this->create_stmt->execute($param);
-
-        return $success;      
-    }
     
     public function mapModelToDb(Model $obj) {
         $db_arr = [

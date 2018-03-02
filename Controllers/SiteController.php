@@ -109,6 +109,38 @@ class SiteController extends Controller{
         
     }
 
+    public function actionTableTest() {
+        
+        $arr = [];
+
+        $arr[] = [
+            'id' => 1,
+            'name' => 'col 1',
+            'sum' => 35.50
+        ];
+
+        $arr[] = [
+            'id' => 2,
+            'name' => 'col 2',
+            'sum' => 340.50
+        ];
+
+        $arr[] = [
+            'id' => 3,
+            'name' => 'col 3',
+            'sum' => 70
+        ];
+
+        $arr[] = [
+            'id' => 4,
+            'name' => 'col 4',
+            'sum' => 23
+        ];
+
+        return $this->createResponse($arr);
+        
+    }
+
     public function actionTable() {
 
         $table = new Table("my_table");

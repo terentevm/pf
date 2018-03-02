@@ -117,4 +117,11 @@ class Request extends Base
     public function getRequestMethod() {
         return $this->headers['REQUEST_METHOD'];    
     }
+
+    public function isCORSRequest() {
+        
+        $isCORS = $this->getHeader('HTTP_ACCESS_CONTROL_REQUEST_METHOD') !== '' ? true : false;
+        return $isCORS;
+         
+    }
 }

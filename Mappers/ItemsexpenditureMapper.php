@@ -13,6 +13,25 @@ class ItemsExpenditureMapper extends Mapper
         return "ref_items_expenditure";
     }
     
+    protected function create(Model $obj) {
+       
+        $sql = "CALL InsertItemExpenditure(?,?,?,?,?,?)";
+
+        $stmt = $this->db->prepare($sql);
+        $param = $this->mapModelToDb($obj);
+        $stmt->bindParam(1, $param['id']);
+        $stmt->bindParam(2, $param['user_id']);
+        $stmt->bindParam(3, $param['name']);
+        $stmt->bindParam(4, $param['comment']);
+        $stmt->bindParam(5, $param['not_active']);
+        $stmt->bindParam(6, $param['parent_id']);
+    
+        $success = $stmt->execute();
+        
+        return $success;
+
+    }
+
    public function delete(Model $obj) {
         if ($this->delete_stmt === null) {
             $this->where = ['id = :id'];
@@ -43,18 +62,6 @@ class ItemsExpenditureMapper extends Mapper
         ];
     }
 
-    protected function update(Model $obj) {
-        if ($this->update_stmt === null) {
-            $this->where = ['id = :id'];
-
-            $sql = $this->db->getQueryBuilder()->buildUpdate($this);
-            $this->update_stmt = $this->db->prepare($sql);
-        }
-        
-        $param = $this->mapModelToDb($obj);
-        $success = $this->create_stmt->execute($param);
-
-        return $success;    
-    }
+   
 
 }

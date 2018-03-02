@@ -70,6 +70,8 @@ class UserController extends Controller {
             }
             
             $token = Reg::$app->access_manager->generateNewToken($user_id);
+            //setcookie("jwt", $token, time()+3600,"","http://localhost:8080",0,1);
+
             return $this->createResponse(['jwt' => $token], 200, '');
             
         }

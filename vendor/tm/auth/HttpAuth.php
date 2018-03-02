@@ -33,6 +33,9 @@ class HttpAuth implements AccessInterface
         }
         $request = Registry::$app->request;
         $header = $request->getHeader('HTTP_AUTHORIZATION');
+        if($header == "") {
+            return false;
+        }
         list($type, $jwt) = explode(" ",$header);
         
         if ((strcasecmp($type, "Bearer") == 0)) {

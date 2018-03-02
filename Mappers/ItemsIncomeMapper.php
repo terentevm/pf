@@ -44,18 +44,5 @@ class ItemsIncomeMapper extends Mapper
         ];
     }
 
-    protected function update(Model $obj) {
-        if ($this->update_stmt === null) {
-            $this->where = ['id = :id'];
-
-            $sql = $this->db->getQueryBuilder()->buildUpdate($this);
-            $this->update_stmt = $this->db->prepare($sql);
-        }
-        
-        $param = $this->mapModelToDb($obj);
-        $success = $this->create_stmt->execute($param);
-
-        return $success;    
-    }
 
 }

@@ -35,6 +35,10 @@ class Application extends Base{
             $this->request = Registry::CreateObject(Request::className());  
         }
         
+        if ($this->request->isCORSRequest()) {
+            (new Response(200))->send();
+        }
+
         if (isset($this->config['use_csrf_token']) && $this->config['use_csrf_token']) {
             $_SESSION['csrf_token'] = md5($this->getGuide());
         }
@@ -48,14 +52,14 @@ class Application extends Base{
         $access_is_allowed = $this->access_manager->checkAccess($route);
         
         if (!$access_is_allowed) {
-            if ($this->request->isAjax()) {
-                (new Response(401,'' ,'Authorisation error'))->send();
-                die();
-            }
-            else {
-                $router->redirect('/user/login');
-                die();  
-            }
+           // if ($this->request->isAjax()) {
+                (new Response(401))->send();
+                
+           // }
+          //  else {
+          //      $router->redirect('/user/login');
+          //      die();  
+          //  }
             
         }
        

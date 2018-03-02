@@ -59,9 +59,10 @@ class Response {
         }
 
         header("Access-Control-Allow-Origin: *");
-        header("Access-Control-Allow-Headers: content-type");
+        header("Access-Control-Allow-Headers: content-type,authorization");
         
         echo $this->body;
+        die();
     
     }
 }
