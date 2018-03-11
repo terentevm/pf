@@ -81,7 +81,24 @@ class RestController extends Controller
     }
     
     public function actionUpdate() {
+        $post = Reg::$app->request->post();
         
+        if (empty($post)) {
+            return $this->createResponse("Data for saving hasn't recieved", 500);
+        }
+        $post['user_id'] = $this->user_id;
+        $className = get_called_class()::$classModel;
+        
+        $model = new $className();
+        $model->load($post);
+        
+        $success = $model->update();
+        
+        if ($success === true) {
+            return $this->createResponse("OK", 200);    
+        } 
+        
+        return $this->createResponse("Error", 500);    
     }
     
     public function actionDelete($id) {

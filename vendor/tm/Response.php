@@ -55,14 +55,19 @@ class Response {
         header(http_response_code($this->http_code)); 
 
         foreach ($this->headers as $header => $value) {
-            header($header . ": " . $value);
+            $this->addHeaderToResponse($header, $value);
+          
         }
 
-        header("Access-Control-Allow-Origin: *");
-        header("Access-Control-Allow-Headers: content-type,authorization");
+       // $this->addHeaderToResponse("Access-Control-Allow-Origin", "*");
+        //$this->addHeaderToResponse("Access-Control-Allow-Headers", "Authorization, Origin, X-Requested-With, Accept, X-PINGOTHER, Content-Type");
         
         echo $this->body;
         die();
     
+    }
+    
+    public function addHeaderToResponse($header, $value) {
+        header("${header}: ${value}");
     }
 }

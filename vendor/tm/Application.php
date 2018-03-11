@@ -36,9 +36,12 @@ class Application extends Base{
         }
         
         if ($this->request->isCORSRequest()) {
+            header("Access-Control-Allow-Origin: *");
+        header("Access-Control-Allow-Headers: Authorization, Origin, X-Requested-With, Accept, X-PINGOTHER, Content-Type");
             (new Response(200))->send();
         }
-
+        header("Access-Control-Allow-Origin: *");
+        header("Access-Control-Allow-Headers: Authorization, Origin, X-Requested-With, Accept, X-PINGOTHER, Content-Type");
         if (isset($this->config['use_csrf_token']) && $this->config['use_csrf_token']) {
             $_SESSION['csrf_token'] = md5($this->getGuide());
         }

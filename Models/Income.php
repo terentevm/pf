@@ -19,6 +19,7 @@ class Income extends Model
     private $date = null;
     private $rows = null;
     private $comment = '';
+    private $sum = 0;
     
     public function getId() {
         return $this->id;
@@ -51,7 +52,11 @@ class Income extends Model
     public function getComment() {
         return $this->comment;
     }
-
+    
+    public function getSum() {
+        return $this->sum;
+    }
+    
     public function setId($id) {
         $this->id = $id;
     }
@@ -63,16 +68,23 @@ class Income extends Model
     public function setDate($date) {
         $this->date = $date;
     }
-
+    
+    public function setSum($sum) {
+        $this->sum = $sum;
+    }
+    
     public function setRows($rows) {
         
         $this->rows = new DocumentCollection($this);
+        $this->sum = 0;
         
         foreach ($rows as $row) {
             
             $row = new IncomeRow($this->id, $row['item_id'], $row['wallet_id'], $row['sum'], $row['comment']);
             
             $this->rows->add($row);
+            
+            $this->sum += $row['sum'];
         }
     }
 

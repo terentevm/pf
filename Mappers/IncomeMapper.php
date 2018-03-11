@@ -13,7 +13,7 @@ use tm\Model;
 
 class IncomeMapper extends Mapper
 {
-    public static $db_columnes = ['id', 'user_id', 'date', 'comment'];
+    public static $db_columnes = ['id', 'user_id', 'date', 'dateInt', 'sum', 'comment'];
 
     public static function setTable() { 
         return 'doc_income';
@@ -32,7 +32,9 @@ class IncomeMapper extends Mapper
             'id' => $obj->getId(),
             'user_id' => $obj->getUser_id(),
             'date' => $obj->getDate(),
-            'comment' =>$obj->getComment()
+            'dateInt' => strtotime($obj->getDate()),
+            'comment' =>$obj->getComment(),
+            'sum' => $obj->getSum()
         ];
         
         if (!isset($db_arr['id'])){

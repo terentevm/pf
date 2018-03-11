@@ -9,7 +9,6 @@
 namespace Controllers;
 use tm\Controller;
 
-use tm\auth\HttpAuth;
 use tm\Registry as Reg;
 use Models\User;
 use Respect\Validation\Validator as v;
@@ -70,7 +69,7 @@ class UserController extends Controller {
             }
             
             $token = Reg::$app->access_manager->generateNewToken($user_id);
-            //setcookie("jwt", $token, time()+3600,"","http://localhost:8080",0,1);
+            setcookie("jwt", $token, time() + 80000);
 
             return $this->createResponse(['jwt' => $token], 200, '');
             

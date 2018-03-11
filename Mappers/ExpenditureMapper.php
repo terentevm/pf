@@ -12,7 +12,7 @@ use tm\Model;
 
 class ExpenditureMapper extends Mapper
 {
-    public static $db_columnes = ['id', 'user_id', 'date', 'comment', 'wallet_id'];
+    public static $db_columnes = ['id', 'user_id', 'date', 'dateInt', 'sum', 'comment', 'wallet_id'];
 
     public static function setTable() { 
         return 'doc_expend';
@@ -38,8 +38,10 @@ class ExpenditureMapper extends Mapper
             'id' => $obj->getId(),
             'user_id' => $obj->getUser_id(),
             'date' => $obj->getDate(),
+            'dateInt' => strtotime($obj->getDate()),
             'comment' =>$obj->getComment(),
-            'wallet_id' => $obj->getWallet_id()
+            'wallet_id' => $obj->getWallet_id(),
+            'sum' => $obj->getSum()
         ];
         
         if (!isset($db_arr['id'])){

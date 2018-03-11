@@ -85,9 +85,14 @@ class Connection
     }
 
 
-    public function query($sql, $param = []) {
+    public function query($sql, $param = [], $newStmt = true) {
         
-        $success = $this->prepare($sql);
+        if ($newStmt || $this->stmt === null) {
+            $success = $this->prepare($sql);    
+        }
+        else {
+            $success = true;
+        }
 
         if ($success) {
             $this->stmt->execute($param);

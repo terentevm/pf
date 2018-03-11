@@ -81,11 +81,12 @@ abstract class Mapper extends Base
 
     public function update(array $colsForUpdate) {
         
-        $sql = $this->db->getQueryBuilder()->buildUpdate($this);
+        $sql = $this->db->getQueryBuilder()->buildUpdate($this, $colsForUpdate);
         $this->update_stmt = $this->db->prepare($sql);
         
         $success =  $this->update_stmt->execute($colsForUpdate);
-
+        
+        return $success;
     }
 
     public function processRelations(&$data) {

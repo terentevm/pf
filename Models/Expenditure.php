@@ -25,7 +25,7 @@ class Expenditure extends Model
     private $wallet_id = null;
     private $rows = null;
     private $comment = '';
-    
+    private $sum = 0;
     private $Wallet = null;
 
     public function getId() {
@@ -43,7 +43,11 @@ class Expenditure extends Model
     public function getWallet_id() {
         return $this->wallet_id;
     }
-
+    
+    public function getSum() {
+        return $this->sum;
+    }
+    
     public function getRows() {
         
         if ($this->rows === null) {
@@ -76,19 +80,24 @@ class Expenditure extends Model
     public function setDate($date) {
         $this->date = $date;
     }
-
+    
+    public function setSum($sum) {
+        $this->sum = $sum;
+    }
+    
     public function setWallet_id($wallet_id) {
         $this->wallet_id = $wallet_id;
     }
 
     public function setRows(array $rows) {
         $this->rows = new DocumentCollection($this);
-        
+        $this->sum = 0;
         foreach ($rows as $row) {
             
-            $row = new ExpenditureRow($this->id, $row['item_id'], $row['sum'], $row['comment']);
+            $row_obj = new ExpenditureRow($this->id, $row['item_id'], $row['sum'], $row['comment']);
             
-            $this->rows->add($row);
+            $this->rows->add($row_obj);
+            $this->sum += $row['sum'];
         }
     }
 

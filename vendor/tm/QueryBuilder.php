@@ -58,13 +58,15 @@ class QueryBuilder {
     }
 
     public function buildUpdate(Mapper $mapperInstance, $colsForUpdate) {
+        $this->mapper = $mapperInstance;
         
-        $colNames = '(' . implode(',' , array_keys($colsForUpdate)) . ')';
+        $keys_arr = array_keys($colsForUpdate);
+        $colNames = '(' . implode(',' , $keys_arr) . ')';
         $colValues = '(' . implode(',' , array_values($colsForUpdate)) . ')';
 
-        $params = '(' . $this->performColumnesToParams($colsForUpdate) . ')';
+        $params = ' ' . $this->performColumnesToUpdate($keys_arr) . ' ';
        
-        $sql = 'UPDATE ' . $mapperInstance::setTable() . 'SET ' . $colNames . ' VALUES ' . $params . $this->buildWhere();
+        $sql = 'UPDATE ' . $mapperInstance::setTable() . ' SET ' .  $params . $this->buildWhere();
 
         return $sql;
     }
@@ -177,5 +179,15 @@ class QueryBuilder {
         }
 
         return implode(',' ,$columnes);
+    }
+    
+    protected function performColumnesToUpdate($columnes) {
+        $res_arr = [];
+        
+        foreach ($columnes as $col) {
+            $res_arr[] = "${col} = :${col}";    
+        }
+        
+        return implode(",", $res_arr);
     }
 }

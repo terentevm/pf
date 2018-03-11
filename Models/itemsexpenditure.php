@@ -73,19 +73,4 @@ class ItemsExpenditure extends Model
         }
         
     }
-
-
-    public static function findByParentId($parentId, $user_id, $limit = 50, $offset = 0 ,$asArray = true) {
-        $result = Mapper::getMapper(get_called_class())
-            ->where(['user_id = :user_id', 'parent_id = :parent_id'])
-            ->limit($limit)
-            ->offset($offset)
-            ->setParams(['user_id' => $user_id, 'parent_id' => $parentId]);
-            
-            if ($asArray === true) {
-                $result = $result->asArray();     
-            }
-
-        return $result->all();  
-    }
 }

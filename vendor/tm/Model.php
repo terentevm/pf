@@ -57,8 +57,10 @@ abstract class Model extends Base{
         $colsForUpdate = $mapper->mapModelToDb($this);
 
         $success = $mapper->where(['id = :id'])
-            ->setParams(['id' => $id])
+            ->setParams(['id' => $this->id])
             ->update($colsForUpdate);
+                    
+        return $success;
     }
 
     public function delete() {
