@@ -59,8 +59,8 @@ class Response {
           
         }
 
-       // $this->addHeaderToResponse("Access-Control-Allow-Origin", "*");
-        //$this->addHeaderToResponse("Access-Control-Allow-Headers", "Authorization, Origin, X-Requested-With, Accept, X-PINGOTHER, Content-Type");
+        $this->addHeaderToResponse("Access-Control-Allow-Origin", "*");
+        $this->addHeaderToResponse("Access-Control-Allow-Headers", "Authorization, Origin, X-Requested-With, Accept, X-PINGOTHER, Content-Type");
         
         echo $this->body;
         die();
