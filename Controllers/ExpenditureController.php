@@ -11,6 +11,7 @@ namespace Controllers;
 use tm\RestController;
 use tm\Registry as Reg;
 use tm\helpers\DateHelper;
+use Models\Expenditure;
 use Respect\Validation\Validator as v;
 
 class ExpenditureController extends RestController
@@ -29,7 +30,7 @@ class ExpenditureController extends RestController
             $get_params['limit'] = $this->limit;    
         }
         
-        if (isset($get['offset']) && v::intVal()->between(1, 100)->validate($get['limit'])) {
+        if (isset($get['offset']) && v::intVal()->validate($get['offset'])) {
             $get_params['offset'] = $get['offset'];    
         }
         else {
@@ -48,39 +49,40 @@ class ExpenditureController extends RestController
             $get_params['wallet_id'] = $get['wallet_id'];    
         }
         
+        return $get_params;
     }
     
     public function actionIndex() {
         
         $get = $this->getAllowedParams_GET();
         
-        $limit = $get['limit'] ?? 50;
+        $limit = $get['limit'] ?? 20;
         $offset = $get['offset'] ?? 0;
 
-        $arrPeriod = DateHelper::getPeriodFromRequest(Reg::$app->request);
-        $finder = self::$classModel::find();
+        $arrPeriod = DateHelper::getPeriodFromRequestAsInt(Reg::$app->request);
+        $finder = Expenditure::find();
         $finder->with('Wallet');
 
         $finder->where(['user_id = :user_id'])->setParams(['user_id' => $this->user_id]);
 
         if (!is_null($arrPeriod['dateFrom']) && !is_null($arrPeriod['dateTo'])) {
-            $finder->andWhere(['date BETWEEN :dateFrom AND :dateTo'])->setParams($arrPeriod);
+            $finder->andWhere(['dateInt BETWEEN :dateFrom AND :dateTo'])->setParams($arrPeriod);
         }
         elseif (!is_null($arrPeriod['dateFrom'])) {
-            $finder->andWhere(['date >= :dateFrom'])->setParams(['dateFrom' => $arrPeriod['dateFrom']]);
+            $finder->andWhere(['dateInt >= :dateFrom'])->setParams(['dateFrom' => $arrPeriod['dateFrom']]);
         }
         elseif (!is_null($arrPeriod['dateTo'])) {
-            $finder->andWhere(['date <= :dateTo'])->setParams(['dateTo' => $arrPeriod['dateTo']]);
+            $finder->andWhere(['dateInt <= :dateTo'])->setParams(['dateTo' => $arrPeriod['dateTo']]);
         }
 
         if (isset($get['wallet_id'])) {
             $finder->andWhere(['wallet_id = :wallet_id'])->setParams(['wallet_id' => $get['wallet_id']]);   
         }
-        $finder->orderBy('date', 'ASC');
+        $finder->orderBy('dateInt', 'DESC');
         $finder->limit($limit);
         
         if ($offset !== 0) {
-            $finder->offset();
+            $finder->offset($offset);
         }
         
         $result = $finder->all();
@@ -95,7 +97,7 @@ class ExpenditureController extends RestController
             return $this->createResponse('Not found', 404); 
         }
 
-        $modelObj = static::$classModel::findById($get['id']);
+        $modelObj = Expenditure::findById($get['id']);
         $modelObj->getRows();
 
         return $this->createResponse($modelObj, 200); 

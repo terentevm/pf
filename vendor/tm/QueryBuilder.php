@@ -26,6 +26,7 @@ class QueryBuilder {
             $this->buildSelect(),
             $this->buildFrom(),
             $this->buildWhere(),
+            $this->buildOrderBy(),
             $this->buildLimit(),
             $this->buildOffset()
         ];
