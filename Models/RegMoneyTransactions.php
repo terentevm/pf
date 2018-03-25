@@ -14,7 +14,8 @@ use Models\Income;
 use Models\Transfer;
 use Models\ChangeBalance;
 
-class RegMoneyTransactions extends Model {
+class RegMoneyTransactions extends Model
+{
 
     private $rows;
     private $modelId;
@@ -47,6 +48,7 @@ class RegMoneyTransactions extends Model {
             $this->loadExpenditure($model);
         } elseif ($model instanceof Income) {
             $this->condCol = 'income_id';
+            $this->loadIncome($model);
         } elseif ($model instanceof Transfer) {
             $this->condCol = 'transfer_id';
         } elseif ($model instanceof ChangeBalance) {

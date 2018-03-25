@@ -5,6 +5,7 @@ namespace tm\di;
 use tm\di\ContainerInterface;
 use ReflectionClass;
 use tm\di\Instance;
+
 /**
  * Description of Container
  *
@@ -22,9 +23,9 @@ class Container implements ContainerInterface
      */
     private $singletons = [];
     
-     /**
-     * @var array cached objects - singletons indexed by class name;
-     */
+    /**
+    * @var array cached objects - singletons indexed by class name;
+    */
     private $object_store = [];
     
     /**
@@ -32,19 +33,18 @@ class Container implements ContainerInterface
      */
     private $_dependencies = [];
     
-    public function get($class, $params = []) {
-        
-        if(is_string($class)) {
+    public function get($class, $params = [])
+    {
+        if (is_string($class)) {
             $class_name = $class;
-        } 
-        elseif ($class instanceof Instance) {
+        } elseif ($class instanceof Instance) {
             $class_name = $class->id === null ? '' : $class->id;
         }
        
         
         $class_is_singleton = $this->isSingleton($class_name);
         
-        if ($class_is_singleton){
+        if ($class_is_singleton) {
             if (array_key_exists($class_name, $this->object_store)) {
                 return $this->object_store[$class_name];
             }
@@ -53,7 +53,7 @@ class Container implements ContainerInterface
         $object = $this->build($class, $params);
         
         if ($class_is_singleton) {
-            $this->object_store[$class] = $object;   
+            $this->object_store[$class] = $object;
         }
         
         return $object;
@@ -69,8 +69,8 @@ class Container implements ContainerInterface
      * @return object the newly created instance of the specified class
      * @throws Exeption If resolved to an abstract class or an interface (since 2.0.9)
      */
-    protected function build($class, $params) {
-
+    protected function build($class, $params)
+    {
         list($reflection, $dependencies) = $this->getDependencies($class);
         
         foreach ($params as $index => $param) {
@@ -97,11 +97,10 @@ class Container implements ContainerInterface
         }
 
         return $object;
-
     }
 
-    protected function getDependencies($class) {
-
+    protected function getDependencies($class)
+    {
         if (isset($this->_reflections[$class])) {
             return [$this->_reflections[$class], $this->_dependencies[$class]];
         }
@@ -116,19 +115,13 @@ class Container implements ContainerInterface
             foreach ($constructor->getParameters() as $param) {
                 if (version_compare(PHP_VERSION, '5.6.0', '>=') && $param->isVariadic()) {
                     break;
-                } 
-                elseif ($param->isDefaultValueAvailable()) {
-                    $dependencies[] = $param->getDefaultValue();    
-                }
-                else {
+                } elseif ($param->isDefaultValueAvailable()) {
+                    $dependencies[] = $param->getDefaultValue();
+                } else {
                     $c = $param->getClass();
                     $dependencies[] = Instance::of($c === null ? null : $c->getName());
                 }
-
-                
-                
             }
-            
         }
 
         $this->_reflections[$class] = $reflection;
@@ -147,15 +140,13 @@ class Container implements ContainerInterface
     protected function resolveDependencies($dependencies, $reflection = null)
     {
         foreach ($dependencies as $index => $dependency) {
-            
-            if($dependency instanceof Instance) {
+            if ($dependency instanceof Instance) {
                 if ($dependency->id !== null) {
                     $dependencies[$index] = $this->get($dependency);
                 } elseif ($reflection !== null) {
                     $name = $reflection->getConstructor()->getParameters()[$index]->getName();
                     $class = $reflection->getName();
                     throw new \Exception("Missing required parameter \"$name\" when instantiating \"$class\".");
-                                
                 }
             }
         }
@@ -169,11 +160,13 @@ class Container implements ContainerInterface
      * @param string classname
      * @return bool
      */
-    private function isSingleton($classname) {
+    private function isSingleton($classname)
+    {
         return in_array($classname, $this->singletons);
     }
     
-    public function registerSingletons() {
+    public function registerSingletons()
+    {
         $this->singletons = [
             'tm\Application',
             'tm\Router',

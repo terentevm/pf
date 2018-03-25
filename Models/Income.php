@@ -80,9 +80,9 @@ class Income extends Model
         
         foreach ($rows as $row) {
             
-            $row = new IncomeRow($this->id, $row['item_id'], $row['wallet_id'], $row['sum'], $row['comment']);
+            $row_obj = new IncomeRow($this->id, $row['item_id'], $row['wallet_id'], $row['sum'], $row['comment']);
             
-            $this->rows->add($row);
+            $this->rows->add($row_obj);
             
             $this->sum += $row['sum'];
         }

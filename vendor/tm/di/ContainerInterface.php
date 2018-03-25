@@ -12,8 +12,7 @@ namespace tm\di;
  *
  * @author terentyev.m
  */
-interface ContainerInterface {
-    
+interface ContainerInterface
+{
     public function get($name);
-    
 }

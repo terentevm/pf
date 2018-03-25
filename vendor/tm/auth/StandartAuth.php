@@ -10,6 +10,7 @@ namespace tm\auth;
 
 use tm\auth\AccessInterface;
 use tm\Request;
+
 /**
  * Description of StandartAuth
  *
@@ -17,18 +18,19 @@ use tm\Request;
  */
 class StandartAuth implements AccessInterface
 {
-    
     private $access_open = [];
     private $route = null;
 
 
-    public function __construct(array $route) {
+    public function __construct(array $route)
+    {
         $this->access_open = require APP . '/config/config_access.php';
         $this->route = $route;
     }
 
 
-    public function checkAccess() {
+    public function checkAccess()
+    {
         if (isset($_SESSION['user_id'])) {
             return true;
         }

@@ -7,14 +7,14 @@ namespace tm\database;
  */
 class Table
 {
-    
     private $cols = [];
     private $fkeys = [];
 
     private $name;
     private $engine = 'InnoDB';
     
-    public function __construct($name) {
+    public function __construct($name)
+    {
         $this->name = $name;
         return $this;
     }
@@ -26,15 +26,17 @@ class Table
      * @param string format
      * @param bool notNull - can by value as null or not. Default value is false
      * @param bool pk -primary key, default value = false
-     * @param bool autoincrement 
-     * 
+     * @param bool autoincrement
+     *
      * @return object
      */
-    public function addColumn(string $name, string $type, string $format, bool $notNull = false, bool $pk = false, bool $autoincrement = false) {
-
-        if (array_key_exists(trim($name), $this->cols)) return $this;
+    public function addColumn(string $name, string $type, string $format, bool $notNull = false, bool $pk = false, bool $autoincrement = false)
+    {
+        if (array_key_exists(trim($name), $this->cols)) {
+            return $this;
+        }
  
-         $col = [
+        $col = [
              'pk' => $pk,
              'type' => $type,
              'format' => $format,
@@ -42,15 +44,19 @@ class Table
              'ai' => $autoincrement
          ];
  
-         $this->cols[$name] = $col;
+        $this->cols[$name] = $col;
  
-         return $this;
-     }
+        return $this;
+    }
 
-     public function addForeignKey(string $own_key, string $f_table, string $f_key, string $onDel = 'RESTRICT', string $onUpd = 'RESTRICT') {
-
-        if (!array_key_exists(trim($own_key), $this->cols)) return $this;
-        if (array_key_exists(trim($own_key), $this->fkeys)) return $this;
+    public function addForeignKey(string $own_key, string $f_table, string $f_key, string $onDel = 'RESTRICT', string $onUpd = 'RESTRICT')
+    {
+        if (!array_key_exists(trim($own_key), $this->cols)) {
+            return $this;
+        }
+        if (array_key_exists(trim($own_key), $this->fkeys)) {
+            return $this;
+        }
         
         $this->fkeys[$own_key] = [
             'table' => $f_table,
@@ -60,45 +66,43 @@ class Table
         ];
 
         return $this;
-     }
+    }
 
-     public function buildSQL() {
+    public function buildSQL()
+    {
         $col_text = $this->createColumnesText();
         $fk_text = $this->createTextForeignKeys();
         $sql = "CREATE TABLE IF NOT EXISTS " . $this->name . " (" . $col_text . $fk_text .") engine=" . $this->engine;
 
         return $sql;
+    }
 
-     }
-
-     private function createColumnesText() {
-         $strings = [];
-         foreach ($this->cols as $name => $params) {
+    private function createColumnesText()
+    {
+        $strings = [];
+        foreach ($this->cols as $name => $params) {
             $ai = ($params['ai'] === true) ? ' AUTOINCREMENT ' : ' ';
-            $pk = ($params['pk'] === true) ? ' PRIMARY KEY ' : ' '; 
+            $pk = ($params['pk'] === true) ? ' PRIMARY KEY ' : ' ';
             $notNull = ($params['notNull'] === true) ? ' NOT NULL ' : ' ';
             $strings[] = $name . ' ' . $params['type'] . ' (' . $params['format'] . ') ' . $notNull . $pk . $ai;
-         }
+        }
 
-         return \implode(",", $strings);
-         
-     }
+        return \implode(",", $strings);
+    }
 
-     private function createTextForeignKeys(){
-         
-        if (empty($this->fkeys)) return "";
+    private function createTextForeignKeys()
+    {
+        if (empty($this->fkeys)) {
+            return "";
+        }
         
         $strings = [];
 
         foreach ($this->fkeys as $key => $params) {
             $strings[] = " FOREIGN KEY fk_" . $key . '(' . $key . ') REFERENCES '  . $params['table']
                 . '(' . $params['f_key'] . ') ON DELETE ' . $params['onDelete']  . ' ON UPDATE ' .$params['onUpdate'];
-            
         }
 
         return ',' . \implode(",", $strings);
-
-     }
-
-     
+    }
 }

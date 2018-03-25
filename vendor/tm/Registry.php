@@ -14,16 +14,22 @@ class Registry
     
     public static $app = null;
 
-    private function __construct() {
+    private function __construct()
+    {
         if (self::$container === null) {
             self::$container = new Container();
         }
     }
 
-    final private function __clone(){}
-    final private function __wakeup(){}
+    final private function __clone()
+    {
+    }
+    final private function __wakeup()
+    {
+    }
 
-    public static function getInstance() {
+    public static function getInstance()
+    {
         if (!isset(self::$instance)) {
             self::$instance = new self();
 
@@ -31,12 +37,12 @@ class Registry
         }
     }
 
-    public function getApp($param) {
+    public function getApp($param)
+    {
         if (is_null(self::$app)) {
             self::$app = self::CreateObject(\tm\Application::className(), $param);
             return self::$app;
-        }
-        elseif (self::$app instanceof \tm\Application) {
+        } elseif (self::$app instanceof \tm\Application) {
             return self::$app;
         }
         
@@ -45,12 +51,12 @@ class Registry
 
     /**
      * Creates a new object using the given using giving classname and parametres
-     * @var type string  class name 
+     * @var type string  class name
      * @var params array params for create new instance
      */
-    public static function CreateObject($type, array $params = []) {
+    public static function CreateObject($type, array $params = [])
+    {
         $obj = self::$container->get($type, $params);
         return $obj;
     }
-    
 }

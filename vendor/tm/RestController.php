@@ -15,13 +15,14 @@ class RestController extends Controller
     protected $limit = 50;
     protected $offset = 0;
     
-    public function __construct($route) {
+    public function __construct($route)
+    {
         parent::__construct($route);
         $this->user_id = Reg::$app->user_id;
     }
     
-    public function actionIndex() {
-        
+    public function actionIndex()
+    {
         $get = Reg::$app->request->get();
         
         $limit = $get['limit'] ?? 50;
@@ -39,25 +40,26 @@ class RestController extends Controller
         return $this->createResponse($result, 200);
     }
     
-    public function actionShow() {
-        $get = Reg::$app->request->get();  
+    public function actionShow()
+    {
+        $get = Reg::$app->request->get();
         
         if (!isset($get['id'])) {
-            return $this->createResponse('Not found', 404); 
+            return $this->createResponse('Not found', 404);
         }
-        $className = self::$classModel;    
+        $className = self::$classModel;
         
         $result = $className::findById($id, false);
         
         if ($result === false) {
-            return $this->createResponse("Not found", 404);    
+            return $this->createResponse("Not found", 404);
         }
         
         return $this->createResponse($result, 200);
     }
     
-    public function actionCreate() {
-        
+    public function actionCreate()
+    {
         $post = Reg::$app->request->post();
         
         $upload_mode = $post['uploadMode'] ?? false;
@@ -74,13 +76,14 @@ class RestController extends Controller
         $success = $model->save($upload_mode);
         
         if ($success === true) {
-            return $this->createResponse("OK", 201);    
-        } 
+            return $this->createResponse("OK", 201);
+        }
         
         return $this->createResponse("Error", 500);
     }
     
-    public function actionUpdate() {
+    public function actionUpdate()
+    {
         $post = Reg::$app->request->post();
         
         if (empty($post)) {
@@ -95,14 +98,13 @@ class RestController extends Controller
         $success = $model->update();
         
         if ($success === true) {
-            return $this->createResponse("OK", 200);    
-        } 
+            return $this->createResponse("OK", 200);
+        }
         
-        return $this->createResponse("Error", 500);    
+        return $this->createResponse("Error", 500);
     }
     
-    public function actionDelete($id) {
-        
+    public function actionDelete($id)
+    {
     }
-	
 }

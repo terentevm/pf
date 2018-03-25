@@ -9,18 +9,16 @@ use tm\renderers\HtmlRender;
 
 class View extends Base
 {
-    
-    public static function getRenderer($response_type,$route, $layout = '', $view = '') {
-        
+    public static function getRenderer($response_type, $route, $layout = '', $view = '')
+    {
         switch ($response_type) {
-            case 'json' : 
+            case 'json':
                 $renderer =new JsonRender();
                 break;
-            default :
+            default:
                 $renderer = new HtmlRender($route, $layout, $view);
         }
 
         return $renderer;
     }
-    
 }

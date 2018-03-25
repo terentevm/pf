@@ -12,10 +12,11 @@ trait TraitModelFunc
      */
 
 
-    public function set($prop_name, $prop_value) {
+    public function set($prop_name, $prop_value)
+    {
         if (property_exists($this, $prop_name)) {
-			$this->$prop_name = $prop_value;
-		}
+            $this->$prop_name = $prop_value;
+        }
     }
 
     /**
@@ -24,22 +25,21 @@ trait TraitModelFunc
      * return peroperty value, if property doesn't extists then return null
      * @author terentyev.m
      */
-    public function get($prop_name) {
+    public function get($prop_name)
+    {
         if (property_exists($this, $prop_name)) {
-			return $this->$prop_name;
+            return $this->$prop_name;
         }
         
         return null;
     }
 
-    public function getMapping() {
-        
-        if (isset($this->mapping)){
+    public function getMapping()
+    {
+        if (isset($this->mapping)) {
             return $mapping;
         }
         
         return [];
     }
-
-    
 }

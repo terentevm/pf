@@ -13,7 +13,8 @@ namespace tm\di;
  *
  * @author terentyev.m
  */
-class Instance {
+class Instance
+{
     /**
      * @var string the component ID, class name, interface name or alias name
      */

@@ -13,27 +13,31 @@ namespace tm;
  *
  * @author terentyev.m
  */
-class Response {
-    
+class Response
+{
     private $http_code = 200;
     private $body ='';
     private $headers = [];
     
-    public function __construct(int $http_code = 200, $body = '', $headers = []) {
+    public function __construct(int $http_code = 200, $body = '', $headers = [])
+    {
         $this->http_code = $http_code;
         $this->body = $body;
         $this->headers = $headers;
     }
     
-    public function setHeader(string $header, string $value) {
+    public function setHeader(string $header, string $value)
+    {
         $this->header[$header] =  $value;
     }
 
-    public function setHttpCode(int $code) {
-        $this->http_code = $code;    
+    public function setHttpCode(int $code)
+    {
+        $this->http_code = $code;
     }
 
-    public function setContentType($content_type) {
+    public function setContentType($content_type)
+    {
         $this->headers['Content-Type'] = $content_type;
     }
 
@@ -42,21 +46,21 @@ class Response {
      * @param string type (example: html, json)
      * @return string correct content-type (example: application/json, text/html)
      */
-    public function createContentType($type) {
-        switch($type) {
+    public function createContentType($type)
+    {
+        switch ($type) {
             case 'json': return 'application/json';
             case 'html': return 'text/html';
             default: return 'text/html';
         }
     }
 
-    public function send() {
-       
-        header(http_response_code($this->http_code)); 
+    public function send()
+    {
+        header(http_response_code($this->http_code));
 
         foreach ($this->headers as $header => $value) {
             $this->addHeaderToResponse($header, $value);
-          
         }
 
         $this->addHeaderToResponse("Access-Control-Allow-Origin", "*");
@@ -64,10 +68,10 @@ class Response {
         
         echo $this->body;
         die();
-    
     }
     
-    public function addHeaderToResponse($header, $value) {
+    public function addHeaderToResponse($header, $value)
+    {
         header("${header}: ${value}");
     }
 }

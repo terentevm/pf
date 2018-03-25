@@ -18,7 +18,7 @@ class ItemsIncomeMapper extends Mapper
         if ($this->delete_stmt === null) {
             $this->where = ['id = :id'];
 
-            $sql = $this->db->getQueryBuilder()->buildDelete($this);
+            $sql = $this->qb->buildDelete($this);
             $this->delete_stmt = $this->db->prepare($sql);
         }
         

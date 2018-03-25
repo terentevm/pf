@@ -15,28 +15,30 @@ use Firebase\JWT\JWT;
 use Firebase\JWT\SignatureInvalidException;
 use Firebase\JWT\ExpiredException;
 
-class HttpAuth implements AccessInterface 
+class HttpAuth implements AccessInterface
 {
     private $access_open = [];
     private $route = null;
     private $jwt_key = null;
     
-    public function __construct($route) {
+    public function __construct($route)
+    {
         $this->access_open = require APP . '/config/config_access.php';
         $this->route = $route;
         $this->jwt_key = Registry::$app->config['jwt_key'];
     }
     
-    public function checkAccess() {
+    public function checkAccess()
+    {
         if (!empty($this->access_open) && in_array($this->route['controller'], $this->access_open)) {
             return true;
         }
         $request = Registry::$app->request;
         $header = $request->getHeader('HTTP_AUTHORIZATION');
-        if($header == "") {
+        if ($header == "") {
             return false;
         }
-        list($type, $jwt) = explode(" ",$header);
+        list($type, $jwt) = explode(" ", $header);
         
         if ((strcasecmp($type, "Bearer") == 0)) {
             try {
@@ -45,24 +47,24 @@ class HttpAuth implements AccessInterface
                 return true;
             } catch (SignatureInvalidException $ex) {
                 return false;
-            }
-            catch (ExpiredException $ex) {
+            } catch (ExpiredException $ex) {
                 return false;
             }
         }
         return false;
     }
     
-    private function setUserId($data) {
+    private function setUserId($data)
+    {
         Registry::$app->user_id = $data->user_id ?? null;
     }
     
-    public function generateNewToken($user_id) : string {
+    public function generateNewToken($user_id) : string
+    {
         $token = [
             'user_id' => $user_id,
         ];
 
         return  JWT::encode($token, $this->jwt_key);
     }
-    
 }

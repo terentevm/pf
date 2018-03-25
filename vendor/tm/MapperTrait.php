@@ -18,7 +18,8 @@ trait MapperTrait
 
     public $params = [];
 
-    public function where(array $condition) {
+    public function where(array $condition)
+    {
         $this->where = $condition;
         return $this;
     }
@@ -45,7 +46,8 @@ trait MapperTrait
         return $this;
     }
 
-    public function with() {
+    public function with()
+    {
         $args = func_get_args();
 
         if (isset($args[0]) && is_array($args[0])) {
@@ -57,7 +59,6 @@ trait MapperTrait
         } elseif (!empty($args)) {
             foreach ($args as $name => $value) {
                 if (is_int($name)) {
-                    
                     $this->with[] = $value;
                 } else {
                     $this->with[$name] = $value;
@@ -66,48 +67,50 @@ trait MapperTrait
         }
 
         return $this;
-    } 
+    }
 
-    public function orderBy(string $column, $order = 'ASC') {
-        
+    public function orderBy(string $column, $order = 'ASC')
+    {
         if (array_key_exists($column, $this->orderBy) === false) {
-            $this->orderBy[$column] = $column . ' ' . $order;   
+            $this->orderBy[$column] = $column . ' ' . $order;
         }
         
         return $this;
     }
 
-    public function limit($limit) {
+    public function limit($limit)
+    {
         $this->limit = $limit;
         return $this;
     }
 
-    public function offset($offset) {
+    public function offset($offset)
+    {
         $this->offset  =$offset;
         return $this;
     }
 
-    public function asArray() {
+    public function asArray()
+    {
         $this->asArray = true;
         return $this;
     }
 
-    public function setParams(array $params) {
-        
+    public function setParams(array $params)
+    {
         foreach ($params as $key => $value) {
-            $this->setParam($key,  $value);
+            $this->setParam($key, $value);
         }
         
         return $this;
     }
     
-    public function setParam($name, $value) {
-        
+    public function setParam($name, $value)
+    {
         if (is_string($name) && !empty($name)) {
-            $this->params[$name] = $value;    
+            $this->params[$name] = $value;
         }
         
         return $this;
     }
-
 }

@@ -1,18 +1,17 @@
 <?php
 
 namespace tm;
+
 use tm\Base;
-use tm\Controller;
-use Controllers\SiteController;
-use tm\Db;
+
 use tm\Request;
 use tm\Router;
 use tm\auth\AccessManager;
 use tm\Response;
 
-class Application extends Base{
-    
-    private static $instance; 
+class Application extends Base
+{
+    private static $instance;
 
     public $config;
     
@@ -20,8 +19,8 @@ class Application extends Base{
     public $access_manager = null;
     public $request;
 
-    public function __construct($config){
-       
+    public function __construct($config)
+    {
         session_start();
         
         $this->config = $config;
@@ -29,15 +28,15 @@ class Application extends Base{
         define('LANGUAGE', $this->config['lang']);
     }
     
-    public function run(){
-
+    public function run()
+    {
         if (!isset(self::$request)) {
-            $this->request = Registry::CreateObject(Request::className());  
+            $this->request = Registry::CreateObject(Request::className());
         }
         
         if ($this->request->isCORSRequest()) {
             header("Access-Control-Allow-Origin: *");
-			header("Access-Control-Allow-Headers: Authorization, Origin, X-Requested-With, Accept, X-PINGOTHER, Content-Type");
+            header("Access-Control-Allow-Headers: Authorization, Origin, X-Requested-With, Accept, X-PINGOTHER, Content-Type");
             (new Response(200))->send();
         }
         header("Access-Control-Allow-Origin: *");
@@ -48,22 +47,14 @@ class Application extends Base{
 
         $router = Registry::CreateObject(Router::className(), [1 => $this->config]);
         
-        $route = $router->getRoute(); 
+        $route = $router->getRoute();
         
         $this->access_manager = AccessManager::getAccessManager($route, $this->config);
         
         $access_is_allowed = $this->access_manager->checkAccess($route);
         
         if (!$access_is_allowed) {
-           // if ($this->request->isAjax()) {
-                (new Response(401))->send();
-                
-           // }
-          //  else {
-          //      $router->redirect('/user/login');
-          //      die();  
-          //  }
-            
+            (new Response(401))->send();
         }
        
         
@@ -71,12 +62,14 @@ class Application extends Base{
         $response->send();
     }
 
-    public function startSession($param) {
+    public function startSession($param)
+    {
         $_SESSION['success'] = true;
         $_SESSION['user_id'] = $param['user_id'];
     }
 
-    public function endSession() {
+    public function endSession()
+    {
         $_SESSION['success'] = false;
         unset($_SESSION['user_id']);
         session_destroy();

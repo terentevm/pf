@@ -96,25 +96,17 @@ class UserController extends Controller {
                 'name' => \htmlspecialchars($formData['name'])
             ];
 
-
-            $validator = v::attribute('login', v::stringType()->notEmpty()->email())
-            ->attribute('name', v::stringType()->notEmpty())
-            ->attribute('password', v::stringType()->notEmpty());
-
             $user = new User();
             $user->setLogin(\filter_var($post['login'], FILTER_SANITIZE_EMAIL));
             $user->setPassword(\filter_var($post['password'], FILTER_SANITIZE_STRING));
             $user->setName(\filter_var($post['name'], FILTER_DEFAULT));
-            $user->hashPassword();
-
-            try{
-                $validator->assert($user);
-            } catch (ValidationException $exception) {
-                $this->errors = $exception->getMessages();
-                $this->getErrors();
-                
-                return $this->createResponse("$inputed_data", 400, 'Inputed data are invalid!');
+            
+            $ok = $user->validate();
+            
+            if (ok !== true) {
+                return $this->createResponse("$inputed_data", 400, 'Inputed data are invalid!');    
             }
+            $user->hashPassword();
             
             //check login unique.        
             

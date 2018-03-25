@@ -8,7 +8,6 @@ use tm\Request;
 
 class Controller extends Base
 {
-    
     public static $default_controller = 'Site';
     
     public $route = [];
@@ -22,34 +21,33 @@ class Controller extends Base
     
     
     
-    public function __construct($route){
+    public function __construct($route)
+    {
         $this->route = $route;
         $this->view = $route['action'];
-       
     }
 
-    public function createResponse($data = null, int $httpcode = 200, $msg = '') {
-        
+    public function createResponse($data = null, int $httpcode = 200, $msg = '')
+    {
         $reqType = Registry::$app->request->getResponseType();
-        $body = View::getRenderer($reqType,$this->route, $this->layout, $this->view)->render($data);
+        $body = View::getRenderer($reqType, $this->route, $this->layout, $this->view)->render($data);
 
         $response = new Response($httpcode, $body);
         $response->setContentType($response->createContentType($reqType));
         
         return $response;
-
     }
 
-    public function set($vars) {
+    public function set($vars)
+    {
         $this->vars = $vars;
     }
     
-    public function getErrors(){
+    public function getErrors()
+    {
         $errors = '<ul>';
-        foreach($this->errors as $error){
-            
+        foreach ($this->errors as $error) {
             $errors .= "<li>$error</li>";
-            
         }
         $errors .= '</ul>';
         $_SESSION['error'] = $errors;

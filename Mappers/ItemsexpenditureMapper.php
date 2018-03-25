@@ -24,7 +24,7 @@ class ItemsExpenditureMapper extends Mapper
             $this->setParams(['parent_id' => $parentId]);
         }
         
-        list($sql, $params) = $this->db->getQueryBuilder()->build($this);
+        list($sql, $params) = $this->qb->build($this);
         
         $head_items = $this->db->query($sql, $params, true);
         
@@ -59,7 +59,7 @@ class ItemsExpenditureMapper extends Mapper
         if ($this->delete_stmt === null) {
             $this->where = ['id = :id'];
 
-            $sql = $this->db->getQueryBuilder()->buildDelete($this);
+            $sql = $this->qb->buildDelete($this);
             $this->delete_stmt = $this->db->prepare($sql);
         }
         

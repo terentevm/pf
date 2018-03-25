@@ -12,7 +12,8 @@ namespace tm\auth;
  *
  * @author terentyev.m
  */
-interface AccessInterface {
+interface AccessInterface
+{
     
     /**
 

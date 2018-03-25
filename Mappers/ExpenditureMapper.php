@@ -55,7 +55,7 @@ class ExpenditureMapper extends Mapper
     protected function create(Model $obj) {
          
         if ($this->create_stmt === null) {
-            $sql = $this->db->getQueryBuilder()->buildInsert($this);
+            $sql = $this->qb->buildInsert($this);
             $this->create_stmt = $this->db->prepare($sql);
         }
         

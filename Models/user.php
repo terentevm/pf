@@ -2,6 +2,9 @@
 
 namespace Models;
 use tm\Model;
+use Respect\Validation\Validator as v;
+use Respect\Validation\Exceptions\ValidationException;
+use Respect\Validation\Exceptions\NestedValidationException;
 /**
  * Description of user
  *
@@ -77,5 +80,25 @@ class User extends Model{
        }
        
        return false;
+    }
+    
+    public function validate() {
+        $validator = v::attribute('login', v::notEmpty()->Email())
+                    ->attribute('password', v::notEmpty()->stringType())
+                    ->attribute('name', v::notEmpty()->stringType());
+        
+        try {
+            $validator->assert($this);
+            return true;
+        } catch (NestedValidationException $e) {
+            $errors = $e->getMessages();
+            return false;
+        }
+    }
+    
+    public function getValidationRules() {
+        return [
+            'login' =>['Email']
+        ];
     }
 }
