@@ -19,6 +19,12 @@ class ExpenditureRowMapper extends Mapper
         return 'doc_expend_rows';
     }
     
+    public static function getItemExpenditure() {
+        return [
+                'f_key' => 'item_id',
+                'table_col' => 'id'
+            ];
+    }
     public function delete(Model $obj) {
         
     }

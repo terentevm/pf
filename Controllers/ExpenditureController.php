@@ -97,9 +97,10 @@ class ExpenditureController extends RestController
             return $this->createResponse('Not found', 404); 
         }
 
-        $modelObj = Expenditure::findById($get['id']);
+        $modelObj = Expenditure::findById($get['id'], false);
         $modelObj->getRows();
-
+        
+        unset($modelObj->rows->owner);
         return $this->createResponse($modelObj, 200); 
     }
 

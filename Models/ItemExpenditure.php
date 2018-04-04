@@ -14,7 +14,7 @@ use tm\Model;
  *
  * @author terentyev.m
  */
-class ItemsExpenditure extends Model
+class ItemExpenditure extends Model
 {
     private $id = null;
     private $name = '';

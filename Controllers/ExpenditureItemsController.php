@@ -10,7 +10,7 @@ namespace Controllers;
 
 use tm\RestController;
 use tm\Registry as Reg;
-use Models\ItemsExpenditure;
+use Models\ItemExpenditure;
 /**
  * Description of ExpenditureItemsController
  *
@@ -18,7 +18,7 @@ use Models\ItemsExpenditure;
  */
 class ExpenditureItemsController extends RestController 
 {
-    public static $classModel = '\models\ItemsExpenditure';
+    public static $classModel = '\models\ItemExpenditure';
     
     public function actionIndex() {
         $get = Reg::$app->request->get();
@@ -27,7 +27,7 @@ class ExpenditureItemsController extends RestController
         $offset = $get['offset'] ?? 0;
         $asList = $get['list'] ?? false;
         
-        $finder = ItemsExpenditure::find();
+        $finder = ItemExpenditure::find();
         $finder->where(['user_id = :user_id']);
         $finder->setParams(['user_id' => $this->user_id]);
         $finder->limit($limit);

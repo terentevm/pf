@@ -6,7 +6,7 @@ use tm\Mapper;
 use tm\Model;
 
 
-class ItemsExpenditureMapper extends Mapper
+class ItemExpenditureMapper extends Mapper
 {
     public static $db_columnes = ['id', 'user_id','name', 'not_active', 'parent_id', 'comment'];
     
