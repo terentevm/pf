@@ -21,10 +21,12 @@ class ExpenditureRowMapper extends Mapper
     
     public static function getItemExpenditure() {
         return [
+                'model' => 'ItemExpenditure',
                 'f_key' => 'item_id',
                 'table_col' => 'id'
             ];
     }
+    
     public function delete(Model $obj) {
         
     }
@@ -33,12 +35,6 @@ class ExpenditureRowMapper extends Mapper
         return 'id';
     }
 
-    public static function getItemsExpenditure() {
-        return [
-                'f_key' => 'item_id',
-                'table_col' => 'id'
-            ];
-    }
 
     public function mapModelToDb(Model $obj) {
         $db_arr = [

@@ -13,7 +13,6 @@ abstract class CollectionAbstract implements CollectionsInterface
      */
     protected $storage = null;
 
-    protected $owner = null; //model instance
     
 
     public function add($row)

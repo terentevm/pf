@@ -19,6 +19,22 @@ class IncomeRowMapper extends Mapper
         return 'doc_income_rows';
     }
     
+    public static function getItemIncome() {
+        return [
+                'model' => 'ItemsIncome',
+                'f_key' => 'item_id',
+                'table_col' => 'id'
+            ];
+    }
+
+    public static function getWallet() {
+        return [
+                'model' => 'Wallet',
+                'f_key' => 'wallet_id',
+                'table_col' => 'id'
+            ];
+    }
+    
     public function delete(Model $obj) {
         
     }

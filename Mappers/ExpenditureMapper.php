@@ -20,6 +20,7 @@ class ExpenditureMapper extends Mapper
     
     public static function getWallet() {
         return [
+                'model' => 'Wallet',
                 'f_key' => 'wallet_id',
                 'table_col' => 'id'
             ];

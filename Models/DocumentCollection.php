@@ -7,7 +7,7 @@ use tm\CollectionAbstract;
 class DocumentCollection extends CollectionAbstract
 {
     public function __construct(Model $owner) {
-        $this->owner = $owner;
+    
         $this->storage = [];
     }
 }

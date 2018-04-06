@@ -25,6 +25,22 @@ class TransferMapper extends Mapper
         return 'id';
     }
 
+    public static function getWalletFrom() {
+        return [
+                'model' => 'Wallet',
+                'f_key' => 'wallet_id_from',
+                'table_col' => 'id'
+            ];
+    }
+
+    public static function getWalletTo() {
+        return [
+                'model' => 'Wallet',
+                'f_key' => 'wallet_id_to',
+                'table_col' => 'id'
+            ];
+    }
+
     public function mapModelToDb(Model $obj) {
         $db_arr = [
             'id' => $obj->getId(),

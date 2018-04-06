@@ -134,7 +134,7 @@ abstract class Mapper extends Base
     {
         $condition = $this->qb::createTextConditionFromArray($relation['table_col'], $keys_arr);
 
-        $class_name = '\\models\\' . $tableName;
+        $class_name = '\\models\\' . $relation['model'];
 
         $rows = $class_name::find()->where([$condition])->all();
 
