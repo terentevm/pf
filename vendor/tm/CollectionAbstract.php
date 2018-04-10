@@ -6,7 +6,7 @@ use tm\Model;
 use tm\Base;
 use tm\CollectionsInterface;
 
-abstract class CollectionAbstract implements CollectionsInterface
+abstract class CollectionAbstract implements CollectionsInterface, \JsonSerializable
 {
     /**
      * @var array storage will store collection rows
@@ -43,5 +43,11 @@ abstract class CollectionAbstract implements CollectionsInterface
         foreach ($this->storage as &$str) {
             yield $str;
         }
+    }
+    
+    public function jsonSerialize() {
+        $vars = get_object_vars($this);
+
+	return $vars;   
     }
 }

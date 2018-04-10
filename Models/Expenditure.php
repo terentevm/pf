@@ -17,7 +17,7 @@ use Models\ExpenditureRow;
  *
  * @author terentyev.m
  */
-class Expenditure extends Model
+class Expenditure extends Model implements \JsonSerializable
 {
     private $id = null;
     private $user_id = null;
@@ -112,5 +112,12 @@ class Expenditure extends Model
     public function getWallet() {
         return $this->Wallet;
     }
+    
+    public function jsonSerialize() {
+        $vars = get_object_vars($this);
+
+	return $vars;   
+    }
+
 
 }

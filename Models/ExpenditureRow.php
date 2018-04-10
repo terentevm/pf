@@ -11,7 +11,7 @@ namespace Models;
 use tm\Model;
 
 
-class ExpenditureRow extends Model
+class ExpenditureRow extends Model implements \JsonSerializable
 {
     private $id = null;
     private $docId = null;
@@ -76,5 +76,9 @@ class ExpenditureRow extends Model
         return $this->ItemExpenditure;
     }
 
-    
+    public function jsonSerialize() {
+        $vars = get_object_vars($this);
+
+	return $vars;   
+    }
 }
