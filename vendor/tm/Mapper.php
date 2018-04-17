@@ -45,7 +45,7 @@ abstract class Mapper extends Base
         $modelClassName = $type;
 
         $type = preg_replace('|^.*\\\|', "", $type);
-        $mapper = "\\mappers\\{$type}Mapper";
+        $mapper = "\\app\\mappers\\{$type}Mapper";
         if (class_exists($mapper)) {
 
             //check if mapper object has been already created - return from storage

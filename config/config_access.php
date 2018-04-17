@@ -2,4 +2,7 @@
 /**
 
  * return array with controllers names without authorization. */
-return ['user', 'site'];
+return [
+        'cv' =>['*'],
+        'app' => ['app','user']
+    ];

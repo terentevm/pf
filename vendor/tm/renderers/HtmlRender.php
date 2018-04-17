@@ -11,10 +11,11 @@ use Twig_Loader_Filesystem;
 class HtmlRender extends View implements RenderInterface
 {
     public $route = [];
+    public $pathView = "";
     public $layout;
     public $view;
 
-    public function __Construct($route, $layout = '', $view = '')
+    public function __Construct($route, $layout = '', $view = '', $module = 'cv')
     {
         $this->route = $route;
         
@@ -25,11 +26,13 @@ class HtmlRender extends View implements RenderInterface
         }
         
         $this->view = $view;
+        
+        $this->pathView = MODULES_PATH . "/" . $module;
     }
 
     public function render($vars) : string
     {
-        $file_view = APP . "/Views/{$this->route['controller']}/{$this->view}.php";
+        $file_view = $this->pathView . "/Views/{$this->route['controller']}/{$this->view}.php";
         $file_config = APP . "/config/config_view.php";
         $render_param = [];
         $this->setMeta($render_param);
@@ -60,18 +63,21 @@ class HtmlRender extends View implements RenderInterface
             }
         }
         
-        
+        ob_start('ob_gzhandler');
         $render_param['layout'] = $this->layout . '.twig';
-        
+        header("Content-Encoding: gzip");
         if (is_file($file_view)) {
             //register view diectory as directory for look up templates twig.
-            $loader = new Twig_Loader_Filesystem(array(APP. '/Views/layouts', APP. '/Views/templates', dirname($file_view)));
-            $twig = new Twig_Environment($loader, array('cache' => APP. '/Views/compilation_cache','auto_reload' => true));
+            $loader = new Twig_Loader_Filesystem(array($this->pathView .'/Views/layouts', $this->pathView. '/Views/templates', dirname($file_view)));
+            $twig = new Twig_Environment($loader, array('cache' => $this->pathView . '/Views/compilation_cache','auto_reload' => true));
             $html = require $file_view;
-            return $html;
+            
         } else {
-            return "<p>Не найден вид {$file_view}</p>";
+            $html;
         }
+        
+        ob_clean();
+        return $html;
     }
 
     public function setMeta(&$render_param)

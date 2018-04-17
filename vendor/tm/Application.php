@@ -8,6 +8,7 @@ use tm\Request;
 use tm\Router;
 use tm\auth\AccessManager;
 use tm\Response;
+use tm\Configuration;
 
 class Application extends Base
 {
@@ -19,13 +20,12 @@ class Application extends Base
     public $access_manager = null;
     public $request;
 
-    public function __construct($config)
+    public function __construct(Configuration $config)
     {
-        session_start();
         
         $this->config = $config;
 
-        define('LANGUAGE', $this->config['lang']);
+        define('LANGUAGE', $config->getLang());
     }
     
     public function run()
@@ -39,19 +39,27 @@ class Application extends Base
             header("Access-Control-Allow-Headers: Authorization, Origin, X-Requested-With, Accept, X-PINGOTHER, Content-Type");
             (new Response(200))->send();
         }
+        
         header("Access-Control-Allow-Origin: *");
         header("Access-Control-Allow-Headers: Authorization, Origin, X-Requested-With, Accept, X-PINGOTHER, Content-Type");
-        if (isset($this->config['use_csrf_token']) && $this->config['use_csrf_token']) {
+        
+        if ($this->config->useCsrf()) {
             $_SESSION['csrf_token'] = md5($this->getGuide());
         }
 
-        $router = Registry::CreateObject(Router::className(), [1 => $this->config]);
+        $router = Registry::CreateObject(Router::className(),[]);
         
         $route = $router->getRoute();
         
-        $this->access_manager = AccessManager::getAccessManager($route, $this->config);
+        $check_status = $router->checkRoute();
         
-        $access_is_allowed = $this->access_manager->checkAccess($route);
+        if ($check_status === 404) {
+            (new Response(404, "Not found"))->send();
+        }
+        
+        $this->access_manager = AccessManager::getAccessManager($router->route, $this->config);
+        
+        $access_is_allowed = $this->access_manager->checkAccess($router->route);
         
         if (!$access_is_allowed) {
             (new Response(401))->send();

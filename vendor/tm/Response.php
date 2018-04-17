@@ -62,7 +62,9 @@ class Response
         foreach ($this->headers as $header => $value) {
             $this->addHeaderToResponse($header, $value);
         }
-
+        
+        //$this->addHeaderToResponse("Content-Encoding", "gzip");
+                
         $this->addHeaderToResponse("Access-Control-Allow-Origin", "*");
         $this->addHeaderToResponse("Access-Control-Allow-Headers", "Authorization, Origin, X-Requested-With, Accept, X-PINGOTHER, Content-Type");
         

@@ -37,10 +37,10 @@ class Registry
         }
     }
 
-    public function getApp($param)
+    public function getApp()
     {
         if (is_null(self::$app)) {
-            self::$app = self::CreateObject(\tm\Application::className(), $param);
+            self::$app = self::CreateObject(\tm\Application::className(), []);
             return self::$app;
         } elseif (self::$app instanceof \tm\Application) {
             return self::$app;

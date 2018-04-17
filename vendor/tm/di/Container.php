@@ -53,7 +53,14 @@ class Container implements ContainerInterface
         $object = $this->build($class, $params);
         
         if ($class_is_singleton) {
-            $this->object_store[$class] = $object;
+            if (is_string($class)) {
+                $this->object_store[$class] = $object;
+            }
+            elseif ($class instanceof Instance) {
+                $this->object_store[$class->id] = $object;
+         
+            }
+            
         }
         
         return $object;
@@ -101,13 +108,23 @@ class Container implements ContainerInterface
 
     protected function getDependencies($class)
     {
-        if (isset($this->_reflections[$class])) {
-            return [$this->_reflections[$class], $this->_dependencies[$class]];
+        
+        if (is_string($class)) {
+            $class_str = $class;   
+        }
+        elseif ($class instanceof Instance) {
+            $class_str = $class->id; 
+        }
+        
+        if (isset($this->_reflections[$class_str])) {
+            return [$this->_reflections[$class_str], $this->_dependencies[$class_str]];
         }
 
         $dependencies = [];
-
-        $reflection = new ReflectionClass($class);
+        
+      
+        $reflection = new ReflectionClass($class_str);   
+      
 
         $constructor = $reflection->getConstructor();
 
@@ -123,9 +140,12 @@ class Container implements ContainerInterface
                 }
             }
         }
-
-        $this->_reflections[$class] = $reflection;
-        $this->_dependencies[$class] = $dependencies;
+        
+      
+        $this->_reflections[$class_str] = $reflection;
+        $this->_dependencies[$class_str] = $dependencies;  
+       
+        
 
         return [$reflection, $dependencies];
     }
@@ -171,7 +191,8 @@ class Container implements ContainerInterface
             'tm\Application',
             'tm\Router',
             'tm\Request',
-            'tm\auth\StandartAuth'
+            'tm\auth\StandartAuth',
+            'tm\Configuration'
         ];
     }
 }

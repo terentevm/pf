@@ -2,8 +2,15 @@
 
 $config = [
     'lang' => 'en-GB',
-    'default_controller' => 'site',
-    'default_action' => 'index',
+    'default_module' => 'cv',
+    'modules_settings' => [
+        'cv' => [
+            'default_controller' => 'main'
+        ],
+        'app' => [
+            'default_controller' => 'app'
+        ]
+    ],
     'use_csrf_token' => false,
     'http_auth' => true,
     'use_sessions' =>false,

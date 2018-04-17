@@ -25,14 +25,30 @@ class HttpAuth implements AccessInterface
     {
         $this->access_open = require APP . '/config/config_access.php';
         $this->route = $route;
-        $this->jwt_key = Registry::$app->config['jwt_key'];
+        $this->jwt_key = Registry::$app->config->getJwtKey();
     }
     
     public function checkAccess()
     {
-        if (!empty($this->access_open) && in_array($this->route['controller'], $this->access_open)) {
-            return true;
+        if (empty($this->access_open)) {
+            return false;
+        } 
+        
+        $module = $this->route['module'];
+        
+        if (array_key_exists($module, $this->access_open)) {
+            $mudule_rules = $this->access_open[$this->route['module']]; //check module
+            
+            if (in_array('*', $mudule_rules)) { //all controllers are allowed
+                return true;
+            }
+            else {
+               if (in_array($this->route['controller'], $mudule_rules)) { //check controller
+                   return true;
+               }  
+            } 
         }
+        
         $request = Registry::$app->request;
         $header = $request->getHeader('HTTP_AUTHORIZATION');
         if ($header == "") {

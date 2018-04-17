@@ -4,23 +4,25 @@ namespace tm;
 
 use tm\Base;
 use tm\Request;
+use tm\Response;
 
+use tm\Registry as Reg;
 class Router extends Base
 {
     private $request;
-    private $config = [];
+    private $config;
     public $route = [];
    
     public $id;
-    private $path_elements = array('controller','action','id');
+    private $path_elements = array('module','controller','action');
     
     private $router = array(
-        '([a-z0-9+_\-]+)/([a-z0-9+_\-]+)/([0-9]+)' => '$controller/$action/$id',
-        '([a-z0-9+_\-]+)/([a-z0-9+_\-]+)' => '$controller/$action',
+        '([a-z0-9+_\-]+)/([a-z0-9+_\-]+)/([0-9]+)' => '$module/$controller/$action',
+        '([a-z0-9+_\-]+)/([a-z0-9+_\-]+)' => '$module/$controller',
         '([a-z0-9+_\-]+)(/)?' => '$controller',
         );
     
-    public function __construct(Request $request, array $config)
+    public function __construct(Request $request, Configuration $config)
     {
         $this->request = $request;
         $this->config = $config;
@@ -28,21 +30,15 @@ class Router extends Base
     
     public function route()
     {
-        $this->getRoute();
+
+        $module=  $this->route['module'];
         
-        if (!isset($this->route['controller'])) {
-            $this->route = [
-                'controller' => $this->config['default_controller'],
-                'action' => $this->config['default_action']
-                ];
-        }
-        
-        $controller_name = 'Controllers\\' . ucfirst($this->route['controller']) .'Controller';
+        $controller_name = $module . '\\Controllers\\' . ucfirst($this->route['controller']) .'Controller';
         
         try {
             $reflection = new \ReflectionClass($controller_name);
         } catch (\ReflectionException $ex) {
-            die('404 Not found');
+            return new Response(404, "Not found");
         }
         
         if (isset($this->route['action'])) {
@@ -53,7 +49,7 @@ class Router extends Base
         
         
         if ($this->route['action'] === '') {
-            die('404 Not found');
+            return new Response(404, "Not found");
         }
         
         $controller = $reflection->newInstanceArgs([$this->route]);
@@ -65,11 +61,40 @@ class Router extends Base
         try {
             return $action->invoke($controller);
         } catch (ReflectionException $ex) {
-            die('404 Not found');
+            return new Response(404, "Not found");
         }
     }
     
-    private function createController($controller)
+    public function checkRoute() : int {
+        if (!isset($this->route['module']) || is_null($this->route['module']) || $this->route['module'] === '') {
+            $defaultModule = $this->config->getDefaultModule();
+            
+            if (empty($defaultModule)) {
+                return 404;
+            }
+            
+            else {
+                $this->route['module'] = $defaultModule;
+            }
+        }
+        
+        if (!isset($this->route['controller']) || is_null($this->route['controller']) || $this->route['controller'] === '') {
+            $defaultController = $this->config->getDefaultController($this->route['module']);
+            
+            if (empty($defaultController)) {
+                return 404;
+            }
+            
+            else {
+                $this->route['controller'] = $defaultController;
+            }
+        }
+        
+        return 200;
+        
+    }
+
+        private function createController($controller)
     {
         $controller_name = 'Controllers\\' . ucfirst($controller) .'Controller';
         if (class_exists($controller_name)) {
@@ -81,12 +106,20 @@ class Router extends Base
             
     public function getRoute()
     {
-        /*$this->route = [
-            'controller' => $this->config['default_controller'],
-            'action' =>$this->config['default_action']
-        ];*/
+  
+        if (!isset($this->request->get()['route'])) {
+            
+            $this->route = [
+                'module' => null,
+                'controller' => null,
+                'action' =>null
+            ];
+
+            return $this->route;
+        }
         
         $path = $this->request->get()['route'];
+
         $parts = parse_url($path);
         if (isset($parts['query']) and !empty($parts['query'])) {
             $path = str_replace('?'.$parts['query'], '', $path);

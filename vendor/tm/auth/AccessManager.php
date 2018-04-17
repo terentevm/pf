@@ -9,6 +9,7 @@
 namespace tm\auth;
 
 use tm\Registry;
+use tm\Configuration;
 
 /**
  * Description of AccessManager
@@ -17,9 +18,9 @@ use tm\Registry;
  */
 class AccessManager
 {
-    public static function getAccessManager($route, array $config)
+    public static function getAccessManager($route, Configuration $config)
     {
-        if (isset($config['http_auth']) && $config['http_auth'] === true) {
+        if ($config->useHttpAuth()) {
             return Registry::CreateObject('tm\auth\HttpAuth', [$route]);
         }
         
