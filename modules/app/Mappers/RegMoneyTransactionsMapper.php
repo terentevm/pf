@@ -6,11 +6,11 @@
  * and open the template in the editor.
  */
 
-namespace mappers;
+namespace app\mappers;
 
 use tm\Mapper;
 use tm\Model;
-use Models\RegMoneyTransactions;
+use app\Models\RegMoneyTransactions;
 
 class RegMoneyTransactionsMapper extends Mapper
 {

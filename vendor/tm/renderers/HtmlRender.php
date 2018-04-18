@@ -68,7 +68,7 @@ class HtmlRender extends View implements RenderInterface
         header("Content-Encoding: gzip");
         if (is_file($file_view)) {
             //register view diectory as directory for look up templates twig.
-            $loader = new Twig_Loader_Filesystem(array($this->pathView .'/Views/layouts', $this->pathView. '/Views/templates', dirname($file_view)));
+            $loader = new Twig_Loader_Filesystem(array($this->pathView .'/Views/layouts', dirname($file_view)));
             $twig = new Twig_Environment($loader, array('cache' => $this->pathView . '/Views/compilation_cache','auto_reload' => true));
             $html = require $file_view;
             
@@ -86,7 +86,7 @@ class HtmlRender extends View implements RenderInterface
             "<meta charset='utf-8'>",
             "<meta http-equiv='X-UA-Compatible' content='IE=edge' />",
             "<meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no'>",
-            "<meta name='ccsrf_token' content='" . $_SESSION['csrf_token'] . "'>",
+            //"<meta name='ccsrf_token' content='" . $_SESSION['csrf_token'] . "'>",
             "<META HTTP-EQUIV='Content-language' CONTENT='" . LANGUAGE . "'>"
         ];
     }

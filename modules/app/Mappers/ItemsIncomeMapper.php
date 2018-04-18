@@ -1,6 +1,6 @@
 <?php
 
-namespace mappers;
+namespace app\mappers;
 
 use tm\Mapper;
 use tm\Model;

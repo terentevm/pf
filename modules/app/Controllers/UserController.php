@@ -20,7 +20,8 @@ use Respect\Validation\Exceptions\NestedValidationException;
  *
  * @author terentyev.m
  */
-class UserController extends Controller {
+class UserController extends Controller 
+{
     
     public $layout = 'material';
     
@@ -33,34 +34,18 @@ class UserController extends Controller {
 
         if(!empty($post)){
             
-            $login = $post['login'];
-            $password = $post['password'];
-            /**
-             * Here must be validations actions
-             */
-            
-            //$login_valid = v::stringType()->notEmpty()->email()->validate($login);
-            $userValidator = v::attribute('login', v::stringType()->notEmpty()->email())
-                    ->attribute('password', v::stringType()->notEmpty());
-                    
-            try {
-                $userValidator->assert($post);
-            } catch(NestedValidationException $exception) {
-                $msgs =  $exception->getFullMessage();
-                $msgs2 = $exception->getMessages();
-            }
+            $login = $post['login'] ?? '';
+            $password = $post['password'] ?? '';
             
             $user_id = User::verify($login, $password);
             
             if($user_id === false){
-                $this->errors[] = 'Invalid login or password';
-                $this->getErrors();
-                
+               
                 $inputed_data = [
-                    'login' => \htmlspecialchars($login)
+                    'login' => \filter_var($login, FILTER_SANITIZE_EMAIL)
                 ];
                 
-                return $this->createResponse($inputed_data, 401, '');  
+                return $this->createResponse($this->createResponseData('Invalid login or password!', $inputed_data), 401);  
             }
             
             if (Reg::$app->config->useSessions()) {
@@ -72,7 +57,7 @@ class UserController extends Controller {
             $token = Reg::$app->access_manager->generateNewToken($user_id);
             setcookie("jwt", $token, time() + 80000);
 
-            return $this->createResponse(['jwt' => $token], 200, '');
+            return $this->createResponse(['jwt' => $token], 200);
             
         }
         else{
@@ -92,45 +77,45 @@ class UserController extends Controller {
 
         if(!empty($post)){
             
-            $inputed_data = [
-                'login' => \htmlspecialchars($formData['login']),
-                'name' => \htmlspecialchars($formData['name'])
-            ];
-
             $user = new User();
-            $user->setLogin(\filter_var($post['login'], FILTER_SANITIZE_EMAIL));
-            $user->setPassword(\filter_var($post['password'], FILTER_SANITIZE_STRING));
-            $user->setName(\filter_var($post['name'], FILTER_DEFAULT));
             
+            $user->loadSafe($post);
+ 
             $ok = $user->validate();
             
-            if (ok !== true) {
-                return $this->createResponse("$inputed_data", 400, 'Inputed data are invalid!');    
+            
+            $returnData =[
+                'login' =>$user->getLogin(),
+                'name' =>$user->getName(), 
+            ];
+
+            if ($ok !== true) {
+                
+                return $this->createResponse($this->createResponseData('Inputed data are invalid!', $returnData), 400);    
             }
+            
             $user->hashPassword();
             
             //check login unique.        
             
             if(!$user->CheckUnique()){
-                //output error
-                $this->errors[] = 'Login already taken';
-                $this->getErrors();
-                return $this->createResponse($inputed_data, 400, 'Login already taken');      
+              
+                return $this->createResponse($this->createResponseData('Login already taken', $returnData), 400);      
             }
             
-            //Create new user and redirect to login page
+            
+            //save new user
            
             $success = $user->save();
 
             if(!$success){
-                $this->errors[] = 'Error, please try again!';
-                $this->getErrors();
-                return $this->createResponse($inputed_data, 500, 'Error, please try again!');
+
+                return $this->createResponse($this->createResponseData("Server error", $returnData), 500, 'Error, please try again!');
            }
            
            //if data are saved, create response with code 200
 
-           return $this->createResponse("User has been registered successful!", 200);
+           return $this->createResponse($this->createResponseData("User has been registered successful!"), 201);
 
            //redirect to login page
            //header('Location: /user/login');
@@ -162,5 +147,12 @@ class UserController extends Controller {
         }
         return $this->createResponse("Login hasn't been transfered! Delete field!", 400);    
         
+    }
+
+    private function createResponseData($msg, $returnData =[]) {
+        return [
+            'msg' => $msg,
+            'formData' => $returnData
+        ];
     }
 }

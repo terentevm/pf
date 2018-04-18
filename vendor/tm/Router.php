@@ -17,7 +17,7 @@ class Router extends Base
     private $path_elements = array('module','controller','action');
     
     private $router = array(
-        '([a-z0-9+_\-]+)/([a-z0-9+_\-]+)/([0-9]+)' => '$module/$controller/$action',
+        '([a-z0-9+_\-]+)/([a-z0-9+_\-]+)/([a-z0-9+_\-]+)' => '$module/$controller/$action',
         '([a-z0-9+_\-]+)/([a-z0-9+_\-]+)' => '$module/$controller',
         '([a-z0-9+_\-]+)(/)?' => '$controller',
         );
@@ -33,6 +33,8 @@ class Router extends Base
 
         $module=  $this->route['module'];
         
+        define('CURRENT_MUDULE', $module);
+
         $controller_name = $module . '\\Controllers\\' . ucfirst($this->route['controller']) .'Controller';
         
         try {

@@ -12,8 +12,8 @@ class RusMenu
     public function getMenuStructure() : array
     {
         $menu = [
-            flag =>"src/img/flags.svg#icon-flag-ru",
-            sideMenu => [
+            'flag' =>"src/img/flags.svg#icon-flag-ru",
+            'sideMenu' => [
                 'ПЕРСОНАЛЬНЫЕ ДАННЫЕ',
                 'ПРОФАЙЛ',
                 'ОБРАЗОВАНИЕ',

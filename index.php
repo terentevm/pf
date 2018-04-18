@@ -15,7 +15,7 @@ define('LAYOUT', 'main');
 define('APP', dirname(__FILE__));
 define('MODULES_PATH', dirname(__FILE__) . "\\modules");
 define('MODULE_DEFAULT', "cv");
-
+define('TEST', true);
 
 
 $reg = tm\Registry::getInstance();

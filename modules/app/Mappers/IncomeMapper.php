@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace mappers;
+namespace app\mappers;
 
 use tm\Mapper;
 use tm\Model;
@@ -62,7 +62,7 @@ class IncomeMapper extends Mapper
 
         foreach ($obj->rows->strings() as $row) {
             $row->setDocId($param['id']);
-            $row_mapper = $this->getMapper("Models\IncomeRow");
+            $row_mapper = $this->getMapper("app\Models\IncomeRow");
             $saved = $row_mapper->save($row);
 
             if ($saved === false) {

@@ -81,4 +81,17 @@ abstract class Model extends Base
             }
         }
     }
+
+    public function loadSafe(array $attributes)
+    {
+        
+        $filters = get_called_class()::getFilterRules();
+        $sanitizedData = filter_var_array($attributes, $filters);
+        foreach ($sanitizedData as $attrName => $attrValue) {
+            $setter = 'set' . ucfirst($attrName);
+            if (method_exists($this, $setter)) {
+                $this->$attrName = $attrValue;
+            }
+        }
+    }
 }

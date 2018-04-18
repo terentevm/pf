@@ -22,13 +22,23 @@ class Request extends Base
         $this->set_files_params($files);
     }
 
-    public function get()
+    public function get(string $key='')
     {
+        if ($key !=='') {
+            $value = $this->get[$key] ?? null;
+            return $value;
+        }
+        
         return $this->get;
     }
 
-    public function post()
+    public function post(string $key='')
     {
+        if ($key !=='') {
+            $value = $this->post[$key] ?? null;
+            return $value;
+        }
+
         return $this->post;
     }
 

@@ -82,9 +82,18 @@ class User extends Model{
        return false;
     }
     
+    public static function getFilterRules()
+	{
+		return [
+			'login' => FILTER_SANITIZE_EMAIL,
+			'password' => FILTER_DEFAULT,
+			'name' => FILTER_SANITIZE_SPECIAL_CHARS,
+		];
+    }
+        
     public function validate() {
         $validator = v::attribute('login', v::notEmpty()->Email())
-                    ->attribute('password', v::notEmpty()->stringType())
+                    ->attribute('password', v::notEmpty()->stringType()->length(3, null))
                     ->attribute('name', v::notEmpty()->stringType());
         
         try {
@@ -96,9 +105,4 @@ class User extends Model{
         }
     }
     
-    public function getValidationRules() {
-        return [
-            'login' =>['Email']
-        ];
-    }
 }

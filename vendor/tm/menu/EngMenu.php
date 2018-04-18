@@ -12,8 +12,8 @@ class EngMenu
     public function getMenuStructure() : array
     {
         $menu = [
-            flag =>"src/img/flags.svg#icon-flag-en",
-            sideMenu => [
+            'flag' =>"src/img/flags.svg#icon-flag-en",
+            'sideMenu' => [
                 'PERSONAL DATA',
                 'PROFILE',
                 'EDUCATION',

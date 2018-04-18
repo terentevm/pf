@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-namespace mappers;
+namespace app\mappers;
 
 
 use tm\Mapper;
