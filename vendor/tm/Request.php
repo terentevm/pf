@@ -42,6 +42,19 @@ class Request extends Base
         return $this->post;
     }
 
+    public function server(string $key='')
+    {
+        
+        if ($key =='') {
+            return $_SERVER;
+        }
+
+        $keyUp = strtoupper($key);
+        
+        return $_SERVER[$keyUp] ?? null;
+
+    }
+
     public function files()
     {
         return $this->files;

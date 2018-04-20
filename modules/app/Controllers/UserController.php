@@ -47,13 +47,7 @@ class UserController extends Controller
                 
                 return $this->createResponse($this->createResponseData('Invalid login or password!', $inputed_data), 401);  
             }
-            
-            if (Reg::$app->config->useSessions()) {
-                Reg::$app->startSession(['user_id' => $user_id]);
-                header('Location: /site/index');
-                die();
-            }
-            
+
             $token = Reg::$app->access_manager->generateNewToken($user_id);
             setcookie("jwt", $token, time() + 80000);
 

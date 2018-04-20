@@ -81,6 +81,11 @@ class HttpAuth implements AccessInterface
             'user_id' => $user_id,
         ];
 
+        $client_ip = Registry::$app->request->server('REMOTE_ADDR');
+
+        if(!is_null($client_ip )) {
+            $token['ip'] = $client_ip;   
+        }
         return  JWT::encode($token, $this->jwt_key);
     }
 }
