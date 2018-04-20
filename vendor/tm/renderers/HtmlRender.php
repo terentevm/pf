@@ -27,7 +27,7 @@ class HtmlRender extends View implements RenderInterface
         
         $this->view = $view;
         
-        $this->pathView = MODULES_PATH . "/" . $module;
+        $this->pathView = MODULES_PATH . "/" . CURRENT_MUDULE;
     }
 
     public function render($vars) : string

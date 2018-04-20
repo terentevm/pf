@@ -14,7 +14,10 @@
     $template = $twig->load('login.twig');
     $html = $template->render($render_param);
     
-    unset($_SESSION['error']);    
+    if(isset($_SESSION['error'])) {
+        unset($_SESSION['error']);
+    }
+        
 
     return $html;
     
