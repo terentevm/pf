@@ -19,12 +19,14 @@ class Controller extends Base
     public $errors = [];
     public $rules = [];
     
-    
+    protected $user_id = null;
     
     public function __construct($route)
     {
         $this->route = $route;
         $this->view = $route['action'];
+        $this->user_id = Reg::$app->user_id;
+        
     }
 
     public function createResponse($data = null, int $httpcode = 200, $msg = '')

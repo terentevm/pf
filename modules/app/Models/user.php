@@ -82,6 +82,10 @@ class User extends Model{
        return false;
     }
     
+    public function verifyPassword($password) {
+        return password_verify($this->password, $password);
+    }
+
     public static function getFilterRules()
 	{
 		return [

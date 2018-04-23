@@ -8,12 +8,27 @@ use tm\Base;
 
 abstract class Model extends Base
 {
+    /**
+     * Creates class mapper instanse usig model class name
+     * 
+     * @return Mapper instance
+     */
     public static function find()
     {
         return Mapper::getMapper(get_called_class());
     }
 
-    public static function findByUser($user_id, $limit = 50, $offset = 0, $asArray = true)
+    /**
+     * Return data (array or model instance) selected by user id from DB.
+     * 
+     * @param string $user_id User id in UUID format
+     * @param int $limit Number of records selected from the database
+     * @param int $offset 
+     * @param bool $asArray If true return array, else model instance
+     * 
+     * @return mixed Array or model instance
+     */
+    public static function findByUser(string $user_id, int $limit = 50, int $offset = 0, bool $asArray = true)
     {
         $result = Mapper::getMapper(get_called_class())
             ->where(['user_id = :user_id'])

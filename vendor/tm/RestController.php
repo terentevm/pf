@@ -10,7 +10,7 @@ class RestController extends Controller
 {
     public static $defaultAction = 'index';
     
-    protected $user_id = null;
+    
     
     protected $limit = 50;
     protected $offset = 0;
@@ -18,7 +18,7 @@ class RestController extends Controller
     public function __construct($route)
     {
         parent::__construct($route);
-        $this->user_id = Reg::$app->user_id;
+       
     }
     
     public function actionIndex()

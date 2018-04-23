@@ -117,6 +117,53 @@ class UserController extends Controller
         }
     }
     
+    public function changePassword()
+    {
+        $post = Reg::$app->request->post();
+        
+        if (empty($post)) {
+            return $this->createResponse(['result' => false, 'msg' => "No data!"], 500);    
+        }
+
+        //For change password user should be authorised.
+
+        if (is_null(Reg::$app->user_id)) {
+            return $this->createResponse(['result' => false, 'msg' => "Not authorise!"], 401);    
+        }
+
+        $user = User::findById(Reg::$app->user_id, false);
+
+        if (!$user instanceof User) {
+            return $this->createResponse(['result' => false, 'msg' => "Error get user!"], 500);     
+        }
+        
+        $currentPasword = $post['currentPasword'] ?? '';
+
+        if ($user->verifyPassword($currentPasword) !== true) {
+            return $this->createResponse(['result' => false, 'msg' => "Current password is invalid!"], 500);   
+        }
+
+        $newPassword = $post['newPassword'] ?? '';
+        $user->setPassword($newPassword);
+        $ok = $user->validate();
+
+        if (!$ok === true) {
+            return $this->createResponse(['result' => false, 'msg' => "error validate data!"], 500);     
+        }
+        
+        $user->hashPassword();
+
+        $updated = $user->update();
+
+        if ($updated === true) {
+            return $this->createResponse(['result' => true, 'msg' => "Password has been updated"], 200);   
+        }
+        else {
+            return $this->createResponse(['result' => false, 'msg' => "Password hasn't been updated"], 500);
+        }
+
+    }
+
     public function actionDelete() {
         $post = Reg::$app->request->post();
         
