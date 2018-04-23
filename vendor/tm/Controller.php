@@ -30,8 +30,14 @@ class Controller extends Base
     public function createResponse($data = null, int $httpcode = 200, $msg = '')
     {
         $reqType = Registry::$app->request->getResponseType();
-        $body = View::getRenderer($reqType, $this->route, $this->layout, $this->view)->render($data);
-
+        
+        if (is_string($data)) {
+            $body = $data;   
+        }
+        else {
+            $body = View::getRenderer($reqType, $this->route, $this->layout, $this->view)->render($data);   
+        }
+        
         $response = new Response($httpcode, $body);
         $response->setContentType($response->createContentType($reqType));
         

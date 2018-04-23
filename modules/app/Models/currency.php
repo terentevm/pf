@@ -8,7 +8,7 @@
 
 namespace app\Models;
 use tm\Model;
-
+use tm\Registry as Reg;
 /**
  * Description of Currency
  *
@@ -16,13 +16,13 @@ use tm\Model;
  */
 class Currency extends Model {
    
-    private $id;
+    private $id = null;
     private $code = '';
     private $name = '';
     private $short_name = '';
     private $user_id;
     
-    public function __construct($id = '', $code = '', $name = '', $short_name = '', $user_id = '') {
+    public function __construct($id = null, $code = '', $name = '', $short_name = '', $user_id = '') {
         $this->id = $id;
         $this->code = $code;
         $this->name = $name;
@@ -69,5 +69,17 @@ class Currency extends Model {
     function setUser_id($user_id) {
         $this->user_id = $user_id;
     }
-
+    
+    public static function getClassificator() 
+    {
+        $file_path = Reg::$app->config->getRateClassificatorFilePath();
+        
+        if ($file_path === '' || !is_file($file_path)) {
+            return null;
+        }
+        
+        $classificator_arr = require $file_path;
+        
+        return $classificator_arr ;
+    }
 }

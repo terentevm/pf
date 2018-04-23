@@ -95,15 +95,7 @@ abstract class Mapper extends Base
         return $model;
     }
 
-    public function update(array $colsForUpdate)
-    {
-        $sql = $this->qb->buildUpdate($this, $colsForUpdate);
-        $this->update_stmt = $this->db->prepare($sql);
 
-        $success = $this->update_stmt->execute($colsForUpdate);
-
-        return $success;
-    }
 
     public function processRelations(&$data)
     {
@@ -136,8 +128,8 @@ abstract class Mapper extends Base
     protected function addDataFromForeignTable(&$data, $keys_arr, $tableName, $relation)
     {
         $condition = $this->qb::createTextConditionFromArray($relation['table_col'], $keys_arr);
-
-        $class_name = '\\models\\' . $relation['model'];
+        $currentModule = CURRENT_MUDULE;
+        $class_name = "\\" . $currentModule . '\\models\\' . $relation['model'];
 
         $rows = $class_name::find()->where([$condition])->all();
 
@@ -201,31 +193,25 @@ abstract class Mapper extends Base
 
     public function save(Model $obj, $upload_mode = false, $useTransaction = false)
     {
-        $pk_name = $this->getPrimaryKey();
-
-        $pk_val = $obj->$pk_name;
-
-        if (is_null($pk_val) || empty($pk_val) || $upload_mode === true) {
-            if (!$this->db->transactionExists() && $useTransaction) {
-                $this->db->beginTransaction();
-            }
-
-            $success = $this->create($obj);
-
-            if ($success) {
-                $success = $this->afterSave($obj);
-            }
-
-            if ($this->db->transactionExists() && $useTransaction) {
-                if ($success) {
-                    $this->db->commitTransaction();
-                } else {
-                    $this->db->rollBackTransaction();
-                }
-            }
-        } else {
-            $success = $this->update($obj);
+        
+        if (!$this->db->transactionExists() && $useTransaction) {
+            $this->db->beginTransaction();
         }
+
+        $success = $this->create($obj);
+
+        if ($success) {
+            $success = $this->afterSave($obj);
+        }
+
+        if ($this->db->transactionExists() && $useTransaction) {
+            if ($success) {
+                $this->db->commitTransaction();
+            } else {
+                $this->db->rollBackTransaction();
+            }
+        }
+
 
         return $success;
     }
@@ -243,7 +229,30 @@ abstract class Mapper extends Base
 
         return $success;
     }
-
+    
+    public function update(Model $obj, array $colsForUpdate)
+    {
+        $sql = $this->qb->buildUpdate($this, $colsForUpdate);
+        $this->update_stmt = $this->db->prepare($sql);
+        
+        $this->db->beginTransaction();
+        
+        $success = $this->update_stmt->execute($colsForUpdate);
+        
+        if ($success === true) {
+            $success = $this->afterUpdate($obj);   
+        }
+        
+        if ($this->db->transactionExists()) {
+            if ($success) {
+                $this->db->commitTransaction();
+            } else {
+                $this->db->rollBackTransaction();
+            }
+        }
+        
+        return $success;
+    }
     protected function afterSave($obj)
     {
         return true;

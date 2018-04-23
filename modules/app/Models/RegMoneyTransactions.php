@@ -13,6 +13,7 @@ use app\Models\Expenditure;
 use app\Models\Income;
 use app\Models\Transfer;
 use app\Models\ChangeBalance;
+use app\Models\Lend;
 
 class RegMoneyTransactions extends Model
 {
@@ -51,8 +52,13 @@ class RegMoneyTransactions extends Model
             $this->loadIncome($model);
         } elseif ($model instanceof Transfer) {
             $this->condCol = 'transfer_id';
+            $this->loadTransfer($model);
         } elseif ($model instanceof ChangeBalance) {
             $this->condCol = 'cb_id';
+            $this->loadChangeBalance($model);
+        } elseif ($model instanceof Lend) {
+            $this->condCol = 'lend_id';
+            $this->loadLend($model);
         } else {
             throw new \Exception('Instance of model: ' . get_class($model) . " doesn't support for saving to the moneys register!");
         }
@@ -73,7 +79,8 @@ class RegMoneyTransactions extends Model
             'expend_id' => $model->getId(),
             'income_id' => null,
             'transfer_id' => null,
-            'cb_id' => null
+            'cb_id' => null,
+            'lend_id' => null,
         ];
     }
 
@@ -98,7 +105,8 @@ class RegMoneyTransactions extends Model
                 'expend_id' => null,
                 'income_id' => $model->getId(),
                 'transfer_id' => null,
-                'cb_id' => null
+                'cb_id' => null,
+                'lend_id' => null,
             ];
         }
     }
@@ -109,28 +117,30 @@ class RegMoneyTransactions extends Model
             'date' => $model->getDate(),
             'dateInt' => strtotime($model->getDate()),
             'wallet_id' => $model->getWallet_id_from(),
-            'sum' => $row->getSumFrom() * -1,
+            'sum' => $model->getSumFrom() * -1,
             'expend_id' => null,
             'income_id' => null,
             'transfer_id' => $model->getId(),
-            'cb_id' => null
+            'cb_id' => null,
+            'lend_id' => null,
         ];
 
         $this->rows[] = [
             'date' => $model->getDate(),
             'dateInt' => strtotime($model->getDate()),
             'wallet_id' => $model->getWallet_id_to(),
-            'sum' => $row->getSumTo(),
+            'sum' => $model->getSumTo(),
             'expend_id' => null,
             'income_id' => null,
             'transfer_id' => $model->getId(),
-            'cb_id' => null
+            'cb_id' => null,
+            'lend_id' => null,
         ];
     }
 
     public function loadChangeBalance($model) {
 
-        $sum = ($model->getSumExpend() > 0) ? $model->getSumExpend() : $model->getSumIncome();
+        $sum = ($model->getSumExpend() > 0) ? $model->getSumExpend() * -1 : $model->getSumIncome();
 
         $this->rows[] = [
             'date' => $model->getDate(),
@@ -140,7 +150,25 @@ class RegMoneyTransactions extends Model
             'expend_id' => null,
             'income_id' => null,
             'transfer_id' => null,
-            'cb_id' => $model->getId()
+            'cb_id' => $model->getId(),
+            'lend_id' => null,
+        ];
+    }
+    
+    public function loadLend($model) {
+
+        $sum = $model->getSum() * -1;
+
+        $this->rows[] = [
+            'date' => $model->getDate(),
+            'dateInt' => strtotime($model->getDate()),
+            'wallet_id' => $model->getWallet_id(),
+            'sum' => $sum,
+            'expend_id' => null,
+            'income_id' => null,
+            'transfer_id' => null,
+            'cb_id' => null,
+            'lend_id' => $model->getId(),
         ];
     }
 

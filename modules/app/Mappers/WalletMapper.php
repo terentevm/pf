@@ -23,7 +23,7 @@ class WalletMapper extends Mapper
 
     public static function getCurrency() {
         return [
-                'model' => 'Wallet',
+                'model' => 'Currency',
                 'f_key' => 'currency_id',
                 'table_col' => 'id'
             ];

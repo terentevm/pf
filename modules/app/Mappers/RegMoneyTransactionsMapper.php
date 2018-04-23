@@ -14,7 +14,7 @@ use app\Models\RegMoneyTransactions;
 
 class RegMoneyTransactionsMapper extends Mapper
 {
-    public static $db_columnes = ['date','dateInt', 'wallet_id', 'sum', 'expend_id', 'income_id', 'transfer_id', 'cb_id'];
+    public static $db_columnes = ['date','dateInt', 'wallet_id', 'sum', 'expend_id', 'income_id', 'transfer_id', 'cb_id', 'lend_id'];
     
     public static function setTable() { 
         return 'regMoneyTrans';

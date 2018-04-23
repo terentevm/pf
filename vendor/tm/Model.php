@@ -60,7 +60,7 @@ abstract class Model extends Base
 
         $success = $mapper->where(['id = :id'])
             ->setParams(['id' => $this->id])
-            ->update($colsForUpdate);
+            ->update($this, $colsForUpdate);
                     
         return $success;
     }

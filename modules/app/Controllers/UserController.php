@@ -12,9 +12,7 @@ use tm\Controller;
 
 use tm\Registry as Reg;
 use app\Models\User;
-use Respect\Validation\Validator as v;
-use Respect\Validation\Exceptions\ValidationException;
-use Respect\Validation\Exceptions\NestedValidationException;
+use app\Models\Settings;
 /**
  * Description of User
  *
@@ -49,21 +47,20 @@ class UserController extends Controller
             }
 
             $token = Reg::$app->access_manager->generateNewToken($user_id);
-            setcookie("jwt", $token, time() + 80000);
+            
+            $oSettings = Settings::getSettings($user_id);
+            
+            $data = [
+                'jwt' => $token,
+                'settings' => $oSettings
+            ];
 
-            return $this->createResponse(['jwt' => $token], 200);
+            return $this->createResponse($data, 200);
             
         }
         else{
             return $this->createResponse(null, 200, '');
         }
-    }
-
-    public function actionLogout(){
-        
-        Reg::$app->endSession();
-        header('Location: /user/login');
-        
     }
     
     public function actionSignup(){

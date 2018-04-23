@@ -65,9 +65,13 @@ class Application extends Base
             (new Response(401))->send();
         }
        
+        try {
+            $response = $router->route();
+            $response->send();
+        } catch (Exception $ex) {
+            (new Response(500, "Some error"))->send();
+        }
         
-        $response = $router->route();
-        $response->send();
     }
 
     public function startSession($param)

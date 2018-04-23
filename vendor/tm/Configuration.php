@@ -67,5 +67,11 @@ class Configuration
         $val = (isset($this->config['lang'])) ? $this->config['lang'] : "en-GB";
         return $val;   
     }
+    
+    public function getRateClassificatorFilePath() : string 
+    {
+        $val = (isset($this->config['currensy_classificator_file'])) ? $this->config['currensy_classificator_file'] : "";
+        return $val;   
+    }
         
 }

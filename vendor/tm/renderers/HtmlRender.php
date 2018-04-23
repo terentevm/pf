@@ -7,6 +7,7 @@ use tm\renderers\RenderInterface;
 use tm\Registry;
 use Twig_Environment;
 use Twig_Loader_Filesystem;
+use Twig_Error_Loader;
 
 class HtmlRender extends View implements RenderInterface
 {
@@ -69,7 +70,7 @@ class HtmlRender extends View implements RenderInterface
         if (is_file($file_view)) {
             //register view diectory as directory for look up templates twig.
             $loader = new Twig_Loader_Filesystem(array($this->pathView .'/Views/layouts', dirname($file_view)));
-            $twig = new Twig_Environment($loader, array('cache' => $this->pathView . '/Views/compilation_cache','auto_reload' => true));
+            $twig = new Twig_Environment($loader, array('cache' => $this->pathView . '/Views/compilation_cache','auto_reload' => false));
             $html = require $file_view;
             
         } else {

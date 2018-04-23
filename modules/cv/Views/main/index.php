@@ -1,5 +1,7 @@
 <?php
-$template = $twig->load('index.twig');
+
+  $template = $twig->load('index.twig');   
+
 
 $render_param['flag'] = $vars['flag'];
 $render_param['sideMenu'] = $vars['sideMenu'];

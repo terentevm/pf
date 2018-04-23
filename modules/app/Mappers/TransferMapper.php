@@ -14,7 +14,7 @@ use tm\Model;
 class TransferMapper extends Mapper
 {
 
-    public static $db_columnes = ['id', 'user_id' ,'date', 'wallet_id_from', 'wallet_id_to', 'sumFrom', 'sumTo' ,'comment'];
+    public static $db_columnes = ['id', 'user_id' ,'date', 'dateInt', 'wallet_id_from', 'wallet_id_to', 'sumFrom', 'sumTo' ,'comment'];
     
     public static function setTable() { 
         return 'doc_transfers';
@@ -46,6 +46,7 @@ class TransferMapper extends Mapper
             'id' => $obj->getId(),
             'user_id' => $obj->getUser_id(),
             'date' => $obj->getDate(),
+            'dateInt' => strtotime($obj->getDate()),
             'wallet_id_from' => $obj->getWallet_id_from(),
             'wallet_id_to' => $obj->getWallet_id_to(),
             'sumFrom' => $obj->getSumFrom(),
@@ -63,5 +64,15 @@ class TransferMapper extends Mapper
        
     public function delete(Model $obj) {
         
+    }
+    
+    protected function afterSave($obj) {
+       $regMoney = new \app\Models\RegMoneyTransactions();
+       $regMoney->loadModel($obj);
+       $success = $regMoney->save(false);
+       
+       unset($regMoney);
+       
+       return $success;
     }
 }

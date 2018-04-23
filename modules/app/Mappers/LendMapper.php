@@ -8,19 +8,19 @@
 
 namespace app\mappers;
 
-
 use tm\Mapper;
 use tm\Model;
 
-class ChangeBalanceMapper extends Mapper
+class LendMapper extends Mapper
 {
-    
-    public static $db_columnes = ['id', 'user_id' ,'date', 'dateInt', 'wallet_id', 'sumExpend', 'sumIncome', 'newBalance'];
+    public static $db_columnes = ['id', 'user_id' ,'date', 'dateInt', 'wallet_id', 'contact', 'sum'];
     
     public static function setTable() { 
-        return 'doc_change_balance';
+        return 'lend';
     }
- 
+    public function delete(Model $obj) {
+        
+    }
 
     protected function getPrimaryKey() {
         return 'id';
@@ -32,11 +32,9 @@ class ChangeBalanceMapper extends Mapper
             'user_id' => $obj->getUser_id(),
             'date' => $obj->getDate(),
             'dateInt' => strtotime($obj->getDate()),
+            'contact' =>$obj->getContact(),
             'wallet_id' => $obj->getWallet_id(),
-            'sumExpend' => $obj->getSumExpend(),
-            'sumIncome' => $obj->getSumIncome(),
-            'newBalance' => $obj->getNewBalance()
-            
+            'sum' => $obj->getSum()
         ];
         
         if (!isset($db_arr['id'])){
@@ -46,22 +44,7 @@ class ChangeBalanceMapper extends Mapper
         return $db_arr;
     }
     
-       
-    public function delete(Model $obj) {
-        
-    }
-    
     protected function afterSave($obj) {
-        $regMoney = new \app\Models\RegMoneyTransactions();
-        $regMoney->loadModel($obj);
-        $success = $regMoney->save(false);
-
-        unset($regMoney);
-
-        return $success;
-    }
-    
-    protected function afterUpdate($obj) {
         $regMoney = new \app\Models\RegMoneyTransactions();
         $regMoney->loadModel($obj);
         $success = $regMoney->save(false);

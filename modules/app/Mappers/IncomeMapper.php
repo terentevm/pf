@@ -75,7 +75,7 @@ class IncomeMapper extends Mapper
     }
 
     protected function afterSave($obj) {
-        $regMoney = new \Models\RegMoneyTransactions();
+        $regMoney = new \app\Models\RegMoneyTransactions();
         $regMoney->loadModel($obj);
         $success = $regMoney->save(false);
 
