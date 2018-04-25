@@ -3,7 +3,7 @@
 namespace tm;
 
 use tm\Base;
-use tm\Registry;
+use tm\Registry as Reg;
 use tm\Request;
 
 class Controller extends Base
@@ -31,7 +31,7 @@ class Controller extends Base
 
     public function createResponse($data = null, int $httpcode = 200, $msg = '')
     {
-        $reqType = Registry::$app->request->getResponseType();
+        $reqType = Reg::$app->request->getResponseType();
         
         if (is_string($data)) {
             $body = $data;   
