@@ -72,6 +72,7 @@ class Settings extends Model implements \JsonSerializable
             ->one();
         
         if (is_null($oSettings)) {
+            
             $oSettings = new self();
             $oSettings->setNewUser(true);
             $oSettings->setHasCurrencies(false);

@@ -73,5 +73,14 @@ class Configuration
         $val = (isset($this->config['currensy_classificator_file'])) ? $this->config['currensy_classificator_file'] : "";
         return $val;   
     }
+
+    public function getSystemCurrency() {
+        return (isset($this->config['systemCurrency'])) ? $this->config['systemCurrency'] : [
+            "name"=> "Czech koruna",
+            "short_name"=> "CZK",
+            "code"=> "203",
+            "mult"=> "1"
+            ];
+    }
         
 }

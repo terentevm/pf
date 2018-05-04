@@ -82,4 +82,39 @@ class Currency extends Model {
         
         return $classificator_arr ;
     }
+
+    public static function SystemCurrensy()
+    {
+        $sysCurrency_arr = Reg::$app->config->getSystemCurrency();
+       
+        $sysCurrency = static::find()->where("short_name = :short_name")->setParam('short_name', sysCurrency_arr['short_name'])->limit(1)->one();
+        
+        return $sysCurrency;
+    }
+
+    public static function saveSystemCurrensy($user_id) {
+        
+        $sysCurrency = self::SystemCurrensy();
+
+        if (is_null($sysCurrency)) {
+            
+            $sysCurrency_arr = Reg::$app->config->getSystemCurrency();
+            
+            $currensy = new self();
+            
+            $currensy->setUser_id($user_id);
+            $currensy->setName($sysCurrency_arr['name']);
+            $currensy->setShort_Name($sysCurrency_arr['short_name']) ;
+            $currensy->setCode($sysCurrency_arr['code']);
+
+            $success = $currensy->save();
+
+            return $success;
+
+        }
+        else {
+            return true;
+        }
+
+    }
 }

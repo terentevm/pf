@@ -10,6 +10,8 @@ namespace app\mappers;
 
 use tm\Mapper;
 use tm\Model;
+use app\Models\Currency;
+use app\Models\Rates;
 
 class SettingsMapper extends Mapper
 {
@@ -46,5 +48,31 @@ class SettingsMapper extends Mapper
         ];    
         
         return $db_arr;
+    }
+
+    protected function afterSave($obj)
+    {
+        $success = Currency::saveSystemCurrensy($obj->getUser_Id()) ;
+
+        if ($success === false) {
+            return false;
+        }
+
+        $sysCurrency = Currency::SystemCurrensy();
+
+        $record = [
+            'id' => null,
+            'currency_id' =>  $sysCurrency->getId(),
+            'date' => "1980-01-01",
+            'dateInt' => strtotime("1980-01-01"),
+            'mult' => 1,
+            'rate' => 1
+        ];
+
+        $rates = new Rates();
+        $rates->setDataset(array($record));
+        $success = $rates->save();
+        
+        return $success;
     }
 }

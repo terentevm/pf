@@ -13,6 +13,7 @@ use tm\Controller;
 use tm\Registry as Reg;
 use app\Models\User;
 use app\Models\Settings;
+
 /**
  * Description of User
  *
@@ -49,7 +50,7 @@ class UserController extends Controller
             $token = Reg::$app->access_manager->generateNewToken($user_id);
             
             $oSettings = Settings::getSettings($user_id);
-            
+
             $data = [
                 'jwt' => $token,
                 'settings' => $oSettings
@@ -103,7 +104,9 @@ class UserController extends Controller
 
                 return $this->createResponse($this->createResponseData("Server error", $returnData), 500, 'Error, please try again!');
            }
+
            
+
            //if data are saved, create response with code 200
 
            return $this->createResponse($this->createResponseData("User has been registered successful!"), 201);
