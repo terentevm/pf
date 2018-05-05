@@ -6,7 +6,7 @@ use tm\RestController;
 use app\Models\Currency;
 use app\Models\Rates;
 
-use tm\Registry;
+use tm\Registry as Reg;
 use Respect\Validation\Validator as v;
 use Respect\Validation\Exceptions\ValidationException;
 
@@ -35,7 +35,15 @@ class CurrencyController extends RestController
         if (!empty($errors)) {
             return $this->createResponse($errors, 500); 
         }
-
+        
+        $rates = new Rates();
+        $result = $rates->loadRates($post['currencies'], $post['dateFrom'], $post['dateTo']);
+        
+        if ($result === true) {
+            return $this->createResponse(["Currency rates have been loaded"], 201);    
+        } else {
+            return $this->createResponse(["Currency rates have not been loaded"],500); 
+        }
         
 
     }

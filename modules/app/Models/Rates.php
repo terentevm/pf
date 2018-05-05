@@ -3,11 +3,11 @@
 namespace app\Models;
 
 use tm\Model;
-
+use tm\Mapper;
 use tm\rates\LoaderFabric;
 use app\Models\Currency;
 use tm\Registry as Reg;
-use tm\Mappers\RatesMapper;
+use app\Mappers\RatesMapper;
 
 class Rates extends Model
 {
@@ -23,24 +23,23 @@ class Rates extends Model
         $this->dataset = $dataset;
     }
 
-    public function loadRates(array $currencies, string $date1, sting $date2)
+    public function loadRates(array $currencies, string $date1, string $date2)
     {
 
         $user_id = Reg::$app->user_id;
-
-        $params = [
-            'user_id' => $user_id,
-            'currency_arr' => implode(",", $currencies)
-        ];
         
-        $curr_arr = Currencies::find()->where(["user_id = :user_id", "id IN (:currency_arr)"])->setParams($params)->asArray()->all();
+        list($inCondition, $params) = Mapper::in($currencies, "curr");
+        
+        $params['user_id'] = $user_id;
+                
+        $curr_arr = Currency::find()->where(["user_id = :user_id", "id IN (" . $inCondition . ")"])->setParams($params)->asArray()->all();
         
         
         $loader = LoaderFabric::getLoader();
 
         foreach ($curr_arr as $currency) {
             
-            $rates_data = $loader->load($currency['short_name'], $data1, $data2);
+            $rates_data = $loader->load($currency['short_name'], $date1, $date2);
 
             if (empty($rates_data)) {
                 continue;
@@ -48,29 +47,30 @@ class Rates extends Model
 
             $rates = $rates_data['rates'];
             
-            $rates_db = getExistsRates($currency['id'], $date1, $date2);
+            $rates_db = $this->getExistsRates($currency['id'], $date1, $date2);
             
             foreach ($rates as $date => $rate) {
                 if (!$this->rateExists($rates_db, $date)) {
                     $record = [
+                        'user_id' => $user_id,
                         'currency_id' => $currency['id'],
                         'date' => $rate['date'],
                         'mult' =>  $rates_data['mult'],
                         'rate' => $rate['rate'],
                     ] ; 
                     
-                    $this->dataset.push($record);
-
+                    array_push($this->dataset, $record);
+                    
                 }
             }
 
         }
 
         if (empty($this->dataset)){
-            return false;
+            return true;
         }
 
-        $mapper = new RatesMapper();
+        $mapper = new RatesMapper(get_class($this));
         $ok = $mapper->save($this);
 
         return $ok;
@@ -81,7 +81,7 @@ class Rates extends Model
     {
         $date1_int = strtotime($date1);
         $date2_int = strtotime($date2);
-        
+        $user_id = Reg::$app->user_id;
         $params = [
             'user_id' => $user_id,
             'currency_id' => $currency_id,
@@ -89,7 +89,7 @@ class Rates extends Model
             'date2' => $date2_int,
         ];
 
-        $exist_rates = static::find()->where(['user_id = :user_id', "currency_id = :currency_id" ,'date_int >= :date1', 'date_int <= :date2'])->setParams($params)->asArray()->all();
+        $exist_rates = static::find()->where(['user_id = :user_id', "currency_id = :currency_id" ,'dateInt >= :date1', 'dateInt <= :date2'])->setParams($params)->asArray()->all();
 
         return $exist_rates;
 
@@ -97,7 +97,7 @@ class Rates extends Model
 
     private function rateExists($rates_db, $dateInt) {
         foreach($rates_db as $record) {
-            if ($record['dateInt'] === $dateInt) {
+            if ($record['dateInt'] == $dateInt) {
                 return true;
             }
         }

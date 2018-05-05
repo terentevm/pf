@@ -28,12 +28,15 @@ class RatesMapper extends Mapper
 
         foreach ($dataset as $record) {
             $record['id'] = null; 
+            $record['dateInt'] = strtotime($record['date']); 
             $success = $this->create_stmt->execute($record);
         
             if ($success !== true) {
                 return false;
             } 
         }
+        
+        return true;
     }
 
     public function delete(\tm\Model $obj) {

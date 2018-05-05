@@ -16,8 +16,8 @@ class CNBLoader implements IRatesLoader
     public function load(string $currencyCode, string $date1, string $date2) : array
     {
         $this->currencyCode = $currencyCode;
-        $this->date1 = new DateTime($date1);
-        $this->date2 = new DateTime($date2);
+        $this->date1 = new \DateTime($date1);
+        $this->date2 = new \DateTime($date2);
 
         if ($this->date1 > $this->date2) {
             return [];
@@ -87,9 +87,9 @@ class CNBLoader implements IRatesLoader
 
             $parts = explode("|", $row_str);
 
-            $date_fmt = (new DateTime(trim($parts[0])))->format("Y-m-d");
-
-            $rates[$date_fmt] =  [
+            $date_fmt = (new \DateTime(trim($parts[0])))->format("Y-m-d");
+            $dateInt = strtotime($date_fmt);
+            $rates[$dateInt] =  [
                 'date' => $date_fmt,
                 'rate' => floatval(str_replace(",", ".", $parts[1]))
             ];
