@@ -83,7 +83,7 @@ class UserController extends Controller
 
             if ($ok !== true) {
                 
-                return $this->createResponse($this->createResponseData('Inputed data are invalid!', $returnData), 400);    
+                return $this->createResponse($this->createResponseData(2 ,'Inputed data are invalid!', $returnData), 400);    
             }
             
             $user->hashPassword();
@@ -92,7 +92,7 @@ class UserController extends Controller
             
             if(!$user->CheckUnique()){
               
-                return $this->createResponse($this->createResponseData('Login already taken', $returnData), 400);      
+                return $this->createResponse($this->createResponseData(3, 'Login already taken', $returnData), 400);      
             }
             
             
@@ -102,7 +102,7 @@ class UserController extends Controller
 
             if(!$success){
 
-                return $this->createResponse($this->createResponseData("Server error", $returnData), 500, 'Error, please try again!');
+                return $this->createResponse($this->createResponseData(-1, "Server error", $returnData), 500);
            }
 
            
@@ -111,8 +111,7 @@ class UserController extends Controller
 
            return $this->createResponse($this->createResponseData("User has been registered successful!"), 201);
 
-           //redirect to login page
-           //header('Location: /user/login');
+   
         }
         else {
             // output registrqation form
@@ -125,6 +124,7 @@ class UserController extends Controller
         $post = Reg::$app->request->post();
         
         if (empty($post)) {
+            
             return $this->createResponse(['result' => false, 'msg' => "No data!"], 500);    
         }
 
@@ -190,8 +190,19 @@ class UserController extends Controller
         
     }
 
-    private function createResponseData($msg, $returnData =[]) {
+    /**
+     * Creates response array
+     * @param int code. Addition code: -1 - server eror,  1 - success, 2 - invalid data, 3 - login is exits
+     * @param string msg  Some message
+     * @param array returnData  Data inputed by user
+     * 
+     * @return array
+     * 
+     */
+    private function createResponseData(int $code, string $msg, array $returnData =[]) : array
+    {
         return [
+            'code' => $code,
             'msg' => $msg,
             'formData' => $returnData
         ];
