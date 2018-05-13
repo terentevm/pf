@@ -24,6 +24,7 @@ class ItemExpenditureMapper extends Mapper
             $this->setParams(['parent_id' => $parentId]);
         }
         
+        $this->orderBy("name");
         list($sql, $params) = $this->qb->build($this);
         
         $head_items = $this->db->query($sql, $params, true);
@@ -75,7 +76,7 @@ class ItemExpenditureMapper extends Mapper
 
     public function mapModelToDb(Model $obj) {
      
-        return [
+        $db_arr = [
             'id' => $obj->getId(),
             'user_id' => $obj->getUser_id(),
             'name' => $obj->getName(),
@@ -83,6 +84,12 @@ class ItemExpenditureMapper extends Mapper
             'parent_id' => $obj->getParentId(),
             'comment' => $obj->getComment()
         ];
+        
+        if (!isset($db_arr['id'])){
+            $db_arr['id'] = $this->getGuide();
+        }
+        
+        return $db_arr; 
     }
 
    
