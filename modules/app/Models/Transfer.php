@@ -10,7 +10,7 @@ namespace app\Models;
 
 use tm\Model;
 
-class Transfer extends Model
+class Transfer extends Model implements \JsonSerializable
 {
     private $id = null;
     private $user_id = null;
@@ -104,6 +104,10 @@ class Transfer extends Model
         $this->user_id = $user_id;
     }
 
+    public function jsonSerialize() {
+        $vars = get_object_vars($this);
 
+	    return $vars;   
+    }
 
 }

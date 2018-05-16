@@ -47,7 +47,7 @@ class RestController extends Controller
         if (!isset($get['id'])) {
             return $this->createResponse('Not found', 404);
         }
-        $className = self::$classModel;
+        $className = static::$classModel;
         
         $result = $className::findById($id, false);
         
