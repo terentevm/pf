@@ -61,11 +61,11 @@ class Controller extends Base
         $_SESSION['error'] = $errors;
     }
 
-    public function createResponseData(bool $success, $returnData = null, string $message ="") : stdClass
+    public function createResponseData(bool $success, $returnData = null, string $message ="")
     {
-        $respStruct = new stdClass();
+        $respStruct = new \stdClass();
         $respStruct->success = $success;
-        $respStruct->Data = $returnData;
+        $respStruct->data = $returnData;
         $respStruct->message = $message;
 
         return $respStruct;
