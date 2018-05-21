@@ -60,4 +60,14 @@ class Controller extends Base
         $errors .= '</ul>';
         $_SESSION['error'] = $errors;
     }
+
+    public function createResponseData(bool $success, $returnData = null, string $message ="") : stdClass
+    {
+        $respStruct = new stdClass();
+        $respStruct->success = $success;
+        $respStruct->Data = $returnData;
+        $respStruct->message = $message;
+
+        return $respStruct;
+    }
 }

@@ -44,7 +44,7 @@ class UserController extends Controller
                     'login' => \filter_var($login, FILTER_SANITIZE_EMAIL)
                 ];
                 
-                return $this->createResponse($this->createResponseData('Invalid login or password!', $inputed_data), 401);  
+                return $this->createResponse($this->createResponseData(false, $inputed_data, 'Invalid login or password!'), 401);  
             }
 
             $token = Reg::$app->access_manager->generateNewToken($user_id);
@@ -56,11 +56,11 @@ class UserController extends Controller
                 'settings' => $oSettings
             ];
 
-            return $this->createResponse($data, 200);
+            return $this->createResponse($this->createResponseData(true, $data, "OK"), 200);
             
         }
         else{
-            return $this->createResponse(null, 200, '');
+            return $this->createResponse($this->createResponseData(false, null, "Login data hasn't ben recieved"), 200);
         }
     }
     
@@ -83,7 +83,7 @@ class UserController extends Controller
 
             if ($ok !== true) {
                 
-                return $this->createResponse($this->createResponseData(2 ,'Inputed data are invalid!', $returnData), 400);    
+                return $this->createResponse($this->createResponseData(false , $returnData, 'Inputed data are invalid!'), 400);    
             }
             
             $user->hashPassword();
@@ -92,7 +92,7 @@ class UserController extends Controller
             
             if(!$user->CheckUnique()){
               
-                return $this->createResponse($this->createResponseData(3, 'Login already taken', $returnData), 400);      
+                return $this->createResponse($this->createResponseData(false, $returnData, 'Login already taken'), 400);      
             }
             
             
@@ -102,20 +102,20 @@ class UserController extends Controller
 
             if(!$success){
 
-                return $this->createResponse($this->createResponseData(-1, "Server error", $returnData), 500);
+                return $this->createResponse($this->createResponseData(false, $returnData,"Server error"), 500);
            }
 
            
 
            //if data are saved, create response with code 200
 
-           return $this->createResponse($this->createResponseData("User has been registered successful!"), 201);
+           return $this->createResponse($this->createResponseData(true, null ,"User has been registered successfully!"), 201);
 
    
         }
         else {
             // output registrqation form
-            return $this->createResponse("OK", 200);
+            return $this->createResponse($this->createResponseData(false, null, "Login data hasn't ben recieved"), 200);
         }
     }
     
@@ -125,25 +125,27 @@ class UserController extends Controller
         
         if (empty($post)) {
             
-            return $this->createResponse(['result' => false, 'msg' => "No data!"], 500);    
+            return $this->createResponse($this->createResponseData(false, null, "No data"), 500);    
         }
 
         //For change password user should be authorised.
 
         if (is_null(Reg::$app->user_id)) {
-            return $this->createResponse(['result' => false, 'msg' => "Not authorise!"], 401);    
+            
+            return $this->createResponse($this->createResponseData(false, null, "Not authorized!"), 401); 
         }
 
         $user = User::findById(Reg::$app->user_id, false);
 
         if (!$user instanceof User) {
-            return $this->createResponse(['result' => false, 'msg' => "Error get user!"], 500);     
+            
+            return $this->createResponse($this->createResponseData(false, null, "Error get user!"), 500);     
         }
         
         $currentPasword = $post['currentPasword'] ?? '';
 
         if ($user->verifyPassword($currentPasword) !== true) {
-            return $this->createResponse(['result' => false, 'msg' => "Current password is invalid!"], 500);   
+            return $this->createResponse($this->createResponseData(false, null, "Current password is invalid!"), 500);   
         }
 
         $newPassword = $post['newPassword'] ?? '';
@@ -151,7 +153,7 @@ class UserController extends Controller
         $ok = $user->validate();
 
         if (!$ok === true) {
-            return $this->createResponse(['result' => false, 'msg' => "error validate data!"], 500);     
+            return $this->createResponse($this->createResponseData(false, null, "error validate data!"), 500);     
         }
         
         $user->hashPassword();
@@ -159,10 +161,12 @@ class UserController extends Controller
         $updated = $user->update();
 
         if ($updated === true) {
-            return $this->createResponse(['result' => true, 'msg' => "Password has been updated"], 200);   
+
+            return $this->createResponse($this->createResponseData(true, null, "Password has been updated"), 200);   
         }
         else {
-            return $this->createResponse(['result' => false, 'msg' => "Password hasn't been updated"], 500);
+            
+            return $this->createResponse($this->createResponseData(false, null, "Password hasn't been updated"), 500);
         }
 
     }
@@ -180,31 +184,16 @@ class UserController extends Controller
                 $delited = $user->delete();
                 
                 if ($delited === true) {
-                    return $this->createResponse("User has been deleted successfully!", 200);    
+                   
+                    return $this->createResponse($this->createResponseData(true, null, "User has been deleted successfully!"), 200);     
                 }
                 
-                return $this->createResponse("error", 400); 
+                return $this->createResponse($this->createResponseData(false, null, "User hasn't been deleted!"), 400); 
             }
         }
-        return $this->createResponse("Login hasn't been transfered! Delete field!", 400);    
-        
+         
+        return $this->createResponse($this->createResponseData(false, null, "login hasn't been transfered! Delete field!"), 400); 
     }
 
-    /**
-     * Creates response array
-     * @param int code. Addition code: -1 - server eror,  1 - success, 2 - invalid data, 3 - login is exits
-     * @param string msg  Some message
-     * @param array returnData  Data inputed by user
-     * 
-     * @return array
-     * 
-     */
-    private function createResponseData(int $code, string $msg, array $returnData =[]) : array
-    {
-        return [
-            'code' => $code,
-            'msg' => $msg,
-            'formData' => $returnData
-        ];
-    }
+
 }
