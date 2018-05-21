@@ -25,20 +25,6 @@ class SettingsMapper extends Mapper
         return 'user_id';
     }
     
-    public function delete(\tm\Model $obj) {
-        
-        if ($this->delete_stmt === null) {
-            $this->where = ['user_id = :user_id'];
-
-            $sql = $this->qb->buildDelete($this);
-            $this->delete_stmt = $this->db->prepare($sql);
-        }
-        
-        $param = $this->mapModelToDb($obj);
-        $success = $this->create_stmt->execute($param);
-
-        return $success; 
-    }
     
     public function mapModelToDb(Model $obj) {
         $db_arr = [     

@@ -20,9 +20,6 @@ class IncomeMapper extends Mapper
         return 'doc_income';
     }
 
-    public function delete(Model $obj) {
-        
-    }
 
     protected function getPrimaryKey() {
         return 'id';

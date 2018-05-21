@@ -14,19 +14,6 @@ class ItemsIncomeMapper extends Mapper
         return 'ref_items_income';
     }
     
-    public function delete(Model $obj) {
-        if ($this->delete_stmt === null) {
-            $this->where = ['id = :id'];
-
-            $sql = $this->qb->buildDelete($this);
-            $this->delete_stmt = $this->db->prepare($sql);
-        }
-        
-        $param = $this->mapModelToDb($obj);
-        $success = $this->create_stmt->execute($param);
-
-        return $success;    
-    }
 
     protected function getPrimaryKey() {
         return "id";

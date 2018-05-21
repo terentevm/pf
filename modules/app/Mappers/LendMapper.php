@@ -18,9 +18,6 @@ class LendMapper extends Mapper
     public static function setTable() { 
         return 'lend';
     }
-    public function delete(Model $obj) {
-        
-    }
 
     protected function getPrimaryKey() {
         return 'id';

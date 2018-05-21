@@ -263,7 +263,18 @@ abstract class Mapper extends Base
         return true;
     }
 
-    abstract public function delete(Model $obj);
+    public function delete() {
+        $sql = $this->qb->buildDelete($this);
+        $this->delete_stmt = $this->db->prepare($sql);
+        
+        if ($this->delete_stmt === false) {
+            return false;
+        }
+        
+        $success = $this->delete_stmt->execute($this->params);
+        
+        return $success;
+    }
 
     abstract protected function getPrimaryKey();
 

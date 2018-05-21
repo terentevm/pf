@@ -35,9 +35,6 @@ class IncomeRowMapper extends Mapper
             ];
     }
     
-    public function delete(Model $obj) {
-        
-    }
 
     protected function getPrimaryKey() {
         return 'id';

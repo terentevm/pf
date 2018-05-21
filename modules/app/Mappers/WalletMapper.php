@@ -29,20 +29,6 @@ class WalletMapper extends Mapper
             ];
     }
 
-    public function delete(\tm\Model $obj) {
-        
-        if ($this->delete_stmt === null) {
-            $this->where = ['id = :id'];
-
-            $sql = $this->qb->buildDelete($this);
-            $this->delete_stmt = $this->db->prepare($sql);
-        }
-        
-        $param = $this->mapModelToDb($obj);
-        $success = $this->create_stmt->execute($param);
-
-        return $success; 
-    }
     
     public function mapModelToDb(Model $obj) {
         $db_arr = [
