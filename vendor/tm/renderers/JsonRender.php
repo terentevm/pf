@@ -7,7 +7,7 @@ use tm\renderers\RenderInterface;
 
 class JsonRender extends View implements RenderInterface
 {
-    public function render($vars) : string
+    public function render(ResponseData $vars) : string
     {
         $json_str =  \json_encode($vars, JSON_UNESCAPED_UNICODE);
         

@@ -5,6 +5,7 @@ namespace tm;
 use tm\Base;
 use tm\Registry as Reg;
 use tm\Request;
+use tm\ResponseData;
 
 class Controller extends Base
 {
@@ -29,7 +30,7 @@ class Controller extends Base
         
     }
 
-    public function createResponse($data = null, int $httpcode = 200, $msg = '')
+    public function createResponse(ResponseData $data, int $httpcode = 200, $msg = '')
     {
         $reqType = Reg::$app->request->getResponseType();
         
@@ -61,13 +62,8 @@ class Controller extends Base
         $_SESSION['error'] = $errors;
     }
 
-    public function createResponseData(bool $success, $returnData = null, string $message ="")
+    public function createResponseData(bool $success, $returnData = null, string $message ="") : ResponseData
     {
-        $respStruct = new \stdClass();
-        $respStruct->success = $success;
-        $respStruct->data = $returnData;
-        $respStruct->message = $message;
-
-        return $respStruct;
+        return  new ResponseData($success, $returnData, $message);
     }
 }

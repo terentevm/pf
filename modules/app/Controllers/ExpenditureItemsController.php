@@ -53,7 +53,7 @@ class ExpenditureItemsController extends RestController
             $result = $finder->hierarchically($expand, $parent_id);    
         }
         
+        return $this->createResponse($this->createResponseData(true, $result, "OK"), 200);
         
-        return $this->createResponse($result, 200);
     }
 }

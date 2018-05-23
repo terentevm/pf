@@ -87,26 +87,26 @@ class ExpenditureController extends RestController
         
         $result = $finder->all();
 
-        return $this->createResponse($result, 200);
+        return $this->createResponse($this->createResponseData(true, $result, "OK"), 200);
     }
 
     public function actionShow() {
         $get = Reg::$app->request->get();  
         
         if (!isset($get['id'])) {
-            return $this->createResponse('Not found', 404); 
+            return $this->createResponse($this->createResponseData(false, null, "Param 'id' hsn't been transfered"), 404);
         }
 
         $modelObj = Expenditure::findById($get['id'], false);
         
         if(!$modelObj instanceof Expenditure) {
-            return $this->createResponse('Not found', 404);  
+            return $this->createResponse($this->createResponseData(false, null, "Not found by id"), 404); 
         }
         $modelObj->getRows();
       
         unset($modelObj->rows->owner);
         
-        return $this->createResponse($modelObj, 200); 
+        return $this->createResponse($this->createResponseData(true, $modelObj, "OK"), 200); 
     }
 
 }

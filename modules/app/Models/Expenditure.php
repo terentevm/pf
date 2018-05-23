@@ -116,7 +116,7 @@ class Expenditure extends Model implements \JsonSerializable
     public function jsonSerialize() {
         $vars = get_object_vars($this);
 
-	return $vars;   
+	    return $vars;   
     }
 
 

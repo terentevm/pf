@@ -3,6 +3,7 @@
 namespace tm\renderers;
 
 use tm\View;
+use tm\ResponseData;
 use tm\renderers\RenderInterface;
 use tm\Registry;
 use Twig_Environment;
@@ -31,7 +32,7 @@ class HtmlRender extends View implements RenderInterface
         $this->pathView = MODULES_PATH . "/" . CURRENT_MUDULE;
     }
 
-    public function render($vars) : string
+    public function render(ResponseData $vars) : string
     {
         $file_view = $this->pathView . "/Views/{$this->route['controller']}/{$this->view}.php";
         $file_config = APP . "/config/config_view.php";

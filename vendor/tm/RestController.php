@@ -37,7 +37,7 @@ class RestController extends Controller
                 ->offset($offset)
                 ->all();
         
-        return $this->createResponse($result, 200);
+        return $this->createResponse($this->createResponseData(true, $result, "OK"), 200);
     }
     
     public function actionShow()
@@ -45,17 +45,18 @@ class RestController extends Controller
         $get = Reg::$app->request->get();
         
         if (!isset($get['id'])) {
-            return $this->createResponse('Not found', 404);
+            return $this->createResponse($this->createResponseData(false, null, "Param 'id' hsn't been transfered"), 404);
         }
         $className = static::$classModel;
         
         $result = $className::findById($id, false);
         
         if ($result === false) {
-            return $this->createResponse("Not found", 404);
+            return $this->createResponse($this->createResponseData(false, null, "Not found by id"), 404);
         }
         
-        return $this->createResponse($result, 200);
+        return $this->createResponse($this->createResponseData(true, $result, "OK"), 200);
+
     }
     
     public function actionCreate()
@@ -65,8 +66,9 @@ class RestController extends Controller
         $upload_mode = $post['uploadMode'] ?? false;
         
         if (empty($post)) {
-            return $this->createResponse("Data for saving hasn't recieved", 500);
+            return $this->createResponse($this->createResponseData(false, null, "Data for saving hasn't recieved"), 500);
         }
+
         $post['user_id'] = $this->user_id;
         $className = get_called_class()::$classModel;
         
@@ -76,10 +78,11 @@ class RestController extends Controller
         $success = $model->save($upload_mode);
         
         if ($success === true) {
-            return $this->createResponse("OK", 201);
+            return $this->createResponse($this->createResponseData(true, null, "OK"), 201);
         }
         
-        return $this->createResponse("Error", 500);
+        return $this->createResponse($this->createResponseData(false, null, "Data haven't been saved"), 500);
+
     }
     
     public function actionUpdate()
@@ -87,7 +90,7 @@ class RestController extends Controller
         $post = Reg::$app->request->post();
         
         if (empty($post)) {
-            return $this->createResponse("Data for saving hasn't recieved", 500);
+            return $this->createResponse($this->createResponseData(false, null, "Data for updating hasn't recieved"), 500);
         }
         $post['user_id'] = $this->user_id;
         $className = get_called_class()::$classModel;
@@ -98,10 +101,10 @@ class RestController extends Controller
         $success = $model->update();
         
         if ($success === true) {
-            return $this->createResponse("OK", 200);
+            return $this->createResponse($this->createResponseData(true, null, "OK"), 200);
         }
         
-        return $this->createResponse("Error", 500);
+        return $this->createResponse($this->createResponseData(false, null, "Data haven't been updated"), 500);
     }
     
     public function actionDelete($id)

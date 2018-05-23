@@ -15,7 +15,9 @@ class SettingsController extends RestController
         $str_json = Currency::getClassificator();
         
         $httpcode = is_null($str_json) ? 404 : 200;
-        
-        return $this->createResponse($str_json, $httpcode);
+        $success = is_null($str_json) ? false : true;
+        $msg = is_null($str_json) ? "Classificator is not found" : "OK";
+       
+        return $this->createResponse($this->createResponseData($success, $str_json, $msg), $httpcode);
     }
 }

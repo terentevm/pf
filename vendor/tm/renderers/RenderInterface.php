@@ -2,6 +2,8 @@
 
 namespace tm\renderers;
 
+use tm\ResponseData;
+
 interface RenderInterface
 {
     /**
@@ -11,5 +13,5 @@ interface RenderInterface
      *
      * @return string
      */
-    public function render($vars) : string;
+    public function render(ResponseData $vars) : string;
 }

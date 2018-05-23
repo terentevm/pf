@@ -39,7 +39,7 @@ class WalletsController extends RestController
                 ->offset($offset)
                 ->all();
         
-        return $this->createResponse($result, 200);
+        return $this->createResponse($this->createResponseData(true, $result, "OK"), 200);
     }
     
 }

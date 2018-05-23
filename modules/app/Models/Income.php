@@ -12,7 +12,7 @@ use tm\Model;
 use app\Models\DocumentCollection;
 use app\Models\IncomeRow;
 
-class Income extends Model
+class Income extends Model implements \JsonSerializable
 {
     private $id = null;
     private $user_id = null;
@@ -91,6 +91,11 @@ class Income extends Model
     public function setComment($comment) {
         $this->comment = $comment;
     }
+    
+    public function jsonSerialize() {
+        $vars = get_object_vars($this);
 
+	    return $vars;   
+    }
 
 }

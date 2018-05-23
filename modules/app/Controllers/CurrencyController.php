@@ -40,9 +40,11 @@ class CurrencyController extends RestController
         $result = $rates->loadRates($post['currencies'], $post['dateFrom'], $post['dateTo']);
         
         if ($result === true) {
-            return $this->createResponse(["Currency rates have been loaded"], 201);    
+           
+            return $this->createResponse($this->createResponseData(true, ["Currency rates have been loaded"], ""), 201);    
         } else {
-            return $this->createResponse(["Currency rates have not been loaded"],500); 
+
+            return $this->createResponse($this->createResponseData(false, ["Currency rates have not been loaded"], ""), 500);  
         }
         
 

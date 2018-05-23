@@ -18,6 +18,7 @@ class MainController extends Controller
 
         $menu = $menuBuilder->getMenuStructure();
         
-        return $this->createResponse($menu);
+        $rData = $this->createResponseData(true, $menu);
+        return $this->createResponse($rData);
     }
 }
