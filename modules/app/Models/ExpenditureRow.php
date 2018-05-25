@@ -10,6 +10,10 @@ namespace app\Models;
 
 use tm\Model;
 
+use Respect\Validation\Validator as v;
+use Respect\Validation\Exceptions\ValidationException;
+use Respect\Validation\Exceptions\NestedValidationException;
+
 
 class ExpenditureRow extends Model implements \JsonSerializable
 {
@@ -79,6 +83,19 @@ class ExpenditureRow extends Model implements \JsonSerializable
     public function jsonSerialize() {
         $vars = get_object_vars($this);
 
-	return $vars;   
+	    return $vars;   
+    }
+
+    public function validate() {
+        $validator = v::attribute('item_id', v::notEmpty()->stringType()->length(36, 36))
+                    ->attribute('sum', v::notEmpty()->floatVal());
+        
+        try {
+            $validator->assert($this);
+            return true;
+        } catch (NestedValidationException $e) {
+            //$errors = $e->getMessages();
+            return false;
+        }
     }
 }

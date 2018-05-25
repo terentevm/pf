@@ -9,11 +9,11 @@
 namespace app\Models;
 
 use tm\Model;
-/**
- * Description of IncomeRows
- *
- * @author terentyev.m
- */
+
+use Respect\Validation\Validator as v;
+use Respect\Validation\Exceptions\ValidationException;
+use Respect\Validation\Exceptions\NestedValidationException;
+
 class IncomeRow extends Model
 {
     private $id = null;
@@ -97,5 +97,19 @@ class IncomeRow extends Model
     
     public function getWallet() {
         return $this->Wallet;
+    }
+
+    public function validate() {
+        $validator = v::attribute('wallet_id', v::notEmpty()->stringType()->length(36, 36))
+                    ->attribute('item_id', v::notEmpty()->stringType()->length(36, 36))
+                    ->attribute('sum', v::notEmpty()->floatVal());
+        
+        try {
+            $validator->assert($this);
+            return true;
+        } catch (NestedValidationException $e) {
+            //$errors = $e->getMessages();
+            return false;
+        }
     }
 }

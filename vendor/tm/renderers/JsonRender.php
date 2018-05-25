@@ -4,6 +4,7 @@ namespace tm\renderers;
 
 use tm\View;
 use tm\renderers\RenderInterface;
+use tm\ResponseData;
 
 class JsonRender extends View implements RenderInterface
 {

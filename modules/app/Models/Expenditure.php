@@ -12,6 +12,9 @@ use tm\Model;
 use app\Models\DocumentCollection;
 use app\Models\ExpenditureRow;
 
+use Respect\Validation\Validator as v;
+use Respect\Validation\Exceptions\ValidationException;
+use Respect\Validation\Exceptions\NestedValidationException;
 /**
  * Description of Expenditure
  *
@@ -119,5 +122,29 @@ class Expenditure extends Model implements \JsonSerializable
 	    return $vars;   
     }
 
+    public function validate() {
+        
+        $ok = true;
+
+        foreach ($this->rows as $row) {
+            $ok = $row->validate();
+        }    
+
+        if ($ok === false) {
+            return false;
+        }
+
+        $validator = v::attribute('wallet_id', v::notEmpty()->stringType()->length(36, 36))
+                    ->attribute('date', v::date('Y-m-d'));
+        
+        try {
+            $validator->assert($this);
+            return true;
+        } catch (NestedValidationException $e) {
+            $errors = $e->getMessages();
+            return false;
+        }
+
+    }
 
 }

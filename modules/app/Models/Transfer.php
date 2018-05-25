@@ -9,6 +9,9 @@
 namespace app\Models;
 
 use tm\Model;
+use Respect\Validation\Validator as v;
+use Respect\Validation\Exceptions\ValidationException;
+use Respect\Validation\Exceptions\NestedValidationException;
 
 class Transfer extends Model implements \JsonSerializable
 {
@@ -108,6 +111,22 @@ class Transfer extends Model implements \JsonSerializable
         $vars = get_object_vars($this);
 
 	    return $vars;   
+    }
+
+    public function validate() {
+        $validator = v::attribute('wallet_id_from', v::notEmpty()->stringType()->length(36, 36))
+                    ->attribute('wallet_id_to', v::notEmpty()->stringType()->length(36, 36))
+                    ->attribute('sumFrom', v::notEmpty()->floatVal())
+                    ->attribute('sumTo', v::notEmpty()->floatVal())
+                    ->attribute('date', v::date('Y-m-d'));
+        
+        try {
+            $validator->assert($this);
+            return true;
+        } catch (NestedValidationException $e) {
+            $errors = $e->getMessages();
+            return false;
+        }
     }
 
 }

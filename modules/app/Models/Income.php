@@ -12,6 +12,10 @@ use tm\Model;
 use app\Models\DocumentCollection;
 use app\Models\IncomeRow;
 
+use Respect\Validation\Validator as v;
+use Respect\Validation\Exceptions\ValidationException;
+use Respect\Validation\Exceptions\NestedValidationException;
+
 class Income extends Model implements \JsonSerializable
 {
     private $id = null;
@@ -96,6 +100,30 @@ class Income extends Model implements \JsonSerializable
         $vars = get_object_vars($this);
 
 	    return $vars;   
+    }
+
+    public function validate() {
+        
+        $ok = true;
+
+        foreach ($this->rows as $row) {
+            $ok = $row->validate();
+        }    
+
+        if ($ok === false) {
+            return false;
+        }
+
+        $validator = v::attribute('date', v::date('Y-m-d'));
+        
+        try {
+            $validator->assert($this);
+            return true;
+        } catch (NestedValidationException $e) {
+            $errors = $e->getMessages();
+            return false;
+        }
+
     }
 
 }
