@@ -23,21 +23,6 @@ class UserMapper extends Mapper
     }
     
     
-    public function delete(Model $obj) {
-        if ($this->delete_stmt === null) {
-            $this->where = ['id = :id'];
-
-            $sql = $this->qb->buildDelete($this);
-            $this->delete_stmt = $this->db->prepare($sql);
-        }
-        
-        //$param = $this->mapModelToDb($obj);
-        $param = ['id' => $obj->getId()];
-        $success = $this->delete_stmt->execute($param);
-
-        return $success;      
-    }
-    
     public function mapModelToDb(Model $obj) {
         $db_arr = [
             'id' => $obj->getId(),

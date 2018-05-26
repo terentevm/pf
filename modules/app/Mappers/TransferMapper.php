@@ -61,11 +61,6 @@ class TransferMapper extends Mapper
         return $db_arr;
     }
     
-       
-    public function delete(Model $obj) {
-        
-    }
-    
     protected function afterSave($obj) {
        $regMoney = new \app\Models\RegMoneyTransactions();
        $regMoney->loadModel($obj);

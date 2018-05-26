@@ -121,7 +121,25 @@ class RestController extends Controller
         return $this->createResponse($this->createResponseData(false, null, "Data haven't been updated"), 500);
     }
     
-    public function actionDelete($id)
+    public function actionDelete()
     {
+        $id = Reg::$app->request->get('id');
+        
+        if (is_null($id)) {
+            return $this->createResponse($this->createResponseData(false, null, "Error. Params havo to contain id"), 500);
+        }
+        
+        $className = get_called_class()::$classModel;
+        
+        $deleted = $className::find()->where(['id = :id'])->setParam('id', $id)->delete();
+       
+        if ($deleted === true) {
+            return $this->createResponse($this->createResponseData(true, null, "Deleted"), 200);   
+        }
+        else {
+           return $this->createResponse($this->createResponseData(true, null, "Not deleted"), 500); 
+        }
+        
+        
     }
 }

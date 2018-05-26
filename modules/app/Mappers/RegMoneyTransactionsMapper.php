@@ -42,7 +42,7 @@ class RegMoneyTransactionsMapper extends Mapper
         }
         
         
-        $this->delete($obj);
+        $this->deleteReg($obj);
         
         foreach ($rows as $record) {
             $success = $this->create_stmt->execute($record);
@@ -56,7 +56,7 @@ class RegMoneyTransactionsMapper extends Mapper
         return true;
     }
     
-    public function delete(Model $obj) {
+    public function deleteReg(Model $obj) {
         $model_id = $obj->getModelId();
         $col_name = $obj->getCondCol();
         $sql = 'DELETE FROM ' . $this->setTable() . ' WHERE ' . $col_name . ' = :model_id';

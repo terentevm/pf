@@ -47,9 +47,6 @@ class ChangeBalanceMapper extends Mapper
     }
     
        
-    public function delete(Model $obj) {
-        
-    }
     
     protected function afterSave($obj) {
         $regMoney = new \app\Models\RegMoneyTransactions();
