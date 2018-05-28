@@ -44,7 +44,7 @@ class Income extends Model implements \JsonSerializable
                 'doc_id' => $this->id
             ];
             
-            $rows = IncomeRow::find()->with(['ItemsIncome', 'Wallet'])->where(['doc_id = :doc_id'])->setParams($param)->All();
+            $rows = IncomeRow::find()->with(['ItemIncome', 'Wallet'])->where(['doc_id = :doc_id'])->setParams($param)->All();
 
             $this->setRows($rows);
 
@@ -84,8 +84,9 @@ class Income extends Model implements \JsonSerializable
         
         foreach ($rows as $row) {
             
-            $row_obj = new IncomeRow($this->id, $row['item_id'], $row['wallet_id'], $row['sum'], $row['comment']);
-            
+           // $row_obj = new IncomeRow($this->id, $row['item_id'], $row['wallet_id'], $row['sum'], $row['comment']);
+            $row_obj = new IncomeRow();
+            $row_obj->load($row);
             $this->rows->add($row_obj);
             
             $this->sum += $row['sum'];

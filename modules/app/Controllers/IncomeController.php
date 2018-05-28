@@ -56,7 +56,7 @@ class IncomeController extends RestController
 
         $arrPeriod = DateHelper::getPeriodFromRequestAsInt(Reg::$app->request);
         $finder = Income::find();
-        $finder->with('Wallet');
+        
 
         $finder->where(['user_id = :user_id'])->setParams(['user_id' => $this->user_id]);
 
@@ -91,7 +91,7 @@ class IncomeController extends RestController
 
         $modelObj = Income::findById($get['id'], false);
         
-        if(!$modelObj instanceof Expenditure) {
+        if(!$modelObj instanceof Income) {
             return $this->createResponse($this->createResponseData(false, null, "Not found by id"), 404); 
         }
         $modelObj->getRows();

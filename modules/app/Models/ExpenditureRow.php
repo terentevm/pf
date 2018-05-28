@@ -25,7 +25,7 @@ class ExpenditureRow extends Model implements \JsonSerializable
     
     private $ItemExpenditure = null;
 
-    public function __construct($docId, $item_id, $sum, $comment) {
+    public function __construct($docId = null, $item_id = null, $sum = 0, $comment = "") {
         $this->docId = $docId;
         $this->item_id = $item_id;
         $this->sum = $sum;

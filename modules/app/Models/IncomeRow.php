@@ -14,7 +14,7 @@ use Respect\Validation\Validator as v;
 use Respect\Validation\Exceptions\ValidationException;
 use Respect\Validation\Exceptions\NestedValidationException;
 
-class IncomeRow extends Model
+class IncomeRow extends Model implements \JsonSerializable
 {
     private $id = null;
     private $docId = null;
@@ -26,7 +26,7 @@ class IncomeRow extends Model
     private $ItemIncome = null;
     private $Wallet = null;
 
-    public function __construct($docId, $item_id, $wallet_id, $sum, $comment) {
+    public function __construct($docId = null, $item_id = null, $wallet_id = null, $sum = 0, $comment = "") {
         $this->docId = $docId;
         $this->item_id = $item_id;
         $this->wallet_id = $wallet_id;
@@ -98,7 +98,12 @@ class IncomeRow extends Model
     public function getWallet() {
         return $this->Wallet;
     }
+    
+    public function jsonSerialize() {
+        $vars = get_object_vars($this);
 
+	    return $vars;   
+    }
     public function validate() {
         $validator = v::attribute('wallet_id', v::notEmpty()->stringType()->length(36, 36))
                     ->attribute('item_id', v::notEmpty()->stringType()->length(36, 36))

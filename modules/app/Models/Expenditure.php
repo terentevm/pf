@@ -97,8 +97,9 @@ class Expenditure extends Model implements \JsonSerializable
         $this->sum = 0;
         foreach ($rows as $row) {
             
-            $row_obj = new ExpenditureRow($this->id, $row['item_id'], $row['sum'], $row['comment']);
-            
+            //$row_obj = new ExpenditureRow($this->id, $row['item_id'], $row['sum'], $row['comment']);
+            $row_obj = new ExpenditureRow();
+            $row_obj->load($row);
             $this->rows->add($row_obj);
             $this->sum += $row['sum'];
         }

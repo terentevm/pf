@@ -9,7 +9,9 @@
 namespace app\Models;
 
 use tm\Model;
-
+use Respect\Validation\Validator as v;
+use Respect\Validation\Exceptions\ValidationException;
+use Respect\Validation\Exceptions\NestedValidationException;
 
 class ItemsIncome extends Model
 {
@@ -71,6 +73,17 @@ class ItemsIncome extends Model
         }
         
     }
-
+    
+    public function validate() {
+        $validator = v::attribute('name', v::notEmpty()->stringType()); 
+        
+        try {
+            $validator->assert($this);
+            return true;
+        } catch (NestedValidationException $e) {
+            //$errors = $e->getMessages();
+            return false;
+        }    
+    }
 
 }

@@ -20,7 +20,7 @@ class ItemsIncomeMapper extends Mapper
 
     public function mapModelToDb(Model $obj) {
      
-        return [
+        $db_arr = [
             'id' => $obj->getId(),
             'user_id' => $obj->getUser_id(),
             'name' => $obj->getName(),
@@ -28,6 +28,12 @@ class ItemsIncomeMapper extends Mapper
             'parent_id' => $obj->getParentId(),
             'comment' => $obj->getComment()
         ];
+        
+        if (!isset($db_arr['id'])){
+            $db_arr['id'] = $this->getGuide();
+        }
+        
+        return $db_arr; 
     }
 
     public function hierarchically($expand = true, $parentId = null) {

@@ -9,6 +9,9 @@
 namespace app\Models;
 use tm\Model;
 
+use Respect\Validation\Validator as v;
+use Respect\Validation\Exceptions\ValidationException;
+use Respect\Validation\Exceptions\NestedValidationException;
 /**
  * Description of itemsexpenditure
  *
@@ -72,5 +75,16 @@ class ItemExpenditure extends Model
             $this->parentId = $parentId;    
         }
         
+    }
+    
+    public function validate() {
+        $validator = v::attribute('name', v::notEmpty()->stringType()); 
+        try {
+            $validator->assert($this);
+            return true;
+        } catch (NestedValidationException $e) {
+            //$errors = $e->getMessages();
+            return false;
+        }    
     }
 }

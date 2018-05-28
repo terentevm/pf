@@ -3,7 +3,7 @@
 namespace app\Controllers;
 
 use tm\RestController;
-
+use tm\Registry as Reg;
 
 class IncomeItemsController extends RestController
 {

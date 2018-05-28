@@ -8,12 +8,11 @@
 
 namespace app\Models;
 use tm\Model;
-use tm\TraitModelFunc;
-/**
- * Description of wallets
- *
- * @author terentyev.m
- */
+
+use Respect\Validation\Validator as v;
+use Respect\Validation\Exceptions\ValidationException;
+use Respect\Validation\Exceptions\NestedValidationException;
+
 class Wallet extends Model {
     
     private $id = null;
@@ -99,6 +98,21 @@ class Wallet extends Model {
     public function setUser_id($user_id) {
         $this->user_id = $user_id;
     }
+    
+    public function validate() {
+        
+        $validator = v::attribute('name', v::notEmpty()->stringType())
+                    ->attribute('currency_id', v::notEmpty()->stringType()->length(36, 36));
+        
+        try {
+            $validator->assert($this);
+            return true;
+        } catch (NestedValidationException $e) {
+            //$errors = $e->getMessages();
+            return false;
+        }
 
+    }
+    
 
 }
