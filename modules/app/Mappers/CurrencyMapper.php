@@ -4,6 +4,7 @@ namespace app\mappers;
 
 use tm\Mapper;
 use tm\Model;
+
 /**
  * Description of CurrencyMapper
  *
@@ -11,20 +12,22 @@ use tm\Model;
  */
 class CurrencyMapper extends Mapper
 {
-
     public static $db_columnes = ['id', 'user_id','code', 'short_name' , 'name'];
 
-    public static function setTable() { 
+    public static function setTable()
+    {
         return 'ref_currency';
     }
 
 
-    protected function getPrimaryKey() {
+    protected function getPrimaryKey()
+    {
         return 'id';
     }
 
     
-    public function mapModelToDb(Model $obj) {
+    public function mapModelToDb(Model $obj)
+    {
         $db_arr = [
             'id' => $obj->getId(),
             'user_id' => $obj->getUser_Id(),
@@ -33,7 +36,7 @@ class CurrencyMapper extends Mapper
             'name' => $obj->getName()
         ];
         
-        if (!isset($db_arr['id'])){
+        if (!isset($db_arr['id'])) {
             $db_arr['id'] = $this->getGuide();
         }
         

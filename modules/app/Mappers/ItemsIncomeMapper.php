@@ -7,19 +7,20 @@ use tm\Model;
 
 class ItemsIncomeMapper extends Mapper
 {
-    
     public static $db_columnes = ['id', 'user_id','name', 'not_active', 'parent_id', 'comment'];
 
-    public static function setTable() { 
+    public static function setTable()
+    {
         return 'ref_items_income';
     }
 
-    protected function getPrimaryKey() {
+    protected function getPrimaryKey()
+    {
         return "id";
     }
 
-    public function mapModelToDb(Model $obj) {
-     
+    public function mapModelToDb(Model $obj)
+    {
         $db_arr = [
             'id' => $obj->getId(),
             'user_id' => $obj->getUser_id(),
@@ -29,19 +30,18 @@ class ItemsIncomeMapper extends Mapper
             'comment' => $obj->getComment()
         ];
         
-        if (!isset($db_arr['id'])){
+        if (!isset($db_arr['id'])) {
             $db_arr['id'] = $this->getGuide();
         }
         
-        return $db_arr; 
+        return $db_arr;
     }
 
-    public function hierarchically($expand = true, $parentId = null) {
-        
+    public function hierarchically($expand = true, $parentId = null)
+    {
         if (is_null($parentId)) {
-            $this->andWhere(['parent_id IS NULL']);    
-        }
-        else {
+            $this->andWhere(['parent_id IS NULL']);
+        } else {
             $this->andWhere(['parent_id = :parent_id']);
             $this->setParams(['parent_id' => $parentId]);
         }
@@ -58,11 +58,10 @@ class ItemsIncomeMapper extends Mapper
         $this->selectByParent($head_items, $sql_childs, $params);
         
         return $head_items;
-        
     }
     
-    private function selectByParent(&$items, &$sql, $params, $parent =[]) {
-        
+    private function selectByParent(&$items, &$sql, $params, $parent =[])
+    {
         foreach ($items as &$item) {
             $params['parent_id'] = $item['id'];
             $childs = $this->db->query($sql, $params, false);
@@ -71,12 +70,10 @@ class ItemsIncomeMapper extends Mapper
             $item['parent'] = $parent;
             if (empty($childs)) {
                 $item['hasChild'] = false;
-                continue;    
+                continue;
             }
             $item['hasChild'] = true;
             $this->selectByParent($item['items'], $sql, $params, $item);
         }
-        
     }
-
 }

@@ -7,41 +7,45 @@
  */
 
 namespace app\Controllers;
+
 use tm\Controller;
 use app\Models\Tools;
+
 /**
  * Description of ToolsController
  *
  * @author terentyev.m
  */
-class ToolsController extends Controller {
+class ToolsController extends Controller
+{
     public $layout = 'material';
     
-    public function actionImport1c(){
+    public function actionImport1c()
+    {
         $this->GetView();
     }
-    public function actionGetfiles1c(){
-        if(empty($_FILES)){
+    public function actionGetfiles1c()
+    {
+        if (empty($_FILES)) {
             echo json_encode(['error'=>'No files found for upload.']);
             exit();
         }
         
-        if(!isset($_FILES['userfile'])){
+        if (!isset($_FILES['userfile'])) {
             echo json_encode(['error'=>'No files found for upload.']);
-            exit();   
+            exit();
         }
         
-        if(is_array($_FILES['userfile'])){
+        if (is_array($_FILES['userfile'])) {
             $files_names = $_FILES['userfile']['name'];
             $files_paths = $_FILES['userfile']['tmp_name'];
             $files_type = $_FILES['userfile']['type'];
-        }
-        else{
+        } else {
             echo json_encode(['error'=>'Upload error.']);
-            exit();    
+            exit();
         }
         $actions = [];
-        for($i=0; $i < count($files_names); $i++){
+        for ($i=0; $i < count($files_names); $i++) {
             $filename = $files_names[$i];
             $json_str = file_get_contents($files_paths[$i]);
             
@@ -52,23 +56,22 @@ class ToolsController extends Controller {
         }
         
         $tools = new Tools();
-        $tools->Load(['import_files' => $actions] );
+        $tools->Load(['import_files' => $actions]);
         $result = $tools->ImportDataFrom1c();
         
-        if($result == TRUE){
+        if ($result == true) {
             $output = [];
             echo json_encode($output);
             exit();
-        }
-        else {
+        } else {
             echo json_encode(['error'=>'Error download files!']);
             exit();
         }
-        
     }
     
-    public function actionProgram_settings(){
+    public function actionProgram_settings()
+    {
         $this->view = 'ProgramSettings';
-        $this->GetView();    
+        $this->GetView();
     }
 }

@@ -22,7 +22,6 @@ class Application extends Base
 
     public function __construct(Configuration $config)
     {
-        
         $this->config = $config;
 
         define('LANGUAGE', $config->getLang());
@@ -47,7 +46,7 @@ class Application extends Base
             $_SESSION['csrf_token'] = md5($this->getGuide());
         }
 
-        $router = Registry::CreateObject(Router::className(),[]);
+        $router = Registry::CreateObject(Router::className(), []);
         
         $route = $router->getRoute();
         
@@ -71,7 +70,6 @@ class Application extends Base
         } catch (Exception $ex) {
             (new Response(500, "Some error"))->send();
         }
-        
     }
 
     public function startSession($param)

@@ -16,22 +16,21 @@ use tm\Request;
 use tm\database\Table;
 use Firebase\JWT\JWT;
 
-class SiteController extends Controller{
-
+class SiteController extends Controller
+{
     public $layout = 'material';
 
-    public function actionIndex(){
-        
-        return $this->createResponse(null,200,'');
-     
+    public function actionIndex()
+    {
+        return $this->createResponse(null, 200, '');
     }
     
-    public function actionSettings(){
-        
-        return $this->createResponse(null,200,'');
-     
+    public function actionSettings()
+    {
+        return $this->createResponse(null, 200, '');
     }
-    public function actionTester(){
+    public function actionTester()
+    {
         
 
        // $user1
@@ -72,20 +71,18 @@ class SiteController extends Controller{
         $this->debug($user);
 
         die();
-     
     }
     
     
-    public function actionApi() {
-        
-        $respType = Registry::$app->request->getResponseType(); 
+    public function actionApi()
+    {
+        $respType = Registry::$app->request->getResponseType();
         
 
         if ($respType === 'json') {
-            $response = \json_encode('Вы запросили json формат',JSON_UNESCAPED_UNICODE);
+            $response = \json_encode('Вы запросили json формат', JSON_UNESCAPED_UNICODE);
             $ct = "application/json";
-        }
-        else {
+        } else {
             $response = '<p>' . 'Вы запросили html формат' . '</p>';
             $ct = "text/html";
         }
@@ -94,11 +91,10 @@ class SiteController extends Controller{
         $pesponse->setContentType($ct);
 
         return $pesponse;
-
     }
 
-    public function actionVue() {
-       
+    public function actionVue()
+    {
         $user = User::find()->where(['login = :login'])->setParams(['login' => 'mick911@mail.ru'])->limit(1)->one();
 
         $user_id = $user->id;
@@ -106,11 +102,10 @@ class SiteController extends Controller{
         $wallets = Wallets::find()->with('currency')->where(['user_id = :user_id'])->setParams(['user_id' => $user_id])->all();
 
         return $this->createResponse($wallets);
-        
     }
 
-    public function actionTableTest() {
-        
+    public function actionTableTest()
+    {
         $arr = [];
 
         $arr[] = [
@@ -138,11 +133,10 @@ class SiteController extends Controller{
         ];
 
         return $this->createResponse($arr);
-        
     }
 
-    public function actionTable() {
-
+    public function actionTable()
+    {
         $table = new Table("my_table");
         $sql = $table->addColumn("id", "VARCHAR", "36", true, true)
             ->addColumn("name", "VARCHAR", "150", true)
@@ -152,10 +146,11 @@ class SiteController extends Controller{
             ->addForeignKey('user_id', 'users', 'id')
             ->buildSQL();
 
-            die($sql);
+        die($sql);
     }
 
-    public function actionJwt() {
+    public function actionJwt()
+    {
         $config = Registry::$app->config;
         
         $jwt_key = $config['jwt_key'];
@@ -174,7 +169,8 @@ class SiteController extends Controller{
         die();
     }
     
-    public function actionJwtverify() {
+    public function actionJwtverify()
+    {
         $jwt = $_GET['jwt'];
         $config = Registry::$app->config;
         
@@ -187,5 +183,4 @@ class SiteController extends Controller{
         
         die();
     }
-    
 }

@@ -15,6 +15,7 @@ use app\Models\ExpenditureRow;
 use Respect\Validation\Validator as v;
 use Respect\Validation\Exceptions\ValidationException;
 use Respect\Validation\Exceptions\NestedValidationException;
+
 /**
  * Description of Expenditure
  *
@@ -31,30 +32,34 @@ class Expenditure extends Model implements \JsonSerializable
     private $sum = 0;
     private $Wallet = null;
 
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
-    public function getUser_id() {
+    public function getUser_id()
+    {
         return $this->user_id;
     }
 
-    public function getDate() {
+    public function getDate()
+    {
         return $this->date;
     }
 
-    public function getWallet_id() {
+    public function getWallet_id()
+    {
         return $this->wallet_id;
     }
     
-    public function getSum() {
+    public function getSum()
+    {
         return $this->sum;
     }
     
-    public function getRows() {
-        
+    public function getRows()
+    {
         if ($this->rows === null) {
-            
             $param = [
                 'doc_id' => $this->id
             ];
@@ -62,37 +67,43 @@ class Expenditure extends Model implements \JsonSerializable
             $rows = ExpenditureRow::find()->with('ItemExpenditure')->where(['doc_id = :doc_id'])->setParams($param)->All();
 
             $this->setRows($rows);
-
         }
         
         return $this->rows;
     }
 
-    public function getComment() {
+    public function getComment()
+    {
         return $this->comment;
     }
 
-    public function setId($id) {
+    public function setId($id)
+    {
         $this->id = $id;
     }
 
-    public function setUser_id($user_id) {
+    public function setUser_id($user_id)
+    {
         $this->user_id = $user_id;
     }
 
-    public function setDate($date) {
+    public function setDate($date)
+    {
         $this->date = $date;
     }
     
-    public function setSum($sum) {
+    public function setSum($sum)
+    {
         $this->sum = $sum;
     }
     
-    public function setWallet_id($wallet_id) {
+    public function setWallet_id($wallet_id)
+    {
         $this->wallet_id = $wallet_id;
     }
 
-    public function setRows(array $rows) {
+    public function setRows(array $rows)
+    {
         $this->rows = new DocumentCollection($this);
         $this->sum = 0;
         foreach ($rows as $row) {
@@ -105,31 +116,35 @@ class Expenditure extends Model implements \JsonSerializable
         }
     }
 
-    public function setComment($comment) {
+    public function setComment($comment)
+    {
         $this->comment = $comment;
     }
 
-    public function setWallet($Wallet) {
+    public function setWallet($Wallet)
+    {
         $this->Wallet = $Wallet;
     }
 
-    public function getWallet() {
+    public function getWallet()
+    {
         return $this->Wallet;
     }
     
-    public function jsonSerialize() {
+    public function jsonSerialize()
+    {
         $vars = get_object_vars($this);
 
-	    return $vars;   
+        return $vars;
     }
 
-    public function validate() {
-        
+    public function validate()
+    {
         $ok = true;
 
         foreach ($this->rows as $row) {
             $ok = $row->validate();
-        }    
+        }
 
         if ($ok === false) {
             return false;
@@ -145,7 +160,5 @@ class Expenditure extends Model implements \JsonSerializable
             $errors = $e->getMessages();
             return false;
         }
-
     }
-
 }

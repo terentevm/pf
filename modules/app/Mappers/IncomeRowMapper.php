@@ -15,11 +15,13 @@ class IncomeRowMapper extends Mapper
 {
     public static $db_columnes = ['id', 'doc_id', 'item_id', 'wallet_id', 'sum', 'comment'];
     
-    public static function setTable() { 
+    public static function setTable()
+    {
         return 'doc_income_rows';
     }
     
-    public static function getItemIncome() {
+    public static function getItemIncome()
+    {
         return [
                 'model' => 'ItemsIncome',
                 'f_key' => 'item_id',
@@ -27,7 +29,8 @@ class IncomeRowMapper extends Mapper
             ];
     }
 
-    public static function getWallet() {
+    public static function getWallet()
+    {
         return [
                 'model' => 'Wallet',
                 'f_key' => 'wallet_id',
@@ -36,11 +39,13 @@ class IncomeRowMapper extends Mapper
     }
     
 
-    protected function getPrimaryKey() {
+    protected function getPrimaryKey()
+    {
         return 'id';
     }
 
-    public function mapModelToDb(Model $obj) {
+    public function mapModelToDb(Model $obj)
+    {
         $db_arr = [
             'id' => $obj->getId(),
             'doc_id' => $obj->getDocId(),
@@ -50,11 +55,10 @@ class IncomeRowMapper extends Mapper
             'comment' => $obj->getComment()
         ];
         
-        if (!isset($db_arr['id'])){
+        if (!isset($db_arr['id'])) {
             $db_arr['id'] = $this->getGuide();
         }
         
         return $db_arr;
     }
-
 }

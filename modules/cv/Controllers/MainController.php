@@ -11,7 +11,6 @@ class MainController extends Controller
     
     public function ActionIndex()
     {
-        
         $lang = isset($_GET['lang']) ? $_GET['lang'] : 'en';
 
         $menuBuilder = MenuFactory::getMenuBuilder($lang);

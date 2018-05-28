@@ -8,7 +8,6 @@ use tm\QueryBuilder;
 
 abstract class Connection
 {
-
     public static function init()
     {
         $db_config = require  dirname(__FILE__) . '/config_db.php';
@@ -17,17 +16,15 @@ abstract class Connection
             throw new \Exception("Isn't pointed database driver type out!");
         }
 
-        if(TEST === true) {
-            return SQLiteConnection::init($db_config); 
+        if (TEST === true) {
+            return SQLiteConnection::init($db_config);
         }
 
         if ($db_config['db_driver'] == 'mysql') {
             return mySQLConnection::init($db_config);
-        }
-        elseif ($db_config['db_driver'] == 'sqlite') {
+        } elseif ($db_config['db_driver'] == 'sqlite') {
             return SQLiteConnection::init($db_config);
-        }
-        else {
+        } else {
             throw new \Exception("Connection driver type hasn't defined or has unsupported value");
         }
     }
@@ -37,6 +34,4 @@ abstract class Connection
     {
         return new QueryBuilder();
     }
-
-
 }

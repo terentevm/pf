@@ -24,7 +24,8 @@ class DBCommand
     public static $countsql = 0;
     public static $queries = [];
     
-    public function __construct(IConnection $connection) {
+    public function __construct(IConnection $connection)
+    {
         $this->pdo = $connection->getPDO();
     }
     
@@ -162,5 +163,4 @@ class DBCommand
     {
         return $this->pdo->lastInsertId();
     }
-    
 }

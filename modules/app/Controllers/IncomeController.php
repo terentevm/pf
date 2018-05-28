@@ -17,38 +17,37 @@ use Respect\Validation\Validator as v;
 class IncomeController extends RestController
 {
     public static $classModel = '\app\models\Income';
-    public function getAllowedParams_GET() {
+    public function getAllowedParams_GET()
+    {
         $get = Reg::$app->request->get();
         
         $get_params = [];
         
         if (isset($get['limit']) && v::intVal()->between(1, 100)->validate($get['limit'])) {
-            $get_params['limit'] = $get['limit']; 
-        }
-        else {
-            $get_params['limit'] = $this->limit;    
+            $get_params['limit'] = $get['limit'];
+        } else {
+            $get_params['limit'] = $this->limit;
         }
         
         if (isset($get['offset']) && v::intVal()->validate($get['offset'])) {
-            $get_params['offset'] = $get['offset'];    
-        }
-        else {
-            $get_params['offset'] = $this->offset;    
+            $get_params['offset'] = $get['offset'];
+        } else {
+            $get_params['offset'] = $this->offset;
         }
         
         if (isset($get['dateFrom']) && v::date('Y-m-d')->validate($get['dateFrom'])) {
-            $get_params['dateFrom'] = $get['dateFrom'];    
+            $get_params['dateFrom'] = $get['dateFrom'];
         }
         
         if (isset($get['dateTo']) && v::date('Y-m-d')->validate($get['dateTo'])) {
-            $get_params['dateTo'] = $get['dateTo'];    
+            $get_params['dateTo'] = $get['dateTo'];
         }
         
         return $get_params;
     }
     
-    public function actionIndex() {
-        
+    public function actionIndex()
+    {
         $get = $this->getAllowedParams_GET();
         
         $limit = $get['limit'] ?? 20;
@@ -62,11 +61,9 @@ class IncomeController extends RestController
 
         if (!is_null($arrPeriod['dateFrom']) && !is_null($arrPeriod['dateTo'])) {
             $finder->andWhere(['dateInt BETWEEN :dateFrom AND :dateTo'])->setParams($arrPeriod);
-        }
-        elseif (!is_null($arrPeriod['dateFrom'])) {
+        } elseif (!is_null($arrPeriod['dateFrom'])) {
             $finder->andWhere(['dateInt >= :dateFrom'])->setParams(['dateFrom' => $arrPeriod['dateFrom']]);
-        }
-        elseif (!is_null($arrPeriod['dateTo'])) {
+        } elseif (!is_null($arrPeriod['dateTo'])) {
             $finder->andWhere(['dateInt <= :dateTo'])->setParams(['dateTo' => $arrPeriod['dateTo']]);
         }
 
@@ -82,8 +79,9 @@ class IncomeController extends RestController
         return $this->createResponse($this->createResponseData(true, $result, "OK"), 200);
     }
 
-    public function actionShow() {
-        $get = Reg::$app->request->get();  
+    public function actionShow()
+    {
+        $get = Reg::$app->request->get();
         
         if (!isset($get['id'])) {
             return $this->createResponse($this->createResponseData(false, null, "Param 'id' hsn't been transfered"), 404);
@@ -91,13 +89,13 @@ class IncomeController extends RestController
 
         $modelObj = Income::findById($get['id'], false);
         
-        if(!$modelObj instanceof Income) {
-            return $this->createResponse($this->createResponseData(false, null, "Not found by id"), 404); 
+        if (!$modelObj instanceof Income) {
+            return $this->createResponse($this->createResponseData(false, null, "Not found by id"), 404);
         }
         $modelObj->getRows();
       
         unset($modelObj->rows->owner);
         
-        return $this->createResponse($this->createResponseData(true, $modelObj, "OK"), 200); 
+        return $this->createResponse($this->createResponseData(true, $modelObj, "OK"), 200);
     }
 }

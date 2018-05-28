@@ -9,11 +9,13 @@ class RatesMapper extends Mapper
 {
     public static $db_columnes = ['id', 'user_id','date','dateInt', 'currency_id' , 'mult', 'rate'];
 
-    public static function setTable() { 
+    public static function setTable()
+    {
         return 'rates';
     }
     
-    protected function getPrimaryKey() {
+    protected function getPrimaryKey()
+    {
         return 'id';
     }
 
@@ -27,19 +29,20 @@ class RatesMapper extends Mapper
         $dataset = $obj->getDataset();
 
         foreach ($dataset as $record) {
-            $record['id'] = null; 
-            $record['dateInt'] = strtotime($record['date']); 
+            $record['id'] = null;
+            $record['dateInt'] = strtotime($record['date']);
             $success = $this->create_stmt->execute($record);
         
             if ($success !== true) {
                 return false;
-            } 
+            }
         }
         
         return true;
     }
     
-    public function mapModelToDb(Model $obj) {
+    public function mapModelToDb(Model $obj)
+    {
         $db_arr = [
             'id' => $obj->getId(),
             'user_id' => $obj->getUser_Id(),
@@ -48,7 +51,7 @@ class RatesMapper extends Mapper
             'name' => $obj->getName()
         ];
         
-        if (!isset($db_arr['id'])){
+        if (!isset($db_arr['id'])) {
             $db_arr['id'] = $this->getGuide();
         }
         

@@ -9,7 +9,8 @@ class IncomeItemsController extends RestController
 {
     public static $classModel = '\app\models\ItemsIncome';
     
-    public function actionIndex() {
+    public function actionIndex()
+    {
         $get = Reg::$app->request->get();
         
         $limit = $get['limit'] ?? 50;
@@ -29,21 +30,18 @@ class IncomeItemsController extends RestController
         }
         
         if ($asList == true) {
-            $finder->orderBy('name');       
+            $finder->orderBy('name');
         }
         
         $expand = $get['expand'] ?? true;
         $parent_id = $get['parent_id'] ?? null;
         
         if ($asList == true) {
-            $result = $finder->all();      
-        }
-        else
-        {
-            $result = $finder->hierarchically($expand, $parent_id);    
+            $result = $finder->all();
+        } else {
+            $result = $finder->hierarchically($expand, $parent_id);
         }
         
         return $this->createResponse($this->createResponseData(true, $result, "OK"), 200);
-        
     }
 }

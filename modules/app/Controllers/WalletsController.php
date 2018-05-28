@@ -7,6 +7,7 @@
  */
 
 namespace app\Controllers;
+
 use tm\Registry as Reg;
 use tm\RestController;
 use tm\Validator;
@@ -14,6 +15,7 @@ use app\Models\Wallet;
 use app\Models\Currency;
 use Respect\Validation\Validator as v;
 use Respect\Validation\Exceptions\ValidationException;
+
 /**
  * Description of WalletsController
  *
@@ -21,10 +23,10 @@ use Respect\Validation\Exceptions\ValidationException;
  */
 class WalletsController extends RestController
 {
-    
     public static $classModel = '\app\models\Wallet';
     
-    public function actionIndex() {
+    public function actionIndex()
+    {
         $get = Reg::$app->request->get();
         
         $limit = $get['limit'] ?? 50;
@@ -41,5 +43,4 @@ class WalletsController extends RestController
         
         return $this->createResponse($this->createResponseData(true, $result, "OK"), 200);
     }
-    
 }

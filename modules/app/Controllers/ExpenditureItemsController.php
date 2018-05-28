@@ -11,16 +11,18 @@ namespace app\Controllers;
 use tm\RestController;
 use tm\Registry as Reg;
 use app\Models\ItemExpenditure;
+
 /**
  * Description of ExpenditureItemsController
  *
  * @author terentyev.m
  */
-class ExpenditureItemsController extends RestController 
+class ExpenditureItemsController extends RestController
 {
     public static $classModel = 'app\models\ItemExpenditure';
     
-    public function actionIndex() {
+    public function actionIndex()
+    {
         $get = Reg::$app->request->get();
         
         $limit = $get['limit'] ?? 50;
@@ -39,21 +41,18 @@ class ExpenditureItemsController extends RestController
         }
         
         if ($asList == true) {
-            $finder->orderBy('name');       
+            $finder->orderBy('name');
         }
         
         $expand = $get['expand'] ?? true;
         $parent_id = $get['parent_id'] ?? null;
         
         if ($asList == true) {
-            $result = $finder->all();      
-        }
-        else
-        {
-            $result = $finder->hierarchically($expand, $parent_id);    
+            $result = $finder->all();
+        } else {
+            $result = $finder->hierarchically($expand, $parent_id);
         }
         
         return $this->createResponse($this->createResponseData(true, $result, "OK"), 200);
-        
     }
 }

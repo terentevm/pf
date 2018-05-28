@@ -7,6 +7,7 @@
  */
 
 namespace app\mappers;
+
 use tm\Mapper;
 use tm\Model;
 
@@ -14,11 +15,13 @@ class ExpenditureMapper extends Mapper
 {
     public static $db_columnes = ['id', 'user_id', 'date', 'dateInt', 'sum', 'comment', 'wallet_id'];
 
-    public static function setTable() { 
+    public static function setTable()
+    {
         return 'doc_expend';
     }
     
-    public static function getWallet() {
+    public static function getWallet()
+    {
         return [
                 'model' => 'Wallet',
                 'f_key' => 'wallet_id',
@@ -26,11 +29,13 @@ class ExpenditureMapper extends Mapper
             ];
     }
 
-    protected function getPrimaryKey() {
+    protected function getPrimaryKey()
+    {
         return 'id';
     }
 
-    public function mapModelToDb(Model $obj) {
+    public function mapModelToDb(Model $obj)
+    {
         $db_arr = [
             'id' => $obj->getId(),
             'user_id' => $obj->getUser_id(),
@@ -41,7 +46,7 @@ class ExpenditureMapper extends Mapper
             'sum' => $obj->getSum()
         ];
         
-        if (!isset($db_arr['id'])){
+        if (!isset($db_arr['id'])) {
             $db_arr['id'] = $this->getGuide();
         }
         
@@ -49,8 +54,8 @@ class ExpenditureMapper extends Mapper
     }
 
 
-    protected function create(Model $obj) {
-         
+    protected function create(Model $obj)
+    {
         if ($this->create_stmt === null) {
             $sql = $this->qb->buildInsert($this);
             $this->create_stmt = $this->db->prepare($sql);
@@ -69,7 +74,7 @@ class ExpenditureMapper extends Mapper
             $row_mapper = $this->getMapper("app\Models\ExpenditureRow");
             $saved = $row_mapper->save($row);
             
-            if ($saved === false){
+            if ($saved === false) {
                 $this->db->rollBackTransaction();
                 return false;
             }
@@ -78,13 +83,14 @@ class ExpenditureMapper extends Mapper
         return $success;
     }
     
-    protected function afterSave($obj) {
-       $regMoney = new \app\Models\RegMoneyTransactions();
-       $regMoney->loadModel($obj);
-       $success = $regMoney->save(false);
+    protected function afterSave($obj)
+    {
+        $regMoney = new \app\Models\RegMoneyTransactions();
+        $regMoney->loadModel($obj);
+        $success = $regMoney->save(false);
        
-       unset($regMoney);
+        unset($regMoney);
        
-       return $success;
+        return $success;
     }
 }

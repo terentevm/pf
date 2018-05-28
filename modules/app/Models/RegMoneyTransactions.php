@@ -17,29 +17,31 @@ use app\Models\Lend;
 
 class RegMoneyTransactions extends Model
 {
-
     private $rows;
     private $modelId;
     private $condCol = '';
 
-    public function getRows() {
+    public function getRows()
+    {
         return $this->rows;
     }
 
-    public function getModelId() {
+    public function getModelId()
+    {
         return $this->modelId;
     }
 
-    public function getCondCol() {
+    public function getCondCol()
+    {
         return $this->condCol;
     }
 
     /**
-     * 
+     *
      * @param Model $model
      */
-    public function loadModel(Model $model) {
-
+    public function loadModel(Model $model)
+    {
         $this->rows = array();
 
         $this->modelId = $model->getId();
@@ -64,7 +66,8 @@ class RegMoneyTransactions extends Model
         }
     }
 
-    private function loadExpenditure($model) {
+    private function loadExpenditure($model)
+    {
         $doc_sum = 0;
 
         foreach ($model->rows->strings() as $row) {
@@ -84,7 +87,8 @@ class RegMoneyTransactions extends Model
         ];
     }
 
-    private function loadIncome($model) {
+    private function loadIncome($model)
+    {
         $arrWallets = [];
 
         foreach ($model->rows->strings() as $row) {
@@ -111,8 +115,8 @@ class RegMoneyTransactions extends Model
         }
     }
 
-    private function loadTransfer($model) {
-
+    private function loadTransfer($model)
+    {
         $this->rows[] = [
             'date' => $model->getDate(),
             'dateInt' => strtotime($model->getDate()),
@@ -138,8 +142,8 @@ class RegMoneyTransactions extends Model
         ];
     }
 
-    public function loadChangeBalance($model) {
-
+    public function loadChangeBalance($model)
+    {
         $sum = ($model->getSumExpend() > 0) ? $model->getSumExpend() * -1 : $model->getSumIncome();
 
         $this->rows[] = [
@@ -155,8 +159,8 @@ class RegMoneyTransactions extends Model
         ];
     }
     
-    public function loadLend($model) {
-
+    public function loadLend($model)
+    {
         $sum = $model->getSum() * -1;
 
         $this->rows[] = [
@@ -171,5 +175,4 @@ class RegMoneyTransactions extends Model
             'lend_id' => $model->getId(),
         ];
     }
-
 }

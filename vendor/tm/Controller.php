@@ -27,7 +27,6 @@ class Controller extends Base
         $this->route = $route;
         $this->view = $route['action'];
         $this->user_id = Reg::$app->user_id;
-        
     }
 
     public function createResponse(ResponseData $data, int $httpcode = 200, $msg = '')
@@ -35,10 +34,9 @@ class Controller extends Base
         $reqType = Reg::$app->request->getResponseType();
         
         if (is_string($data)) {
-            $body = $data;   
-        }
-        else {
-            $body = View::getRenderer($reqType, $this->route, $this->layout, $this->view)->render($data);   
+            $body = $data;
+        } else {
+            $body = View::getRenderer($reqType, $this->route, $this->layout, $this->view)->render($data);
         }
         
         $response = new Response($httpcode, $body);

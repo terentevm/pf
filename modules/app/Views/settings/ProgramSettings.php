@@ -1,9 +1,9 @@
 <?php
-    
+
 
     $render_param['form_header'] = 'Program settings';
-    $currency = models\Currency::findByUser($_SESSION['user_id'],50,0,true);
-    $wallets = models\Wallets::findByUser($_SESSION['user_id'],50,0,true);
+    $currency = models\Currency::findByUser($_SESSION['user_id'], 50, 0, true);
+    $wallets = models\Wallets::findByUser($_SESSION['user_id'], 50, 0, true);
     
     $render_param['currency_list'] = $currency;
     $render_param['wallets'] = $wallets;
@@ -23,7 +23,6 @@
     
     
     $template = $twig->load('ProgramSettings.twig');
-    $html = $template->render($render_param);    
+    $html = $template->render($render_param);
 
     return $html;
-

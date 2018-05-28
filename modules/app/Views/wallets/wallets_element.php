@@ -7,16 +7,12 @@ if (isset($_SESSION['error'])) {
 $render_param['isNotAjax'] = !$_SESSION['isAjax'];
 
 if (is_array($vars) && !empty($vars)) {
-
-    
-
     $wallet = $vars['element'];
     
-    if (!$wallet['id'] == ''){
-       $render_param['form_header'] = 'Wallet: ' . $wallet['name'];
-    }
-    else {
-       $render_param['form_header'] = 'Wallet: new item';
+    if (!$wallet['id'] == '') {
+        $render_param['form_header'] = 'Wallet: ' . $wallet['name'];
+    } else {
+        $render_param['form_header'] = 'Wallet: new item';
     }
     
     foreach ($wallet as $key => $value) {
@@ -43,4 +39,3 @@ echo $html;
 if ($_SESSION['isAjax']) {
     exit();
 }
-

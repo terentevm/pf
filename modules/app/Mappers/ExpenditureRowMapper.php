@@ -15,11 +15,13 @@ class ExpenditureRowMapper extends Mapper
 {
     public static $db_columnes = ['id', 'doc_id', 'item_id', 'sum', 'comment'];
     
-    public static function setTable() { 
+    public static function setTable()
+    {
         return 'doc_expend_rows';
     }
     
-    public static function getItemExpenditure() {
+    public static function getItemExpenditure()
+    {
         return [
                 'model' => 'ItemExpenditure',
                 'f_key' => 'item_id',
@@ -28,12 +30,14 @@ class ExpenditureRowMapper extends Mapper
     }
     
 
-    protected function getPrimaryKey() {
+    protected function getPrimaryKey()
+    {
         return 'id';
     }
 
 
-    public function mapModelToDb(Model $obj) {
+    public function mapModelToDb(Model $obj)
+    {
         $db_arr = [
             'id' => $obj->getId(),
             'doc_id' => $obj->getDocId(),
@@ -42,12 +46,10 @@ class ExpenditureRowMapper extends Mapper
             'comment' => $obj->getComment()
         ];
         
-        if (!isset($db_arr['id'])){
+        if (!isset($db_arr['id'])) {
             $db_arr['id'] = $this->getGuide();
         }
         
         return $db_arr;
     }
-
-
 }

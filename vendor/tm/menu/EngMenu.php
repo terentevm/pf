@@ -6,7 +6,6 @@ class EngMenu
 {
     public function __construct()
     {
-
     }
 
     public function getMenuStructure() : array

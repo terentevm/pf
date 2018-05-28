@@ -7,6 +7,7 @@ use tm\Request;
 use tm\Response;
 
 use tm\Registry as Reg;
+
 class Router extends Base
 {
     private $request;
@@ -30,7 +31,6 @@ class Router extends Base
     
     public function route()
     {
-
         $module=  $this->route['module'];
         
         define('CURRENT_MUDULE', $module);
@@ -67,15 +67,14 @@ class Router extends Base
         }
     }
     
-    public function checkRoute() : int {
+    public function checkRoute() : int
+    {
         if (!isset($this->route['module']) || is_null($this->route['module']) || $this->route['module'] === '') {
             $defaultModule = $this->config->getDefaultModule();
             
             if (empty($defaultModule)) {
                 return 404;
-            }
-            
-            else {
+            } else {
                 $this->route['module'] = $defaultModule;
             }
         }
@@ -85,18 +84,15 @@ class Router extends Base
             
             if (empty($defaultController)) {
                 return 404;
-            }
-            
-            else {
+            } else {
                 $this->route['controller'] = $defaultController;
             }
         }
         
         return 200;
-        
     }
 
-        private function createController($controller)
+    private function createController($controller)
     {
         $controller_name = 'Controllers\\' . ucfirst($controller) .'Controller';
         if (class_exists($controller_name)) {
@@ -108,9 +104,7 @@ class Router extends Base
             
     public function getRoute()
     {
-  
         if (!isset($this->request->get()['route'])) {
-            
             $this->route = [
                 'module' => null,
                 'controller' => null,

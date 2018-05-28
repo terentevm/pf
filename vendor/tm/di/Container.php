@@ -55,12 +55,9 @@ class Container implements ContainerInterface
         if ($class_is_singleton) {
             if (is_string($class)) {
                 $this->object_store[$class] = $object;
-            }
-            elseif ($class instanceof Instance) {
+            } elseif ($class instanceof Instance) {
                 $this->object_store[$class->id] = $object;
-         
             }
-            
         }
         
         return $object;
@@ -108,12 +105,10 @@ class Container implements ContainerInterface
 
     protected function getDependencies($class)
     {
-        
         if (is_string($class)) {
-            $class_str = $class;   
-        }
-        elseif ($class instanceof Instance) {
-            $class_str = $class->id; 
+            $class_str = $class;
+        } elseif ($class instanceof Instance) {
+            $class_str = $class->id;
         }
         
         if (isset($this->_reflections[$class_str])) {
@@ -123,7 +118,7 @@ class Container implements ContainerInterface
         $dependencies = [];
         
       
-        $reflection = new ReflectionClass($class_str);   
+        $reflection = new ReflectionClass($class_str);
       
 
         $constructor = $reflection->getConstructor();
@@ -143,7 +138,7 @@ class Container implements ContainerInterface
         
       
         $this->_reflections[$class_str] = $reflection;
-        $this->_dependencies[$class_str] = $dependencies;  
+        $this->_dependencies[$class_str] = $dependencies;
        
         
 

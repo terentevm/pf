@@ -17,21 +17,24 @@ class SettingsMapper extends Mapper
 {
     public static $db_columnes = ['user_id' , 'currency_id', 'wallet_id'];
     
-    public static function setTable() {
+    public static function setTable()
+    {
         return "settings";
     }
     
-    protected function getPrimaryKey() {
+    protected function getPrimaryKey()
+    {
         return 'user_id';
     }
     
     
-    public function mapModelToDb(Model $obj) {
-        $db_arr = [     
+    public function mapModelToDb(Model $obj)
+    {
+        $db_arr = [
             'user_id' => $obj->getUser_Id(),
             'currency_id' => $obj->getCurrency_id(),
             'wallet_id' => $obj->getWallet_id()
-        ];    
+        ];
         
         return $db_arr;
     }

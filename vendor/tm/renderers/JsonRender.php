@@ -37,7 +37,6 @@ class JsonRender extends View implements RenderInterface
         break;
     }
     
-    return $json_str;
-
+        return $json_str;
     }
 }

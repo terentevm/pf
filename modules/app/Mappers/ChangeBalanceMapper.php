@@ -8,25 +8,26 @@
 
 namespace app\mappers;
 
-
 use tm\Mapper;
 use tm\Model;
 
 class ChangeBalanceMapper extends Mapper
 {
-    
     public static $db_columnes = ['id', 'user_id' ,'date', 'dateInt', 'wallet_id', 'sumExpend', 'sumIncome', 'newBalance'];
     
-    public static function setTable() { 
+    public static function setTable()
+    {
         return 'doc_change_balance';
     }
  
 
-    protected function getPrimaryKey() {
+    protected function getPrimaryKey()
+    {
         return 'id';
     }
 
-    public function mapModelToDb(Model $obj) {
+    public function mapModelToDb(Model $obj)
+    {
         $db_arr = [
             'id' => $obj->getId(),
             'user_id' => $obj->getUser_id(),
@@ -39,7 +40,7 @@ class ChangeBalanceMapper extends Mapper
             
         ];
         
-        if (!isset($db_arr['id'])){
+        if (!isset($db_arr['id'])) {
             $db_arr['id'] = $this->getGuide();
         }
         
@@ -48,7 +49,8 @@ class ChangeBalanceMapper extends Mapper
     
        
     
-    protected function afterSave($obj) {
+    protected function afterSave($obj)
+    {
         $regMoney = new \app\Models\RegMoneyTransactions();
         $regMoney->loadModel($obj);
         $success = $regMoney->save(false);
@@ -58,7 +60,8 @@ class ChangeBalanceMapper extends Mapper
         return $success;
     }
     
-    protected function afterUpdate($obj) {
+    protected function afterUpdate($obj)
+    {
         $regMoney = new \app\Models\RegMoneyTransactions();
         $regMoney->loadModel($obj);
         $success = $regMoney->save(false);

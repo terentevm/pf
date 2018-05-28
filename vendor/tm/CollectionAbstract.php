@@ -45,9 +45,10 @@ abstract class CollectionAbstract implements CollectionsInterface, \JsonSerializ
         }
     }
     
-    public function jsonSerialize() {
+    public function jsonSerialize()
+    {
         $vars = get_object_vars($this);
 
-	return $vars;   
+        return $vars;
     }
 }

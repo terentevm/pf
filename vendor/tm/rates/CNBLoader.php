@@ -29,25 +29,24 @@ class CNBLoader implements IRatesLoader
         return $result_arr;
     }
 
-    private function makeRequest($currencyCode) 
+    private function makeRequest($currencyCode)
     {
         $fullUrl = $this->url . $this->createParamString($currencyCode);
        
-        $curl = curl_init(); 
+        $curl = curl_init();
         
         curl_setopt($curl, CURLOPT_URL, $fullUrl);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         
-        $result= curl_exec($curl); 
+        $result= curl_exec($curl);
 
-        curl_close($curl); 
+        curl_close($curl);
 
         return $result;
     }
 
     private function createParamString($currencyCode)
     {
-
         $mena = "mena=" . $currencyCode;
         $od = "od=" . $this->date1->format("d.m.Y");
         $do = "do=" . $this->date2->format("d.m.Y");
@@ -57,13 +56,13 @@ class CNBLoader implements IRatesLoader
         return $params;
     }
 
-    private function parseData(string $data_txt, $currencyCode) 
+    private function parseData(string $data_txt, $currencyCode)
     {
-        $rows = explode("\n",$data_txt);
+        $rows = explode("\n", $data_txt);
        
         
 
-        $headers = explode("|",$rows[0]);
+        $headers = explode("|", $rows[0]);
 
         $parts_mult = explode(":", $headers[1]);
         $mult = intval($parts_mult[1]);
@@ -73,7 +72,7 @@ class CNBLoader implements IRatesLoader
         }
         $result = [
             'code' => $currencyCode,
-            'mult' => $mult, 
+            'mult' => $mult,
         ];
 
         $rates = [];
@@ -93,7 +92,6 @@ class CNBLoader implements IRatesLoader
                 'date' => $date_fmt,
                 'rate' => floatval(str_replace(",", ".", $parts[1]))
             ];
-            
         }
         
         $result['rates'] = $rates;

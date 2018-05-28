@@ -20,66 +20,80 @@ class Lend extends Model implements \JsonSerializable
     private $sum = 0;
     private $Wallet = null;
     
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
-    public function getUser_id() {
+    public function getUser_id()
+    {
         return $this->user_id;
     }
 
-    public function getDate() {
+    public function getDate()
+    {
         return $this->date;
     }
 
-    public function getWallet_id() {
+    public function getWallet_id()
+    {
         return $this->wallet_id;
     }
 
-    public function getContact() {
+    public function getContact()
+    {
         return $this->contact;
     }
 
-    public function getSum() {
+    public function getSum()
+    {
         return $this->sum;
     }
 
-    public function getWallet() {
+    public function getWallet()
+    {
         return $this->Wallet;
     }
 
-    public function setId($id) {
+    public function setId($id)
+    {
         $this->id = $id;
     }
 
-    public function setUser_id($user_id) {
+    public function setUser_id($user_id)
+    {
         $this->user_id = $user_id;
     }
 
-    public function setDate($date) {
+    public function setDate($date)
+    {
         $this->date = $date;
     }
 
-    public function setWallet_id($wallet_id) {
+    public function setWallet_id($wallet_id)
+    {
         $this->wallet_id = $wallet_id;
     }
 
-    public function setContact($contact) {
+    public function setContact($contact)
+    {
         $this->contact = $contact;
     }
 
-    public function setSum($sum) {
+    public function setSum($sum)
+    {
         $this->sum = $sum;
     }
 
-    public function setWallet($Wallet) {
+    public function setWallet($Wallet)
+    {
         $this->Wallet = $Wallet;
     }
 
-    public function jsonSerialize() {
+    public function jsonSerialize()
+    {
         $vars = get_object_vars($this);
 
-	return $vars;   
+        return $vars;
     }
-
 }

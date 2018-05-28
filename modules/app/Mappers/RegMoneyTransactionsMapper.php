@@ -16,20 +16,22 @@ class RegMoneyTransactionsMapper extends Mapper
 {
     public static $db_columnes = ['date','dateInt', 'wallet_id', 'sum', 'expend_id', 'income_id', 'transfer_id', 'cb_id', 'lend_id'];
     
-    public static function setTable() { 
+    public static function setTable()
+    {
         return 'regMoneyTrans';
     }
 
-    protected function getPrimaryKey() {
+    protected function getPrimaryKey()
+    {
         return 'id';
     }
 
-    public function mapModelToDb(Model $obj) {
-        
+    public function mapModelToDb(Model $obj)
+    {
     }
     
-    public function save(Model $obj, $upload_mode = false, $useTransaction = false) {
-        
+    public function save(Model $obj, $upload_mode = false, $useTransaction = false)
+    {
         $rows = $obj->getRows();
         
         if (empty($rows)) {
@@ -48,7 +50,6 @@ class RegMoneyTransactionsMapper extends Mapper
             $success = $this->create_stmt->execute($record);
             
             if ($success === false) {
-           
                 return false;
             }
         }
@@ -56,7 +57,8 @@ class RegMoneyTransactionsMapper extends Mapper
         return true;
     }
     
-    public function deleteReg(Model $obj) {
+    public function deleteReg(Model $obj)
+    {
         $model_id = $obj->getModelId();
         $col_name = $obj->getCondCol();
         $sql = 'DELETE FROM ' . $this->setTable() . ' WHERE ' . $col_name . ' = :model_id';
@@ -66,5 +68,4 @@ class RegMoneyTransactionsMapper extends Mapper
         
         return $success;
     }
-    
 }

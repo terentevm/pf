@@ -7,25 +7,27 @@
  */
 
 namespace app\Models;
+
 use tm\Model;
 
 use Respect\Validation\Validator as v;
 use Respect\Validation\Exceptions\ValidationException;
 use Respect\Validation\Exceptions\NestedValidationException;
 
-class Wallet extends Model {
-    
+class Wallet extends Model
+{
     private $id = null;
     private $name = '';
     private $currency = null;
     private $currency_id = null;
-    private $is_creditcard = 0; 
+    private $is_creditcard = 0;
     
     private $grace_period = 0;
     private $credit_limit = 0;
     private $user_id = '';
     
-    public function __construct($user_id = "", $name ="", $currency_id = "" ,$id = null ,Model $currency = null, $is_creditcard = 0, $grace_period = 0,$credit_limit = 0) {
+    public function __construct($user_id = "", $name ="", $currency_id = "", $id = null, Model $currency = null, $is_creditcard = 0, $grace_period = 0, $credit_limit = 0)
+    {
         $this->id = $id;
         $this->name = $name;
         $this->currency = $currency;
@@ -35,72 +37,88 @@ class Wallet extends Model {
         $this->user_id = $user_id;
         $this->currency_id = $currency_id;
     }
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
-    public function getName() {
+    public function getName()
+    {
         return $this->name;
     }
 
-    public function getCurrency() {
+    public function getCurrency()
+    {
         return $this->currency;
     }
 
-    public function getCurrency_id() {
+    public function getCurrency_id()
+    {
         return $this->currency_id;
     }
 
-    public function getIs_creditcard() {
+    public function getIs_creditcard()
+    {
         return $this->is_creditcard;
     }
 
-    public function getGrace_period() {
+    public function getGrace_period()
+    {
         return $this->grace_period;
     }
 
-    public function getCredit_limit() {
+    public function getCredit_limit()
+    {
         return $this->credit_limit;
     }
 
-    public function getUser_id() {
+    public function getUser_id()
+    {
         return $this->user_id;
     }
 
-    public function setId($id) {
+    public function setId($id)
+    {
         $this->id = $id;
     }
 
-    public function setName($name) {
+    public function setName($name)
+    {
         $this->name = $name;
     }
 
-    public function setCurrency($currency) {
+    public function setCurrency($currency)
+    {
         $this->currency = $currency;
     }
 
-    public function setCurrency_id($currency_id) {
+    public function setCurrency_id($currency_id)
+    {
         $this->currency_id = $currency_id;
     }
 
-    public function setIs_creditcard($is_creditcard) {
+    public function setIs_creditcard($is_creditcard)
+    {
         $this->is_creditcard = $is_creditcard;
     }
 
-    public function setGrace_period($grace_period) {
+    public function setGrace_period($grace_period)
+    {
         $this->grace_period = $grace_period;
     }
 
-    public function setCredit_limit($credit_limit) {
+    public function setCredit_limit($credit_limit)
+    {
         $this->credit_limit = $credit_limit;
     }
 
-    public function setUser_id($user_id) {
+    public function setUser_id($user_id)
+    {
         $this->user_id = $user_id;
     }
     
-    public function validate() {
-        
+    public function validate()
+    {
         $validator = v::attribute('name', v::notEmpty()->stringType())
                     ->attribute('currency_id', v::notEmpty()->stringType()->length(36, 36));
         
@@ -111,8 +129,5 @@ class Wallet extends Model {
             //$errors = $e->getMessages();
             return false;
         }
-
     }
-    
-
 }

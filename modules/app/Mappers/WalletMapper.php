@@ -4,6 +4,7 @@ namespace app\mappers;
 
 use tm\Mapper;
 use tm\Model;
+
 /**
  * Description of WalletMapper
  *
@@ -13,15 +14,18 @@ class WalletMapper extends Mapper
 {
     public static $db_columnes = ['id', 'user_id' ,'name', 'currency_id', 'is_creditcard', 'grace_period', 'credit_limit'];
     
-    public static function setTable() {
+    public static function setTable()
+    {
         return "wallets";
     }
     
-    protected function getPrimaryKey() {
+    protected function getPrimaryKey()
+    {
         return 'id';
     }
 
-    public static function getCurrency() {
+    public static function getCurrency()
+    {
         return [
                 'model' => 'Currency',
                 'f_key' => 'currency_id',
@@ -30,7 +34,8 @@ class WalletMapper extends Mapper
     }
 
     
-    public function mapModelToDb(Model $obj) {
+    public function mapModelToDb(Model $obj)
+    {
         $db_arr = [
             'id' => $obj->getId(),
             'user_id' => $obj->getUser_Id(),
@@ -41,7 +46,7 @@ class WalletMapper extends Mapper
             'grace_period' => $obj->getGrace_period()
         ];
         
-        if (!isset($db_arr['id'])){
+        if (!isset($db_arr['id'])) {
             $db_arr['id'] = $this->getGuide();
         }
         

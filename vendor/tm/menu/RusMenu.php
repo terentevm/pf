@@ -6,7 +6,6 @@ class RusMenu
 {
     public function __construct()
     {
-
     }
 
     public function getMenuStructure() : array

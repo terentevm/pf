@@ -26,15 +26,14 @@ abstract class Mapper extends Base
     {
         if ($this->db_connection === null) {
             $this->db_connection = Connection::init();
-            
         }
         
         if ($this->db === null) {
-            $this->db = new DBCommand($this->db_connection);    
+            $this->db = new DBCommand($this->db_connection);
         }
         
         if ($this->qb === null) {
-            $this->qb = Connection::getQueryBuilder();    
+            $this->qb = Connection::getQueryBuilder();
         }
         
         $this->modelClassName = $modelClassName;
@@ -193,7 +192,6 @@ abstract class Mapper extends Base
 
     public function save(Model $obj, $upload_mode = false, $useTransaction = false)
     {
-        
         if (!$this->db->transactionExists() && $useTransaction) {
             $this->db->beginTransaction();
         }
@@ -240,7 +238,7 @@ abstract class Mapper extends Base
         $success = $this->update_stmt->execute($colsForUpdate);
         
         if ($success === true) {
-            $success = $this->afterUpdate($obj);   
+            $success = $this->afterUpdate($obj);
         }
         
         if ($this->db->transactionExists()) {
@@ -263,7 +261,8 @@ abstract class Mapper extends Base
         return true;
     }
 
-    public function delete() {
+    public function delete()
+    {
         $sql = $this->qb->buildDelete($this);
         $this->delete_stmt = $this->db->prepare($sql);
         

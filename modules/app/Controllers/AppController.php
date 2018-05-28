@@ -15,7 +15,8 @@ class AppController extends Controller
 {
     public static $defaultAction = 'index';
     
-    public function ActionIndex(){
+    public function ActionIndex()
+    {
         $index_file = MODULES_PATH . "/app/Views/index.html";
         $html = file_get_contents($index_file);
         $response = new Response(200, $html);

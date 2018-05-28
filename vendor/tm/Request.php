@@ -44,7 +44,6 @@ class Request extends Base
 
     public function server(string $key='')
     {
-        
         if ($key =='') {
             return $_SERVER;
         }
@@ -52,7 +51,6 @@ class Request extends Base
         $keyUp = strtoupper($key);
         
         return $_SERVER[$keyUp] ?? null;
-
     }
 
     public function files()

@@ -7,22 +7,25 @@
  */
 
 namespace app\Models;
+
 use tm\Model;
 use tm\Registry as Reg;
+
 /**
  * Description of Currency
  *
  * @author terentyev.m
  */
-class Currency extends Model {
-   
+class Currency extends Model
+{
     private $id = null;
     private $code = '';
     private $name = '';
     private $short_name = '';
     private $user_id;
     
-    public function __construct($id = null, $code = '', $name = '', $short_name = '', $user_id = '') {
+    public function __construct($id = null, $code = '', $name = '', $short_name = '', $user_id = '')
+    {
         $this->id = $id;
         $this->code = $code;
         $this->name = $name;
@@ -30,47 +33,57 @@ class Currency extends Model {
         $this->user_id = $user_id;
     }
 
-    function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
-    function getCode() {
+    public function getCode()
+    {
         return $this->code;
     }
 
-    function getName() {
+    public function getName()
+    {
         return $this->name;
     }
 
-    function getShort_name() {
+    public function getShort_name()
+    {
         return $this->short_name;
     }
 
-    function getUser_id() {
+    public function getUser_id()
+    {
         return $this->user_id;
     }
 
-    function setId($id) {
+    public function setId($id)
+    {
         $this->id = $id;
     }
 
-    function setCode($code) {
+    public function setCode($code)
+    {
         $this->code = $code;
     }
 
-    function setName($name) {
+    public function setName($name)
+    {
         $this->name = $name;
     }
 
-    function setShort_Name($short_name) {
+    public function setShort_Name($short_name)
+    {
         $this->short_name = $short_name;
     }
 
-    function setUser_id($user_id) {
+    public function setUser_id($user_id)
+    {
         $this->user_id = $user_id;
     }
     
-    public static function getClassificator() 
+    public static function getClassificator()
     {
         $file_path = Reg::$app->config->getRateClassificatorFilePath();
         
@@ -92,12 +105,11 @@ class Currency extends Model {
         return $sysCurrency;
     }
 
-    public static function saveSystemCurrensy($user_id) {
-        
+    public static function saveSystemCurrensy($user_id)
+    {
         $sysCurrency = self::SystemCurrensy();
 
         if (is_null($sysCurrency)) {
-            
             $sysCurrency_arr = Reg::$app->config->getSystemCurrency();
             
             $currensy = new self();
@@ -110,11 +122,8 @@ class Currency extends Model {
             $success = $currensy->save();
 
             return $success;
-
-        }
-        else {
+        } else {
             return true;
         }
-
     }
 }

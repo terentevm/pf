@@ -63,7 +63,7 @@ class __TwigTemplate_f6f37e94649a3742491ff29551afcc36cdb89c813058ccf0ca3ae118152
       <div class=\"alert alert-danger\" role=\"alert\">
     ";
             // line 28
-            echo ($context["error"] ?? null);
+            echo($context["error"] ?? null);
             echo "
     </div>
     </blockquote>
@@ -95,7 +95,7 @@ class __TwigTemplate_f6f37e94649a3742491ff29551afcc36cdb89c813058ccf0ca3ae118152
 
     public function getDebugInfo()
     {
-        return array (  73 => 32,  66 => 28,  62 => 26,  59 => 25,  49 => 17,  42 => 13,  31 => 4,  28 => 3,  11 => 1,);
+        return array(  73 => 32,  66 => 28,  62 => 26,  59 => 25,  49 => 17,  42 => 13,  31 => 4,  28 => 3,  11 => 1,);
     }
 
     public function getSourceContext()

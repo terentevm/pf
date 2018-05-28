@@ -25,21 +25,24 @@ class Income extends Model implements \JsonSerializable
     private $comment = '';
     private $sum = 0;
     
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
-    public function getUser_id() {
+    public function getUser_id()
+    {
         return $this->user_id;
     }
 
-    public function getDate() {
+    public function getDate()
+    {
         return $this->date;
     }
 
-    public function getRows() {
+    public function getRows()
+    {
         if ($this->rows === null) {
-            
             $param = [
                 'doc_id' => $this->id
             ];
@@ -47,38 +50,43 @@ class Income extends Model implements \JsonSerializable
             $rows = IncomeRow::find()->with(['ItemIncome', 'Wallet'])->where(['doc_id = :doc_id'])->setParams($param)->All();
 
             $this->setRows($rows);
-
         }
         
         return $this->rows;
     }
 
-    public function getComment() {
+    public function getComment()
+    {
         return $this->comment;
     }
     
-    public function getSum() {
+    public function getSum()
+    {
         return $this->sum;
     }
     
-    public function setId($id) {
+    public function setId($id)
+    {
         $this->id = $id;
     }
 
-    public function setUser_id($user_id) {
+    public function setUser_id($user_id)
+    {
         $this->user_id = $user_id;
     }
 
-    public function setDate($date) {
+    public function setDate($date)
+    {
         $this->date = $date;
     }
     
-    public function setSum($sum) {
+    public function setSum($sum)
+    {
         $this->sum = $sum;
     }
     
-    public function setRows($rows) {
-        
+    public function setRows($rows)
+    {
         $this->rows = new DocumentCollection($this);
         $this->sum = 0;
         
@@ -93,23 +101,25 @@ class Income extends Model implements \JsonSerializable
         }
     }
 
-    public function setComment($comment) {
+    public function setComment($comment)
+    {
         $this->comment = $comment;
     }
     
-    public function jsonSerialize() {
+    public function jsonSerialize()
+    {
         $vars = get_object_vars($this);
 
-	    return $vars;   
+        return $vars;
     }
 
-    public function validate() {
-        
+    public function validate()
+    {
         $ok = true;
 
         foreach ($this->rows as $row) {
             $ok = $row->validate();
-        }    
+        }
 
         if ($ok === false) {
             return false;
@@ -124,7 +134,5 @@ class Income extends Model implements \JsonSerializable
             $errors = $e->getMessages();
             return false;
         }
-
     }
-
 }

@@ -13,19 +13,21 @@ use tm\Model;
 
 class IncomeMapper extends Mapper
 {
-
     public static $db_columnes = ['id', 'user_id', 'date', 'dateInt', 'sum', 'comment'];
 
-    public static function setTable() {
+    public static function setTable()
+    {
         return 'doc_income';
     }
 
 
-    protected function getPrimaryKey() {
+    protected function getPrimaryKey()
+    {
         return 'id';
     }
 
-    public function mapModelToDb(Model $obj) {
+    public function mapModelToDb(Model $obj)
+    {
         $db_arr = [
             'id' => $obj->getId(),
             'user_id' => $obj->getUser_id(),
@@ -42,8 +44,8 @@ class IncomeMapper extends Mapper
         return $db_arr;
     }
 
-    protected function create(Model $obj) {
-
+    protected function create(Model $obj)
+    {
         if ($this->create_stmt === null) {
             $sql = $this->qb->buildInsert($this);
             $this->create_stmt = $this->db->prepare($sql);
@@ -63,7 +65,6 @@ class IncomeMapper extends Mapper
             $saved = $row_mapper->save($row);
 
             if ($saved === false) {
-
                 return false;
             }
         }
@@ -71,7 +72,8 @@ class IncomeMapper extends Mapper
         return $success;
     }
 
-    protected function afterSave($obj) {
+    protected function afterSave($obj)
+    {
         $regMoney = new \app\Models\RegMoneyTransactions();
         $regMoney->loadModel($obj);
         $success = $regMoney->save(false);
@@ -80,5 +82,4 @@ class IncomeMapper extends Mapper
 
         return $success;
     }
-
 }

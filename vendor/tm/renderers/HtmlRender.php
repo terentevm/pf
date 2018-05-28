@@ -73,7 +73,6 @@ class HtmlRender extends View implements RenderInterface
             $loader = new Twig_Loader_Filesystem(array($this->pathView .'/Views/layouts', dirname($file_view)));
             $twig = new Twig_Environment($loader, array('cache' => $this->pathView . '/Views/compilation_cache','auto_reload' => false));
             $html = require $file_view;
-            
         } else {
             $html;
         }

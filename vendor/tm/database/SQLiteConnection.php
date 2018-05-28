@@ -14,8 +14,8 @@ class SQLiteConnection implements IConnection
     private $user = null;
     private $password = null;
     
-    private function __construct($db_config) {
-        
+    private function __construct($db_config)
+    {
         $this->dsn = $db_config['dsn'];
         $this->user = $db_config['user'];
         $this->password = $db_config['password'];
@@ -24,7 +24,6 @@ class SQLiteConnection implements IConnection
         
         //for testing use dsn C:/Apache/Apache24/htdocs/db_test/money.db
         $this->pdo = new \PDO("sqlite:C:/Apache/Apache24/htdocs/db_test/money.db", null, null, $connOptions);
-        
     }
     
     protected function __clone()
@@ -39,7 +38,8 @@ class SQLiteConnection implements IConnection
     {
     }
     
-    public static function init($config) {
+    public static function init($config)
+    {
         if (self::$instance === null) {
             self::$instance = new self($config);
         }
@@ -70,20 +70,20 @@ class SQLiteConnection implements IConnection
         return $options;
     }
     
-    public function beginTransaction() {
-        
+    public function beginTransaction()
+    {
     }
 
-    public function commitTransaction() {
-        
+    public function commitTransaction()
+    {
     }
 
-    public function getPDO() {
+    public function getPDO()
+    {
         return $this->pdo;
     }
 
-    public function rollBackTransaction() {
-        
+    public function rollBackTransaction()
+    {
     }
-
 }

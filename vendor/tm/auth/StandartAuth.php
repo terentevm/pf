@@ -37,20 +37,19 @@ class StandartAuth implements AccessInterface
         
         if (empty($this->access_open)) {
             return false;
-        } 
+        }
         if (in_array($this->route['module'], $this->access_open)) {
-             $mudule_rules = $this->access_open[$this->route['module']]; //check module
+            $mudule_rules = $this->access_open[$this->route['module']]; //check module
 
-             if (in_array('*', $mudule_rules)) { //all controllers are allowed
-                 return true;
-             }
-             else {
+            if (in_array('*', $mudule_rules)) { //all controllers are allowed
+                return true;
+            } else {
                 if (in_array($this->route['controller'], $mudule_rules)) { //check controller
                     return true;
-                }  
-             } 
-         }
+                }
+            }
+        }
 
-         return false;
+        return false;
     }
 }

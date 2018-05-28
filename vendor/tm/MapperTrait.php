@@ -27,9 +27,7 @@ trait MapperTrait
             if ($nameParam == "") {
                 array_push($params, "?");
                 array_push($values, $arr[$i]);
-            }
-            else {
-                
+            } else {
                 array_push($params, ":" . $nameParam . $i);
                 $values[$nameParam . $i] = $arr[$i];
             }
@@ -38,7 +36,6 @@ trait MapperTrait
         $txt = implode(",", $params);
         
         return array($txt, $values);
-        
     }
     public function where(array $condition)
     {

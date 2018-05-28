@@ -1,101 +1,116 @@
 <?php
 
 namespace app\Models;
+
 use tm\Model;
 use Respect\Validation\Validator as v;
 use Respect\Validation\Exceptions\ValidationException;
 use Respect\Validation\Exceptions\NestedValidationException;
+
 /**
  * Description of user
  *
  * @author terentyev.m
  */
-class User extends Model{
-    
+class User extends Model
+{
     private $id = null;
     private $login;
     private $password;
     private $name;
     
-    public function __construct($id = null, $login = '', $password = '', $name = '') {
- 
+    public function __construct($id = null, $login = '', $password = '', $name = '')
+    {
         $this->login = $login;
-        $this->password = $password; 
+        $this->password = $password;
         $this->name = $name;
     }
     
     
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
-    public function getLogin() {
+    public function getLogin()
+    {
         return $this->login;
     }
 
-    public function getPassword() {
+    public function getPassword()
+    {
         return $this->password;
     }
 
-    public function getName() {
+    public function getName()
+    {
         return $this->name;
     }
 
-    public function setId($id) {
+    public function setId($id)
+    {
         $this->id = $id;
     }
 
-    public function setLogin($login) {
+    public function setLogin($login)
+    {
         $this->login = $login;
     }
 
-    public function setPassword($password) {
+    public function setPassword($password)
+    {
         $this->password = $password;
     }
 
-    public function setName($name) {
+    public function setName($name)
+    {
         $this->name = $name;
     }
     
-    public function checkUnique() {
+    public function checkUnique()
+    {
         $db_rec = static::find()->where(['login = :login'])->asArray()->setParams(['login' => $this->login])->limit(1)->one();
         
         //if record with this login exist in database return false
         return empty($db_rec) ? true : false;
     }
     
-    public function hashPassword() {
+    public function hashPassword()
+    {
         $this->password = password_hash($this->password, PASSWORD_DEFAULT);
     }
     
-    public static function verify($login, $password) {
-       $db_rec = static::find()->asArray()->where(['login = :login'])->setParams(['login' => $login])->limit(1)->one();
+    public static function verify($login, $password)
+    {
+        $db_rec = static::find()->asArray()->where(['login = :login'])->setParams(['login' => $login])->limit(1)->one();
        
-       if (empty($db_rec)) {
-           return false;
-       }
+        if (empty($db_rec)) {
+            return false;
+        }
        
-       if (password_verify($password, $db_rec['password'])) {
-           return $db_rec['id'];
-       }
+        if (password_verify($password, $db_rec['password'])) {
+            return $db_rec['id'];
+        }
        
-       return false;
+        return false;
     }
     
-    public function verifyPassword($password) {
+    public function verifyPassword($password)
+    {
         return password_verify($this->password, $password);
     }
 
     public static function getFilterRules()
-	{
-		return [
-			'login' => FILTER_SANITIZE_EMAIL,
-			'password' => FILTER_DEFAULT,
-			'name' => FILTER_SANITIZE_SPECIAL_CHARS,
-		];
+    {
+        return [
+            'login' => FILTER_SANITIZE_EMAIL,
+            'password' => FILTER_DEFAULT,
+            'name' => FILTER_SANITIZE_SPECIAL_CHARS,
+        ];
     }
         
-    public function validate() {
+    public function validate()
+    {
         $validator = v::attribute('login', v::notEmpty()->Email())
                     ->attribute('password', v::notEmpty()->stringType()->length(3, null))
                     ->attribute('name', v::notEmpty()->stringType());
@@ -108,5 +123,4 @@ class User extends Model{
             return false;
         }
     }
-    
 }

@@ -13,19 +13,21 @@ use tm\Model;
 
 class TransferMapper extends Mapper
 {
-
     public static $db_columnes = ['id', 'user_id' ,'date', 'dateInt', 'wallet_id_from', 'wallet_id_to', 'sumFrom', 'sumTo' ,'comment'];
     
-    public static function setTable() { 
+    public static function setTable()
+    {
         return 'doc_transfers';
     }
  
 
-    protected function getPrimaryKey() {
+    protected function getPrimaryKey()
+    {
         return 'id';
     }
 
-    public static function getWalletFrom() {
+    public static function getWalletFrom()
+    {
         return [
                 'model' => 'Wallet',
                 'f_key' => 'wallet_id_from',
@@ -33,7 +35,8 @@ class TransferMapper extends Mapper
             ];
     }
 
-    public static function getWalletTo() {
+    public static function getWalletTo()
+    {
         return [
                 'model' => 'Wallet',
                 'f_key' => 'wallet_id_to',
@@ -41,7 +44,8 @@ class TransferMapper extends Mapper
             ];
     }
 
-    public function mapModelToDb(Model $obj) {
+    public function mapModelToDb(Model $obj)
+    {
         $db_arr = [
             'id' => $obj->getId(),
             'user_id' => $obj->getUser_id(),
@@ -54,20 +58,21 @@ class TransferMapper extends Mapper
             'comment' =>$obj->getComment()
         ];
         
-        if (!isset($db_arr['id'])){
+        if (!isset($db_arr['id'])) {
             $db_arr['id'] = $this->getGuide();
         }
         
         return $db_arr;
     }
     
-    protected function afterSave($obj) {
-       $regMoney = new \app\Models\RegMoneyTransactions();
-       $regMoney->loadModel($obj);
-       $success = $regMoney->save(false);
+    protected function afterSave($obj)
+    {
+        $regMoney = new \app\Models\RegMoneyTransactions();
+        $regMoney->loadModel($obj);
+        $success = $regMoney->save(false);
        
-       unset($regMoney);
+        unset($regMoney);
        
-       return $success;
+        return $success;
     }
 }

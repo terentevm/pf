@@ -32,7 +32,7 @@ class HttpAuth implements AccessInterface
     {
         if (empty($this->access_open)) {
             return false;
-        } 
+        }
         
         $module = $this->route['module'];
         
@@ -41,12 +41,11 @@ class HttpAuth implements AccessInterface
             
             if (in_array('*', $mudule_rules)) { //all controllers are allowed
                 return true;
+            } else {
+                if (in_array($this->route['controller'], $mudule_rules)) { //check controller
+                    return true;
+                }
             }
-            else {
-               if (in_array($this->route['controller'], $mudule_rules)) { //check controller
-                   return true;
-               }  
-            } 
         }
         
         $request = Registry::$app->request;
@@ -83,8 +82,8 @@ class HttpAuth implements AccessInterface
 
         $client_ip = Registry::$app->request->server('REMOTE_ADDR');
 
-        if(!is_null($client_ip )) {
-            $token['ip'] = $client_ip;   
+        if (!is_null($client_ip)) {
+            $token['ip'] = $client_ip;
         }
         return  JWT::encode($token, $this->jwt_key);
     }

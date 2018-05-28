@@ -10,7 +10,7 @@ abstract class Model extends Base
 {
     /**
      * Creates class mapper instanse usig model class name
-     * 
+     *
      * @return Mapper instance
      */
     public static function find()
@@ -20,12 +20,12 @@ abstract class Model extends Base
 
     /**
      * Return data (array or model instance) selected by user id from DB.
-     * 
+     *
      * @param string $user_id User id in UUID format
      * @param int $limit Number of records selected from the database
-     * @param int $offset 
+     * @param int $offset
      * @param bool $asArray If true return array, else model instance
-     * 
+     *
      * @return mixed Array or model instance
      */
     public static function findByUser(string $user_id, int $limit = 50, int $offset = 0, bool $asArray = true)
@@ -99,7 +99,6 @@ abstract class Model extends Base
 
     public function loadSafe(array $attributes)
     {
-        
         $filters = get_called_class()::getFilterRules();
         $sanitizedData = filter_var_array($attributes, $filters);
         foreach ($sanitizedData as $attrName => $attrValue) {

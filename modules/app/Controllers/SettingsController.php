@@ -11,7 +11,8 @@ class SettingsController extends RestController
 {
     public static $classModel = '\app\models\Settings';
     
-    public function ActionCurrencyClassificator() {
+    public function ActionCurrencyClassificator()
+    {
         $str_json = Currency::getClassificator();
         
         $httpcode = is_null($str_json) ? 404 : 200;

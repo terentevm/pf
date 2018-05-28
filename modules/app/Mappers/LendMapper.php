@@ -15,15 +15,18 @@ class LendMapper extends Mapper
 {
     public static $db_columnes = ['id', 'user_id' ,'date', 'dateInt', 'wallet_id', 'contact', 'sum'];
     
-    public static function setTable() { 
+    public static function setTable()
+    {
         return 'lend';
     }
 
-    protected function getPrimaryKey() {
+    protected function getPrimaryKey()
+    {
         return 'id';
     }
 
-    public function mapModelToDb(Model $obj) {
+    public function mapModelToDb(Model $obj)
+    {
         $db_arr = [
             'id' => $obj->getId(),
             'user_id' => $obj->getUser_id(),
@@ -34,14 +37,15 @@ class LendMapper extends Mapper
             'sum' => $obj->getSum()
         ];
         
-        if (!isset($db_arr['id'])){
+        if (!isset($db_arr['id'])) {
             $db_arr['id'] = $this->getGuide();
         }
         
         return $db_arr;
     }
     
-    protected function afterSave($obj) {
+    protected function afterSave($obj)
+    {
         $regMoney = new \app\Models\RegMoneyTransactions();
         $regMoney->loadModel($obj);
         $success = $regMoney->save(false);

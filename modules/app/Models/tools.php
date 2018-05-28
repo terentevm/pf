@@ -7,68 +7,66 @@
  */
 
 namespace app\Models;
+
 use tm\Model;
+
 /**
  * Description of tools
  *
  * @author terentyev.m
  */
-class Tools extends Model {
-    
+class Tools extends Model
+{
     public $attributes = ['import_files' => []];
     
-    public function ImportDataFrom1c(){
+    public function ImportDataFrom1c()
+    {
         $import_files = $this->attributes['import_files'];
         
-        foreach ($import_files as $file){
+        foreach ($import_files as $file) {
             $filename = $file['filename'];
             $json_str = $file['json_str'];
             $data = json_decode($json_str);
-            if(!is_array($data)){
-                return FALSE;
+            if (!is_array($data)) {
+                return false;
             }
             $dic_class_name = '';
             
-            if($filename == 'spr_currency.json'){
-                $dic_class_name = "Models". "\\" .'Currency';    
-            }
-            elseif($filename == 'spr_wallets.json') {
+            if ($filename == 'spr_currency.json') {
+                $dic_class_name = "Models". "\\" .'Currency';
+            } elseif ($filename == 'spr_wallets.json') {
                 $dic_class_name = "Models". "\\" . 'Wallets';
-            }
-            elseif($filename == 'spr_items_income.json') {
+            } elseif ($filename == 'spr_items_income.json') {
                 $dic_class_name = "Models". "\\" . 'ItemsIncome';
-            }
-            elseif($filename == 'spr_items_expenditure.json') {
+            } elseif ($filename == 'spr_items_expenditure.json') {
                 $dic_class_name = "Models". "\\" . 'ItemsExpenditure';
-            }
-            else {
+            } else {
                 continue;
             }
             
 
-            $IsErrors = FALSE;
+            $IsErrors = false;
             
-            if(class_exists($dic_class_name)){
-                foreach ($data as $obj){
-                    $arr_elements = get_object_vars ($obj);
+            if (class_exists($dic_class_name)) {
+                foreach ($data as $obj) {
+                    $arr_elements = get_object_vars($obj);
                     
                     $DicObject = new $dic_class_name();
                     $DicObject->load($arr_elements);
                     $success = $DicObject->SaveOrUpdate();
-                    if(!$success == TRUE){
-                        $IsErrors = TRUE;
+                    if (!$success == true) {
+                        $IsErrors = true;
                         break;
                     }
                 }
                 
-                if($IsErrors){
-                    return FALSE;
+                if ($IsErrors) {
+                    return false;
                 }
-            }
-            else{
+            } else {
                 return false;
             }
         }
-        return TRUE;
+        return true;
     }
 }

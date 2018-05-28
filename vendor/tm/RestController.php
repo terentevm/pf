@@ -18,7 +18,6 @@ class RestController extends Controller
     public function __construct($route)
     {
         parent::__construct($route);
-       
     }
     
     public function actionIndex()
@@ -56,7 +55,6 @@ class RestController extends Controller
         }
         
         return $this->createResponse($this->createResponseData(true, $result, "OK"), 200);
-
     }
     
     public function actionCreate()
@@ -78,7 +76,7 @@ class RestController extends Controller
         if (method_exists($model, "validate")) {
             $validated = $model->validate();
             if ($validated === false) {
-                return $this->createResponse($this->createResponseData(false, null, "Validation errors"), 500);    
+                return $this->createResponse($this->createResponseData(false, null, "Validation errors"), 500);
             }
         }
 
@@ -89,7 +87,6 @@ class RestController extends Controller
         }
         
         return $this->createResponse($this->createResponseData(false, null, "Data haven't been saved"), 500);
-
     }
     
     public function actionUpdate()
@@ -108,7 +105,7 @@ class RestController extends Controller
         if (method_exists($model, "validate")) {
             $validated = $model->validate();
             if ($validated === false) {
-                return $this->createResponse($this->createResponseData(false, null, "Validation errors"), 500);    
+                return $this->createResponse($this->createResponseData(false, null, "Validation errors"), 500);
             }
         }
 
@@ -134,12 +131,9 @@ class RestController extends Controller
         $deleted = $className::find()->where(['id = :id'])->setParam('id', $id)->delete();
        
         if ($deleted === true) {
-            return $this->createResponse($this->createResponseData(true, null, "Deleted"), 200);   
+            return $this->createResponse($this->createResponseData(true, null, "Deleted"), 200);
+        } else {
+            return $this->createResponse($this->createResponseData(true, null, "Not deleted"), 500);
         }
-        else {
-           return $this->createResponse($this->createResponseData(true, null, "Not deleted"), 500); 
-        }
-        
-        
     }
 }

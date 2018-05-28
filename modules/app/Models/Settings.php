@@ -10,6 +10,7 @@ namespace app\Models;
 
 use tm\Model;
 use tm\Mapper;
+
 /**
  * Description of ProgramSettings
  *
@@ -17,54 +18,62 @@ use tm\Mapper;
  */
 class Settings extends Model implements \JsonSerializable
 {
-    
     private $user_id = null;
     private $currency_id = null;
     private $wallet_id = null;
     private $newUser = false;
     private $hasCurrencies = true;
     
-    public function __construct($user_id = null, $currency_id = null, $wallet_id = null) {
+    public function __construct($user_id = null, $currency_id = null, $wallet_id = null)
+    {
         $this->user_id = $user_id;
         $this->currency_id = $currency_id;
         $this->wallet_id = $wallet_id;
     }
 
-    public function getUser_id() {
+    public function getUser_id()
+    {
         return $this->user_id;
     }
     
-    public function setUser_Id($user_id) {
+    public function setUser_Id($user_id)
+    {
         $this->user_id = $user_id;
     }
     
-    public function getCurrency_id() {
+    public function getCurrency_id()
+    {
         return $this->currency_id;
     }
     
-    public function setCurrency_id($currency_id) {
+    public function setCurrency_id($currency_id)
+    {
         $this->currency_id = $currency_id;
     }
     
-    public function getWallet_id() {
+    public function getWallet_id()
+    {
         return $this->wallet_id;
     }
  
 
-    public function setWallet_id($wallet_id) {
+    public function setWallet_id($wallet_id)
+    {
         $this->wallet_id = $wallet_id;
     }
     
-    public function setNewUser($value) {
+    public function setNewUser($value)
+    {
         $this->newUser = $value;
     }
     
-    public function setHasCurrencies($value) {
+    public function setHasCurrencies($value)
+    {
         $this->hasCurrencies = $value;
     }
 
-    public static function getSettings($user_id) {
-      
+    public static function getSettings($user_id)
+    {
         $oSettings = Mapper::getMapper(get_called_class())
             ->where(['user_id = :user_id'])
             ->limit(1)
@@ -72,7 +81,6 @@ class Settings extends Model implements \JsonSerializable
             ->one();
         
         if (is_null($oSettings)) {
-            
             $oSettings = new self();
             $oSettings->setNewUser(true);
             $oSettings->setHasCurrencies(false);
@@ -87,7 +95,8 @@ class Settings extends Model implements \JsonSerializable
         return $oSettings;
     }
     
-    public function isNewUser() {
+    public function isNewUser()
+    {
         if (is_null($this->user_id)) {
             return true;
         }
@@ -99,9 +108,10 @@ class Settings extends Model implements \JsonSerializable
         return false;
     }
 
-    public function jsonSerialize() {
+    public function jsonSerialize()
+    {
         $vars = get_object_vars($this);
 
-	return $vars;   
+        return $vars;
     }
 }

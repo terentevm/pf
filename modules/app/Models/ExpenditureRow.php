@@ -14,7 +14,6 @@ use Respect\Validation\Validator as v;
 use Respect\Validation\Exceptions\ValidationException;
 use Respect\Validation\Exceptions\NestedValidationException;
 
-
 class ExpenditureRow extends Model implements \JsonSerializable
 {
     private $id = null;
@@ -25,68 +24,83 @@ class ExpenditureRow extends Model implements \JsonSerializable
     
     private $ItemExpenditure = null;
 
-    public function __construct($docId = null, $item_id = null, $sum = 0, $comment = "") {
+    public function __construct($docId = null, $item_id = null, $sum = 0, $comment = "")
+    {
         $this->docId = $docId;
         $this->item_id = $item_id;
         $this->sum = $sum;
         $this->comment = $comment;
     }
 
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
-    public function getDocId() {
+    public function getDocId()
+    {
         return $this->docId;
     }
 
-    public function getItem_id() {
+    public function getItem_id()
+    {
         return $this->item_id;
     }
 
-    public function getSum() {
+    public function getSum()
+    {
         return $this->sum;
     }
 
-    public function getComment() {
+    public function getComment()
+    {
         return $this->comment;
     }
 
-    public function setId($id) {
+    public function setId($id)
+    {
         $this->id = $id;
     }
 
-    public function setDocId($docId) {
+    public function setDocId($docId)
+    {
         $this->docId = $docId;
     }
 
-    public function setItem_id($item_id) {
+    public function setItem_id($item_id)
+    {
         $this->item_id = $item_id;
     }
 
-    public function setSum($sum) {
+    public function setSum($sum)
+    {
         $this->sum = $sum;
     }
 
-    public function setComment($comment) {
+    public function setComment($comment)
+    {
         $this->comment = $comment;
     }
 
-    public function setItemExpenditure($item) {
+    public function setItemExpenditure($item)
+    {
         $this->ItemExpenditure = $item;
     }
 
-    public function getItemExpenditure() {
+    public function getItemExpenditure()
+    {
         return $this->ItemExpenditure;
     }
 
-    public function jsonSerialize() {
+    public function jsonSerialize()
+    {
         $vars = get_object_vars($this);
 
-	    return $vars;   
+        return $vars;
     }
 
-    public function validate() {
+    public function validate()
+    {
         $validator = v::attribute('item_id', v::notEmpty()->stringType()->length(36, 36))
                     ->attribute('sum', v::notEmpty()->floatVal());
         
