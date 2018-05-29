@@ -9,7 +9,7 @@
 namespace app\Models;
 
 use tm\Model;
-
+use tm\Mapper;
 use Respect\Validation\Validator as v;
 use Respect\Validation\Exceptions\ValidationException;
 use Respect\Validation\Exceptions\NestedValidationException;
@@ -129,5 +129,10 @@ class Wallet extends Model
             //$errors = $e->getMessages();
             return false;
         }
+    }
+    
+    public static function balance() {
+        $result = Mapper::getMapper(get_called_class())->getBalance();
+        return $result;
     }
 }

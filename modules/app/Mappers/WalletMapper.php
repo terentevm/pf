@@ -52,4 +52,34 @@ class WalletMapper extends Mapper
         
         return $db_arr;
     }
+    
+    public function getBalance() {
+        $sql = "call balance(:walletId)";
+        
+       // $stmt = $this->db->prepare($sql);
+        $param = [
+            "walletId" => "71a801a3-6f79-11e5-8276-3065ec4b215b"
+        ];
+        $result = $this->db->query($sql, $param);
+        
+        return $result;
+    }
+    
+    /*CREATE DEFINER=`root`@`%` PROCEDURE `balance`(in walletId varchar(36))
+BEGIN
+		select 
+		temp.wallet_id,
+		wallets.name as wallet,
+		temp.balance
+	FROM (select
+		trans.wallet_id,
+		ROUND(SUM(trans.sum), 2) as balance
+	from 
+		regMoneyTrans as trans
+	where wallet_id = walletId
+	group by
+		trans.wallet_id) as temp
+	left join wallets on temp.wallet_id = wallets.id
+	where temp.balance <> 0;
+END*/
 }

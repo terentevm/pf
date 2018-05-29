@@ -43,4 +43,10 @@ class WalletsController extends RestController
         
         return $this->createResponse($this->createResponseData(true, $result, "OK"), 200);
     }
+    
+    public function actionBalance()
+    {
+        $result = Wallet::balance();
+        return $this->createResponse($this->createResponseData(true, $result, "OK"), 200);
+    }
 }
