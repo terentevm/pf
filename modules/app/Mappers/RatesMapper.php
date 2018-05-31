@@ -28,11 +28,14 @@ class RatesMapper extends Mapper
 
         $dataset = $obj->getDataset();
 
-        foreach ($dataset as $record) {
-            $record['id'] = null;
-            $record['dateInt'] = strtotime($record['date']);
-            $success = $this->create_stmt->execute($record);
-        
+        if (is_null($dataset)) {
+            return false;
+        }
+
+        foreach ($dataset->strings() as $record) {
+            
+            $params = $this->mapModelToDb($record);
+            $success = $this->create_stmt->execute($params);
             if ($success !== true) {
                 return false;
             }
@@ -44,16 +47,14 @@ class RatesMapper extends Mapper
     public function mapModelToDb(Model $obj)
     {
         $db_arr = [
-            'id' => $obj->getId(),
-            'user_id' => $obj->getUser_Id(),
-            'code' => $obj->getCode(),
-            'short_name' => $obj->getShort_name(),
-            'name' => $obj->getName()
+            'id' => null,
+            'user_id' => $obj->getUserId(),
+            'date' => $obj->getDate(),
+            'dateInt' => $obj->getDateInt(),
+            'currency_id' => $obj->getCurrencyId(),
+            'mult' => $obj->getMult(),
+            'rate' => $obj->getRate()
         ];
-        
-        if (!isset($db_arr['id'])) {
-            $db_arr['id'] = $this->getGuide();
-        }
         
         return $db_arr;
     }

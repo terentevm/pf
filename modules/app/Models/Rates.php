@@ -8,10 +8,12 @@ use tm\rates\LoaderFabric;
 use app\Models\Currency;
 use tm\Registry as Reg;
 use app\Mappers\RatesMapper;
+use app\Models\DocumentCollection;
+use app\Models\RateRecord;
 
 class Rates extends Model
 {
-    private $dataset =[];
+    private $dataset = null;
 
     public function getDataset()
     {
@@ -20,7 +22,25 @@ class Rates extends Model
     
     public function setDataset(array $dataset)
     {
-        $this->dataset = $dataset;
+        $this->dataset = new DocumentCollection($this);
+
+        foreach ($dataset as $row) {
+           
+             $record = new RateRecord();
+             $record->load($row);
+             $this->rows->add($row_obj);
+             
+         }
+    }
+
+    public function addRecord(RateRecord $record)
+    {
+        if (is_null($this->dataset)) {
+            $this->dataset = new DocumentCollection($this);   
+        }
+
+        $this->dataset->add($record);
+
     }
 
     public function loadRates(array $currencies, string $date1, string $date2)
@@ -47,27 +67,31 @@ class Rates extends Model
             
             $rates_db = $this->getExistsRates($currency['id'], $date1, $date2);
             
+            $dataset = [];
+
             foreach ($rates as $date => $rate) {
                 if (!$this->rateExists($rates_db, $date)) {
-                    $record = [
-                        'user_id' => $user_id,
-                        'currency_id' => $currency['id'],
+                    $dataset[] = [
+                        'userId' => $user_id,
+                        'currencyId' => $currency['id'],
                         'date' => $rate['date'],
+                        'dateInt' => strtotime($rate['date']),
                         'mult' =>  $rates_data['mult'],
                         'rate' => $rate['rate'],
                     ] ;
                     
-                    array_push($this->dataset, $record);
                 }
             }
+            
         }
 
-        if (empty($this->dataset)) {
-            return true;
+        if (empty($dataset)) {
+            return fasle;
         }
 
-        $mapper = new RatesMapper(get_class($this));
-        $ok = $mapper->save($this);
+        $this->setDataset($dataset);
+        
+        $ok = $this->save();
 
         return $ok;
     }
