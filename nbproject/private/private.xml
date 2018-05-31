@@ -3,11 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/OSPanel/domains/localhost/pf/modules/app/Mappers/WalletMapper.php</file>
-            <file>file:/C:/OSPanel/domains/localhost/pf/modules/app/Controllers/WalletsController.php</file>
-            <file>file:/C:/OSPanel/domains/localhost/pf/vendor/tm/database/DBCommand.php</file>
-            <file>file:/C:/OSPanel/domains/localhost/pf/modules/app/Mappers/RatesMapper.php</file>
-            <file>file:/C:/OSPanel/domains/localhost/pf/modules/app/Models/wallet.php</file>
+            <file>file:/C:/OSPanel/domains/localhost/pf/modules/app/Mappers/UserMapper.php</file>
+            <file>file:/C:/OSPanel/domains/localhost/pf/modules/app/Models/currency.php</file>
+            <file>file:/C:/OSPanel/domains/localhost/pf/modules/app/Controllers/UserController.php</file>
             <file>file:/C:/OSPanel/domains/localhost/pf/vendor/tm/Mapper.php</file>
         </group>
     </open-files>

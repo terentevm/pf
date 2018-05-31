@@ -7,7 +7,6 @@ use tm\Mapper;
 use tm\rates\LoaderFabric;
 use app\Models\Currency;
 use tm\Registry as Reg;
-use app\Mappers\RatesMapper;
 use app\Models\DocumentCollection;
 use app\Models\RateRecord;
 
@@ -28,7 +27,7 @@ class Rates extends Model
            
              $record = new RateRecord();
              $record->load($row);
-             $this->rows->add($row_obj);
+             $this->dataset->add($record);
              
          }
     }
@@ -83,15 +82,17 @@ class Rates extends Model
                 }
             }
             
-        }
+            if (empty($dataset)) {
+                $ok = true;
+                continue;
+            }
 
-        if (empty($dataset)) {
-            return fasle;
-        }
-
-        $this->setDataset($dataset);
+            $this->setDataset($dataset);
         
-        $ok = $this->save();
+            $ok = $this->save();
+        }
+
+       
 
         return $ok;
     }
