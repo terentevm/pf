@@ -32,7 +32,7 @@ class CurrencyController extends RestController
         }
 
         if (!empty($errors)) {
-            return $this->createResponse($errors, 500);
+            return $this->createResponse($this->createResponseData(false, $errors, ""), 500);
         }
         
         $rates = new Rates();
