@@ -56,7 +56,20 @@ class Rates extends Model
         $loader = LoaderFabric::getLoader();
 
         foreach ($curr_arr as $currency) {
-            $rates_data = $loader->load($currency['short_name'], $date1, $date2);
+            
+            if(Currency::isSystemCurrency($currency['short_name'])) {
+                $rates_data = [
+                    'code' => $currency['short_name'],
+                    'mult' => 1,
+                    'rates' => [
+                        strtotime("1980-01-01") => [ 'date' => "1980-01-01", 'rate' => 1 ]
+                    ]
+                ];     
+            }
+            else {
+                $rates_data = $loader->load($currency['short_name'], $date1, $date2);    
+            }
+            
 
             if (empty($rates_data)) {
                 continue;

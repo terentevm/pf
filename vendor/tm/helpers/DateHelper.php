@@ -4,10 +4,16 @@ namespace tm\helpers;
 
 class DateHelper
 {
-    public function validateDate($date, $format = 'Y-m-d H:i:s')
+    public static function validateDate($date, $format = 'Y-m-d H:i:s')
     {
         $d = \DateTime::createFromFormat($format, $date);
         return $d && $d->format($format) == $date;
+    }
+    
+    public static function currentDate($format = 'Y-m-d H:i:s') {
+        $date = new \DateTime();
+        
+        return $date->format($format);
     }
 
     public static function startOfPeriod($date, $period, $format = 'Y-m-d H:i:s')

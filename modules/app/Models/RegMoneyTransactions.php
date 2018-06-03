@@ -75,6 +75,7 @@ class RegMoneyTransactions extends Model
         }
 
         $this->rows[] = [
+            'user_id' => $model->getUser_id(), 
             'date' => $model->getDate(),
             'dateInt' => strtotime($model->getDate()),
             'wallet_id' => $model->getWallet_id(),
@@ -102,6 +103,7 @@ class RegMoneyTransactions extends Model
 
         foreach ($arrWallets as $wallet_id => $sum) {
             $this->rows[] = [
+                'user_id' => $model->getUser_id(),
                 'date' => $model->getDate(),
                 'dateInt' => strtotime($model->getDate()),
                 'wallet_id' => $wallet_id,
@@ -118,6 +120,7 @@ class RegMoneyTransactions extends Model
     private function loadTransfer($model)
     {
         $this->rows[] = [
+            'user_id' => $model->getUser_id(),
             'date' => $model->getDate(),
             'dateInt' => strtotime($model->getDate()),
             'wallet_id' => $model->getWallet_id_from(),
@@ -130,6 +133,7 @@ class RegMoneyTransactions extends Model
         ];
 
         $this->rows[] = [
+            'user_id' => $model->getUser_id(),
             'date' => $model->getDate(),
             'dateInt' => strtotime($model->getDate()),
             'wallet_id' => $model->getWallet_id_to(),
@@ -147,6 +151,7 @@ class RegMoneyTransactions extends Model
         $sum = ($model->getSumExpend() > 0) ? $model->getSumExpend() * -1 : $model->getSumIncome();
 
         $this->rows[] = [
+            'user_id' => $model->getUser_id(),
             'date' => $model->getDate(),
             'dateInt' => strtotime($model->getDate()),
             'wallet_id' => $model->getWallet_id(),
@@ -164,6 +169,7 @@ class RegMoneyTransactions extends Model
         $sum = $model->getSum() * -1;
 
         $this->rows[] = [
+            'user_id' => $model->getUser_id(),
             'date' => $model->getDate(),
             'dateInt' => strtotime($model->getDate()),
             'wallet_id' => $model->getWallet_id(),

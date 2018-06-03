@@ -131,8 +131,8 @@ class Wallet extends Model
         }
     }
     
-    public static function balance() {
-        $result = Mapper::getMapper(get_called_class())->getBalance();
+    public static function walletBalance(string $walletId) {
+        $result = Mapper::getMapper(get_called_class())->getWalletBalance($walletId);
         return $result;
     }
 }

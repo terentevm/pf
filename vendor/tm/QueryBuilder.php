@@ -196,4 +196,22 @@ class QueryBuilder
         
         return implode(",", $res_arr);
     }
+    
+    public function createParamStringFromArray(array $values) {
+        $length = count($values);
+        $pref = "val";
+        
+        $arr_param = [];
+        $params = [];
+        for ($i = 0; $i < $length; $i++) {
+            $param_name = $pref . $i;
+            $param_name_to_str = ":" . $pref . $i;
+            array_push($arr_param, $param_name_to_str);
+            $params[$param_name] = $values[$i];
+        }
+        
+        $paramString = implode(",", $arr_param);
+        
+        return array($paramString, $params);
+    }
 }

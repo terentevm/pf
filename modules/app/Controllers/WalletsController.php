@@ -46,7 +46,13 @@ class WalletsController extends RestController
     
     public function actionBalance()
     {
-        $result = Wallet::balance();
+        $get = Reg::$app->request->get();
+        
+        if (!isset($get['id'])) {
+            return $this->createResponse($this->createResponseData(false, ["Error. No wallet id"], ""), 500);   
+        }
+        
+        $result = Wallet::walletBalance($get['id']);
         return $this->createResponse($this->createResponseData(true, $result, "OK"), 200);
     }
 }

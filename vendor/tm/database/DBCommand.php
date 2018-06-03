@@ -38,7 +38,9 @@ class DBCommand
         }
 
         if ($success) {
+            
             $this->stmt->execute($param);
+            
             return $this->stmt->fetchAll($this->stmtFetchMode);
         }
         return [];
@@ -162,5 +164,9 @@ class DBCommand
     public function lastInsertedId()
     {
         return $this->pdo->lastInsertId();
+    }
+    
+    public function dump() {
+        $this->stmt->debugDumpParams();    
     }
 }

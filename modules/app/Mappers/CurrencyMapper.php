@@ -42,4 +42,50 @@ class CurrencyMapper extends Mapper
         
         return $db_arr;
     }
+    
+    public function getRates(string $user_id, array $currencies, int $dateInt)
+    {
+        $sqlTemplate = $this->getSQL_Rates();
+       
+        
+        list($paramString, $params) = $this->qb->createParamStringFromArray($currencies);
+        $sql = str_replace("#paramCurrencyID#", $paramString, $sqlTemplate );
+        
+        $params["user_id"] = $user_id;
+        $params["dateInt"] = $dateInt;
+
+        $result = $this->db->query($sql, $params);
+        
+        return $result;
+    }
+    
+    private function getSQL_Rates()
+    {
+        return "select
+	temp.id, 
+	temp.short_name,
+	temp.code,
+	temp.name,
+	temp.rateDate,
+    rates.mult,
+    rates.rate
+from (Select 
+	currency.id,
+    currency.short_name,
+	currency.code,
+	currency.name,
+    max(dateInt) as rateDate
+FROM money.ref_currency as currency
+	left join rates as rates on currency.id = rates.currency_id 
+		AND rates.dateInt <= CAST(:dateInt AS UNSIGNED)
+where currency.user_id = :user_id AND currency.id IN (#paramCurrencyID#)
+group by
+	currency.id,
+    currency.short_name,
+	currency.code,
+	currency.name) as temp
+	left join rates as rates on temp.id = rates.currency_id
+		and temp.rateDate = rates.dateInt";
+    }
+    
 }

@@ -73,12 +73,12 @@ class RestController extends Controller
         $model = new $className();
         $model->load($post);
         
-        if (method_exists($model, "validate")) {
+        /*if (method_exists($model, "validate")) {
             $validated = $model->validate();
             if ($validated === false) {
                 return $this->createResponse($this->createResponseData(false, null, "Validation errors"), 500);
             }
-        }
+        }*/
 
         $success = $model->save($upload_mode);
         

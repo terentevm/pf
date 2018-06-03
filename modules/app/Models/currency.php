@@ -10,7 +10,7 @@ namespace app\Models;
 
 use tm\Model;
 use tm\Registry as Reg;
-
+use app\mappers\CurrencyMapper;
 /**
  * Description of Currency
  *
@@ -96,13 +96,20 @@ class Currency extends Model
         return $classificator_arr ;
     }
 
-    public static function SystemCurrensy()
+    public static function systemCurrensy()
     {
         $sysCurrency_arr = Reg::$app->config->getSystemCurrency();
        
-        $sysCurrency = static::find()->where("short_name = :short_name")->setParam('short_name', sysCurrency_arr['short_name'])->limit(1)->one();
+        $sysCurrency = static::find()->where(["short_name = :short_name"])->setParam('short_name', sysCurrency_arr['short_name'])->limit(1)->one();
         
         return $sysCurrency;
+    }
+    
+    public static function isSystemCurrency($charCode)
+    {
+        $sysCurrency_arr = Reg::$app->config->getSystemCurrency();
+        
+        return $sysCurrency_arr['short_name'] == $charCode ? true : false;
     }
 
     public static function saveSystemCurrensy($user_id)
@@ -125,5 +132,35 @@ class Currency extends Model
         } else {
             return true;
         }
+    }
+    
+    public static function addRatesToResult(array $result, string $date) {
+        $array_id = [];
+        
+        foreach ($result as $row) {
+            if (is_array($row)) {
+                array_push($array_id, $row['id']);   
+            }
+            else {
+                array_push($array_id, $row->getId());    
+            }     
+        }
+        
+        $dateInt = strtotime($date);
+        
+        $mapper = new CurrencyMapper(get_called_class());
+        
+        $rates = $mapper->getRates(Reg::$app->user_id, $array_id, $dateInt);
+        
+        foreach ($rates as $rateRow) {
+            foreach ($result as &$row) { 
+                if ($row['id'] == $rateRow['id']) {
+                    $row['mult'] = $rateRow['mult'];
+                    $row['rate'] = $rateRow['rate']; 
+                }
+            }   
+        }
+        
+        return $result;
     }
 }

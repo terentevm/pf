@@ -5,7 +5,7 @@ namespace app\Controllers;
 use tm\RestController;
 use app\Models\Currency;
 use app\Models\Rates;
-
+use tm\helpers\DateHelper;
 use tm\Registry as Reg;
 use Respect\Validation\Validator as v;
 use Respect\Validation\Exceptions\ValidationException;
@@ -13,7 +13,43 @@ use Respect\Validation\Exceptions\ValidationException;
 class CurrencyController extends RestController
 {
     public static $classModel = '\app\models\Currency';
-   
+    
+    public function actionIndex()
+    {
+        $get = Reg::$app->request->get();
+        
+        $limit = $get['limit'] ?? 50;
+        $offset = $get['offset'] ?? 0;
+        
+        $result = Currency::find()
+                ->where(['user_id = :user_id'])
+                ->setParams(['user_id' => $this->user_id])
+                ->limit($limit)
+                ->offset($offset)
+                ->all();
+        
+        if (isset($get['withRates']) && $get['withRates'] == 1){
+            if (isset($get['date'])) {
+                if (DateHelper::validateDate($get['date'], "Y-m-d")) {
+                    $date = $get['date'];
+                }
+                else {
+                    $date = DateHelper::currentDate("Y-m-d");  
+                }
+            }
+            
+            else {
+                $date = DateHelper::currentDate("Y-m-d");  
+            }
+            
+            $resultWithRates = Currency::addRatesToResult($result, $date);
+            return $this->createResponse($this->createResponseData(true, $resultWithRates, "OK"), 200);
+        }
+        
+        return $this->createResponse($this->createResponseData(true, $result, "OK"), 200);   
+    }
+
+
     public function actionLoad()
     {
         $post = Reg::$app->request->post();

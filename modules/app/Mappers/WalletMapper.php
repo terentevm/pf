@@ -53,16 +53,21 @@ class WalletMapper extends Mapper
         return $db_arr;
     }
     
-    public function getBalance() {
+    public function getWalletBalance($walletId) {
         $sql = "call balance(:walletId)";
         
-       // $stmt = $this->db->prepare($sql);
         $param = [
-            "walletId" => "71a801a3-6f79-11e5-8276-3065ec4b215b"
+            "walletId" => $walletId
         ];
         $result = $this->db->query($sql, $param);
         
-        return $result;
+        if (empty($result)) {
+            return ["balance" => 0];
+        }
+        else {
+            return ["balance" => $result[0]['balance']];
+        }
+       
     }
     
     /*CREATE DEFINER=`root`@`%` PROCEDURE `balance`(in walletId varchar(36))
