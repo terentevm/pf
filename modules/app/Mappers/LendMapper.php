@@ -39,6 +39,7 @@ class LendMapper extends Mapper
         
         if (!isset($db_arr['id'])) {
             $db_arr['id'] = $this->getGuide();
+            $obj->setId($db_arr['id'] );
         }
         
         return $db_arr;
