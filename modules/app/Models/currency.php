@@ -150,17 +150,30 @@ class Currency extends Model
         
         $mapper = new CurrencyMapper(get_called_class());
         
-        $rates = $mapper->getRates(Reg::$app->user_id, $array_id, $dateInt);
+        $res_sql = $mapper->getRates(Reg::$app->user_id, $array_id, $dateInt);
         
+        $rates = $res_sql['result'];
+
+        $temp = $result;
+        $x = 0;
+        $i = 0;
         foreach ($rates as $rateRow) {
-            foreach ($result as &$row) { 
-                if ($row['id'] == $rateRow['id']) {
+            $i ++;
+            foreach ($temp as &$row) { 
+                if ($row['code'] == $rateRow['code']) {
                     $row['mult'] = $rateRow['mult'];
                     $row['rate'] = $rateRow['rate']; 
+                    $x ++;
                 }
             }   
         }
         
-        return $result;
+        return [
+            'rates' => $res_sql,
+            'result' => $temp,
+            'x' => $x,
+            "i" =>  $i
+        ];
+        //return $result;
     }
 }

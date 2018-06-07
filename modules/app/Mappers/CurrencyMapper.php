@@ -56,6 +56,13 @@ class CurrencyMapper extends Mapper
 
         $result = $this->db->query($sql, $params);
         
+        /*$res = [
+            'sql' => $sql,
+            'params' => $params,
+            'result' => $result
+        ];    
+
+        return $res;*/
         return $result;
     }
     
@@ -75,7 +82,7 @@ from (Select
 	currency.code,
 	currency.name,
     max(dateInt) as rateDate
-FROM money.ref_currency as currency
+FROM ref_currency as currency
 	left join rates as rates on currency.id = rates.currency_id 
 		AND rates.dateInt <= CAST(:dateInt AS UNSIGNED)
 where currency.user_id = :user_id AND currency.id IN (#paramCurrencyID#)
