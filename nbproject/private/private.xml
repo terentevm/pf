@@ -6,7 +6,10 @@
             <file>file:/C:/OSPanel/domains/localhost/pf/modules/app/Mappers/RegMoneyTransactionsMapper.php</file>
             <file>file:/C:/OSPanel/domains/localhost/pf/modules/app/Models/Income.php</file>
             <file>file:/C:/OSPanel/domains/localhost/pf/modules/app/Models/RegMoneyTransactions.php</file>
+            <file>file:/C:/OSPanel/domains/localhost/pf/modules/app/Models/currency.php</file>
             <file>file:/C:/OSPanel/domains/localhost/pf/vendor/tm/RestController.php</file>
+            <file>file:/C:/OSPanel/domains/localhost/pf/modules/app/Mappers/CurrencyMapper.php</file>
+            <file>file:/C:/OSPanel/domains/localhost/pf/modules/app/Controllers/CurrencyController.php</file>
         </group>
     </open-files>
 </project-private>
