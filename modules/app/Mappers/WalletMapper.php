@@ -70,21 +70,42 @@ class WalletMapper extends Mapper
        
     }
     
-    /*CREATE DEFINER=`root`@`%` PROCEDURE `balance`(in walletId varchar(36))
-BEGIN
-		select 
+    public function getBalanceAllWallets(string $userId, int $dateInt)
+    {
+        $sql = $this->getSQL_BalanceAllWallets();
+        $params = [
+            'userId' => $userId,
+            'date' => $dateInt
+        ];
+        
+        $result = $this->db->query($sql, $params);
+        
+        return $result;
+        
+    }
+    
+    private function getSQL_BalanceAllWallets()
+    {
+        $sql = "select 
 		temp.wallet_id,
 		wallets.name as wallet,
-		temp.balance
-	FROM (select
-		trans.wallet_id,
-		ROUND(SUM(trans.sum), 2) as balance
-	from 
-		regMoneyTrans as trans
-	where wallet_id = walletId
-	group by
-		trans.wallet_id) as temp
-	left join wallets on temp.wallet_id = wallets.id
-	where temp.balance <> 0;
-END*/
+                ref_currency.id as CurrencyId,
+                ref_currency.name as currency,
+                ref_currency.code as currencyCode,
+                ref_currency.short_name as currencyCharCode,
+                        temp.balance
+                FROM (select
+                        trans.wallet_id,
+                        ROUND(SUM(trans.sum), 2) as balance
+                from 
+                        regMoneyTrans as trans
+                where user_id = :userId AND dateInt <= :date
+                group by
+                        trans.wallet_id) as temp
+                left join wallets on temp.wallet_id = wallets.id
+                left join ref_currency on wallets.currency_id = ref_currency.id
+                where temp.balance <> 0";
+        
+        return $sql;
+    }
 }

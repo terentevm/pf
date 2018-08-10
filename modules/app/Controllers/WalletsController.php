@@ -10,12 +10,9 @@ namespace app\Controllers;
 
 use tm\Registry as Reg;
 use tm\RestController;
-use tm\Validator;
 use app\Models\Wallet;
-use app\Models\Currency;
+use tm\helpers\DateHelper;
 use Respect\Validation\Validator as v;
-use Respect\Validation\Exceptions\ValidationException;
-
 /**
  * Description of WalletsController
  *
@@ -54,5 +51,22 @@ class WalletsController extends RestController
         
         $result = Wallet::walletBalance($get['id']);
         return $this->createResponse($this->createResponseData(true, $result, "OK"), 200);
+    }
+    
+    public function actionBalanceAll()
+    {
+        $post = Reg::$app->request->post();
+        if (isset($post['date']) && v::date('Y-m-d')->validate($post['date'])) {
+            $date = strtotime($post['date']);
+        }
+        else {
+            $date = time();
+        }
+        
+        $userId = $this->user_id;
+        
+        $dataset = Wallet::balanceAllWallets($userId, $date );
+        
+        return $this->createResponse($this->createResponseData(true, $dataset, "OK"), 200);        
     }
 }
