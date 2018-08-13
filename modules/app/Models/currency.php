@@ -100,8 +100,8 @@ class Currency extends Model
     {
         $sysCurrency_arr = Reg::$app->config->getSystemCurrency();
        
-        $sysCurrency = static::find()->where(["short_name = :short_name"])->setParam('short_name', sysCurrency_arr['short_name'])->limit(1)->one();
-        
+        $sysCurrency = static::find()->where(["short_name = :short_name"])->setParam('short_name', $sysCurrency_arr['short_name'])->limit(1)->one();
+       
         return $sysCurrency;
     }
     

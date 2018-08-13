@@ -65,7 +65,12 @@ class WalletsController extends RestController
         
         $userId = $this->user_id;
         
-        $dataset = Wallet::balanceAllWallets($userId, $date );
+        $currencyId = null;
+        
+        if (isset($post['filterCurrency'])) {
+            $currencyId = filter_var($post['filterCurrency'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+        }
+        $dataset = Wallet::balanceAllWallets($userId, $date, $currencyId);
         
         return $this->createResponse($this->createResponseData(true, $dataset, "OK"), 200);        
     }

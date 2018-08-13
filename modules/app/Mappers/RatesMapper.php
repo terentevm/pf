@@ -85,7 +85,8 @@ class RatesMapper extends Mapper
         
         if (!empty($result)) {
             foreach($result  as $record) {
-                $result_accoc[$record['currId']] = [
+                $id = $record['currId'];
+                $result_accoc[$id] = [
                     "rate" => $record['rate'],
                     "mult" => $record['mult']
                 ];   

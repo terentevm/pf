@@ -145,13 +145,13 @@ class Rates extends Model
         return $rates;
     }
 
-    public static function recalculateRates(number $amount, number $rateFrom, int $multFrom, number $rateTo, int $multTo) :float
+    public static function recalculateRates(float $amount, float $rateFrom, int $multFrom, float $rateTo, int $multTo) :float
     {
-        if ($amount === 0 || $rateFrom === 0 || $multFrom || $rateTo === 0 || $multTo === 0) {
+        if ($amount === 0 || $rateFrom === 0 || $multFrom === 0 || $rateTo === 0 || $multTo === 0) {
             return 0;
         }
 
-        $result = ( $amount *  $rateFrom / $multTo) / ( $rateTo *  $multFrom);
+        $result = ( $amount *  $rateFrom * $multTo) / ( $rateTo *  $multFrom);
 
         return round($result, 2);
     }
