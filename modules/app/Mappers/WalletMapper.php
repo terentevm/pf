@@ -89,11 +89,11 @@ class WalletMapper extends Mapper
         $sql = "select 
 		temp.wallet_id,
 		wallets.name as wallet,
-                ref_currency.id as CurrencyId,
+                ref_currency.id as currencyId,
                 ref_currency.name as currency,
                 ref_currency.code as currencyCode,
                 ref_currency.short_name as currencyCharCode,
-                        temp.balance
+                temp.balance as balance
                 FROM (select
                         trans.wallet_id,
                         ROUND(SUM(trans.sum), 2) as balance

@@ -10,6 +10,8 @@ namespace app\Models;
 
 use tm\Model;
 use tm\Mapper;
+use app\Models\Currency;
+use app\Models\Rates;
 use Respect\Validation\Validator as v;
 use Respect\Validation\Exceptions\ValidationException;
 use Respect\Validation\Exceptions\NestedValidationException;
@@ -137,13 +139,50 @@ class Wallet extends Model
         return $result;
     }
     
-    public static function balanceAllWallets(string $userId, int $dateInt)
+    public static function balanceAllWallets(string $userId, int $dateInt, $currencyId = null)
     {
         if (empty($userId)) {
             return [];
         }
         
         $result = Mapper::getMapper(get_called_class())->getBalanceAllWallets($userId, $dateInt);
-        return $result;
+        
+        $resultWithAmounts = self::addConvertAmounts($userId, dateInt, $result, $currencyId);
+        
+        return $resultWithAmounts;
+    }
+
+    private static function addConvertAmounts(string $userId, int $dateInt, array $arrBalances, $currencyId = null)
+    {
+        if (\is_null($currencyId)) {
+            $sysCurrency = Currency::systemCurrensy();
+            $currencyId = $sysCurrency->getId();
+
+        }
+
+        $lastRates = Rates::getLastRates($userId, $dateInt);
+
+        if (empty($lastRates)) {
+            return $arrBalances;
+        }
+       
+        if (!key_exists($currencyId, $lastRates)) {
+            return $arrBalances;
+        }
+
+        $rateTo = $lastRates[$currencyId]['rate'];
+        $multTo = $lastRates[$currencyId]['mult'];
+
+        foreach($arrBalances as &$row) {
+            if (key_exists($row['currencyId'], $lastRates)) {
+                $rateFrom = $lastRates[$row['currencyId']]['rate'];
+                $multFrom = $lastRates[$row['currencyId']]['mult'];
+
+                $newAmount = Rates::recalculateRates($row['balance'], $rateFrom, $multFrom, $rateTo, $multTo);
+                $row['BalanceInReportCurrency'] = $newAmount;
+            }
+        }
+
+        return $arrBalances;
     }
 }
