@@ -29,6 +29,11 @@ class Controller extends Base
         $this->user_id = Reg::$app->user_id;
     }
 
+    public function actions()
+    {
+        return array("Index", "Show", "Create", "Update");
+    }
+    
     public function createResponse(ResponseData $data, int $httpcode = 200, $msg = '')
     {
         $reqType = Reg::$app->request->getResponseType();

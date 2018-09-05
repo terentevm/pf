@@ -138,6 +138,83 @@ class Rates extends Model
         return false;
     }
 
+    /**
+     * Converts an array of data to a specified currency. 
+     * If the currency is not specified, the conversion is made to the system currency
+     * 
+     * @param string $userId
+     * @param int $dateInt
+     * @param array $arrData  
+     * @param string $amountProp Name of property containing amount
+     * @param string|null $currencyId
+     * 
+     * @return array the original array complemented by field "convertedAmount"
+     */
+    public static function convert(string $userId, int $dateInt, array $arrData, string $amountProp , $currencyId = null) : array
+    {
+        if (\is_null($currencyId)) {
+            
+            $sysCurrency = Currency::systemCurrensy();
+            
+            if (is_null($sysCurrency)) {
+                $ok = Currency::saveSystemCurrensy($userId);
+                
+                if ($ok === true) {
+                    
+                    $sysCurrency = Currency::systemCurrensy();
+                    
+                    if (is_null($sysCurrency)) {
+                        return $arrBalances;    
+                    }
+                }
+                
+            }
+            
+            $currencyId = $sysCurrency->getId();
+
+        }
+
+        $lastRates = self::getLastRates($userId, $dateInt);
+
+        if (empty($lastRates)) {
+            return self::addEmptyConvertedAmmount($arrData);
+        }
+       
+        if (!key_exists($currencyId, $lastRates)) {
+            return self::addEmptyConvertedAmmount($arrData);
+        }
+
+        $rateTo = $lastRates[$currencyId]['rate'];
+        $multTo = $lastRates[$currencyId]['mult'];
+
+        foreach($arrData as &$row) {
+            if (key_exists($row['currencyId'], $lastRates)) {
+                $rateFrom = $lastRates[$row['currencyId']]['rate'];
+                $multFrom = $lastRates[$row['currencyId']]['mult'];
+
+                $newAmount = Rates::recalculateRates(floatval($row[$amountProp]), floatval($rateFrom), intval($multFrom), floatval($rateTo), intval($multTo));
+                $row['convertedAmount'] = $newAmount;
+            }
+        }
+
+        return $arrBalances;
+    }
+
+    private static function addEmptyConvertedAmmount(&$data, $amountProp)
+    {
+        foreach($arrData as &$row) {
+
+            if (array_key_exists($amountProp)) {
+                $row['convertedAmount'] = $row[$amountProp];
+            }
+            else {
+                $row['convertedAmount'] = 0;
+            }
+            
+        }
+
+    }
+
     public static function getLastRates($userId, $dateInt, $currencies = [])
     {
         $rates = Mapper::getMapper(get_called_class())->getLastRates($userId, $dateInt, $currencies) ;

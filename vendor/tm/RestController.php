@@ -20,6 +20,11 @@ class RestController extends Controller
         parent::__construct($route);
     }
     
+    public function actions()
+    {
+        return array("Index", "Show", "Create", "Update");
+    }
+
     public function actionIndex()
     {
         $get = Reg::$app->request->get();

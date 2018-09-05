@@ -147,57 +147,9 @@ class Wallet extends Model
         
         $result = Mapper::getMapper(get_called_class())->getBalanceAllWallets($userId, $dateInt);
         
-        $resultWithAmounts = self::addConvertAmounts($userId, $dateInt, $result, $currencyId);
+        $resultConverted = Rates::convert($userId, $dateInt, $result, "balance" ,$currencyId);
         
-        return $resultWithAmounts;
+        return $resultConverted;
     }
 
-    private static function addConvertAmounts(string $userId, int $dateInt, array $arrBalances, $currencyId = null)
-    {
-        if (\is_null($currencyId)) {
-            
-            $sysCurrency = Currency::systemCurrensy();
-            
-            if (is_null($sysCurrency)) {
-                $ok = Currency::saveSystemCurrensy($userId);
-                
-                if ($ok === true) {
-                    $sysCurrency = Currency::systemCurrensy();
-                    
-                    if (is_null($sysCurrency)) {
-                        return $arrBalances;    
-                    }
-                }
-                
-            }
-            
-            $currencyId = $sysCurrency->getId();
-
-        }
-
-        $lastRates = Rates::getLastRates($userId, $dateInt);
-
-        if (empty($lastRates)) {
-            return $arrBalances;
-        }
-       
-        if (!key_exists($currencyId, $lastRates)) {
-            return $arrBalances;
-        }
-
-        $rateTo = $lastRates[$currencyId]['rate'];
-        $multTo = $lastRates[$currencyId]['mult'];
-
-        foreach($arrBalances as &$row) {
-            if (key_exists($row['currencyId'], $lastRates)) {
-                $rateFrom = $lastRates[$row['currencyId']]['rate'];
-                $multFrom = $lastRates[$row['currencyId']]['mult'];
-
-                $newAmount = Rates::recalculateRates(floatval($row['balance']), floatval($rateFrom), intval($multFrom), floatval($rateTo), intval($multTo));
-                $row['BalanceInReportCurrency'] = $newAmount;
-            }
-        }
-
-        return $arrBalances;
-    }
 }
