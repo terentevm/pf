@@ -197,14 +197,14 @@ class Rates extends Model
             }
         }
 
-        return $arrBalances;
+        return $arrData;
     }
 
     private static function addEmptyConvertedAmmount(&$data, $amountProp)
     {
-        foreach($arrData as &$row) {
+        foreach($data as &$row) {
 
-            if (array_key_exists($amountProp)) {
+            if (array_key_exists($amountProp, $data)) {
                 $row['convertedAmount'] = $row[$amountProp];
             }
             else {

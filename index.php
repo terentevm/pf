@@ -7,6 +7,7 @@ $loader->addPsr4('Controllers\\', __DIR__ . '/Controllers/');
 $loader->addPsr4('Models\\', __DIR__ . '/Models');
 $loader->addPsr4('Mappers\\', __DIR__ . '/Mappers');
 $loader->addPsr4('Views\\', __DIR__ . '/Views');
+$loader->addPsr4('Reports\\', __DIR__ . '/Reports');
 
 $loader->add('tm\\', __DIR__ . '/vendor/',true);
 
