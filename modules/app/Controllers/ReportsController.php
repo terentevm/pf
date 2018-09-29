@@ -52,7 +52,7 @@ class ReportsController extends RestController
      */
     public function actionExpenses()
     {
-
+        $post = Reg::$app->request->post();
     }
 
     /**
@@ -66,6 +66,6 @@ class ReportsController extends RestController
      */
     public function actionIncomes()
     {
-
+        $post = Reg::$app->request->post();
     }
 }
