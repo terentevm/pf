@@ -51,20 +51,21 @@ class ReportsController extends RestController
      *  items array contains items id
      *  filterCurrency - currency id (uid). Amounts should be recalculated to this currency.
      *                  If currency id hasn't been pointed out, ammounts will be racalculated to system currency
+     * periodMode int period for group
      */
     public function actionExpenses()
     {
         $post = Reg::$app->request->post();
 
         if (isset($post['beginDate']) && v::date('Y-m-d')->validate($post['beginDate'])) {
-            $beginDate = strtotime($post['beginDate']);
+            $beginDate = $post['beginDate'];
         }
         else {
             $beginDate = time();
         }
 
         if (isset($post['endDate']) && v::date('Y-m-d')->validate($post['endDate'])) {
-            $endDate = strtotime($post['endDate']);
+            $endDate = $post['endDate'];
         }
         else {
             $endDate = time();
@@ -78,7 +79,9 @@ class ReportsController extends RestController
             $itemsFilter = $post['items'];
         }
 
-        $filterCurrency = $post['$filterCurrency'] ?? null;
+        $periodMode =  intval($post['periodMode']) ?? 0;
+
+        $filterCurrency = $post['filterCurrency'] ?? null;
 
         $report = new Expenses();
         $report->setBeginDate($beginDate);
@@ -86,6 +89,8 @@ class ReportsController extends RestController
         $report->setCurrencyId($filterCurrency);
         $report->setByMonth($byMonth);
         $report->setFilterItems($itemsFilter);
+        $report->setUserId($this->user_id);
+        $report->setPeriodMode($periodMode);
 
         try {
             $result = $report->execute();
