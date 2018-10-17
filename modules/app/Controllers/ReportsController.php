@@ -3,10 +3,11 @@ namespace app\Controllers;
 
 use tm\Registry as Reg;
 use tm\RestController;
-use tm\helpers\DateHelper;
+use tm\helpers\CollectionsHelper as C;
 use Respect\Validation\Validator as v;
 use app\Models\Wallet;
 use app\Reports\Expenses;
+use app\Reports\Incomes;
 
 class ReportsController extends RestController
 {
@@ -61,14 +62,14 @@ class ReportsController extends RestController
             $beginDate = $post['beginDate'];
         }
         else {
-            $beginDate = time();
+            $beginDate = "now";
         }
 
         if (isset($post['endDate']) && v::date('Y-m-d')->validate($post['endDate'])) {
             $endDate = $post['endDate'];
         }
         else {
-            $endDate = time();
+            $endDate = "now";
         }
 
         $byMonth = $post['byMonth'] ?? 0;
@@ -94,12 +95,12 @@ class ReportsController extends RestController
 
         try {
             $result = $report->execute();
+
             return $this->createResponse($this->createResponseData(true, $result, "OK"), 200);
         }
-        catch (Exception $e) {
-            return $this->createResponse($this->createResponseData(false, [], "Some Error"), 500);
+        catch (\Throwable $e) {
+            return $this->createResponse($this->createResponseData(false, [], $e->getMessage()), 500);
         }
-
 
 
     }
@@ -117,5 +118,48 @@ class ReportsController extends RestController
     public function actionIncomes()
     {
         $post = Reg::$app->request->post();
+
+        if (isset($post['beginDate']) && v::date('Y-m-d')->validate($post['beginDate'])) {
+            $beginDate = $post['beginDate'];
+        }
+        else {
+            $beginDate = "now";
+        }
+
+        if (isset($post['endDate']) && v::date('Y-m-d')->validate($post['endDate'])) {
+            $endDate = $post['endDate'];
+        }
+        else {
+            $endDate = "now";
+        }
+
+        $byMonth = $post['byMonth'] ?? 0;
+
+        $itemsFilter = [];
+
+        if (isset($post['items']) && is_array($post['items']) && !empty($post['items'])) {
+            $itemsFilter = $post['items'];
+        }
+
+        $periodMode =  intval($post['periodMode']) ?? 0;
+
+        $filterCurrency = $post['filterCurrency'] ?? null;
+
+        $report = new Incomes();
+        $report->setBeginDate($beginDate);
+        $report->setEndDate($endDate);
+        $report->setCurrencyId($filterCurrency);
+        $report->setByMonth($byMonth);
+        $report->setFilterItems($itemsFilter);
+        $report->setUserId($this->user_id);
+        $report->setPeriodMode($periodMode);
+
+        try {
+            $result = $report->execute();
+            return $this->createResponse($this->createResponseData(true, $result, "OK"), 200);
+        }
+        catch (\Throwable $e) {
+            return $this->createResponse($this->createResponseData(false, [], $e->getMessage()), 500);
+        }
     }
 }

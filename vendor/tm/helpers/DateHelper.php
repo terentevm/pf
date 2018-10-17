@@ -40,7 +40,9 @@ class DateHelper
 
     public static function startOfDay($date, $format = 'Y-m-d H:i:s')
     {
-        $d = \DateTime::createFromFormat($format, $date);
+        $d = new \DateTime($date);
+        $d->format("Y-m-d");
+        //$d = \DateTime::createFromFormat($format, $date);
         $d->setTime(0, 0, 0);
 
         return $d->format($format);
@@ -48,7 +50,9 @@ class DateHelper
 
     public static function endOfDay($date, $format = 'Y-m-d H:i:s')
     {
-        $d = \DateTime::createFromFormat($format, $date);
+        $d = new \DateTime($date);
+        $d->format("Y-m-d");
+        //$d = \DateTime::createFromFormat($format, $date);
         $d->setTime(23, 59, 59);
 
         return $d->format($format);

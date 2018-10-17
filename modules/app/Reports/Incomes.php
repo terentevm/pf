@@ -1,14 +1,19 @@
 <?php
-
+/**
+ * Created by PhpStorm.
+ * User: zaich
+ * Date: 17-Oct-18
+ * Time: 22:47:13
+ */
 
 namespace app\Reports;
 
 use tm\IReport;
 
-use app\mappers\ReportExpensesMapper;
+use app\mappers\ReportIncomesMapper;
 use tm\helpers\DateHelper;
 
-class Expenses implements  IReport
+class Incomes implements IReport
 {
     private $beginDate;
     private $endDate;
@@ -23,7 +28,7 @@ class Expenses implements  IReport
     public function __construct()
     {
         if ($this->mapper == null) {
-            $this->mapper = new ReportExpensesMapper();
+            $this->mapper = new ReportIncomesMapper();
         }
     }
 
@@ -119,33 +124,25 @@ class Expenses implements  IReport
 
     public function execute(): array
     {
-        // TODO: Implement execute() method.
-        $oneMonth = false;
-
-        $month = DateHelper::startOfMonth($this->beginDate, "Y-m-d");
-
-//        if (DateHelper::startOfMonth($this->beginDate, "Y-m-d") == DateHelper::startOfDay($this->beginDate, "Y-m-d")
-//            && DateHelper::endOfMonth($this->endDate, "Y-m-d") == DateHelper::endOfDay($this->endDate, "Y-m-d")) {
-//            $oneMonth = true;
-//        }
 
         $params =[
             'userId' => $this->userId,
             'filterCurrency' =>$this->currencyId
         ];
 
-        if ($oneMonth === false) {
-            $params['beginDate'] =  DateHelper::startOfDay($this->beginDate);
-            $params['endDate'] =  DateHelper::endOfDay($this->endDate);
-            $params['items'] = $this->filterItems;
-            $params['periodMode'] = $this->periodMode;
+
+        $params['beginDate'] =  DateHelper::startOfDay($this->beginDate);
+        $params['endDate'] =  DateHelper::endOfDay($this->endDate);
+        $params['items'] = $this->filterItems;
+        $params['periodMode'] = $this->periodMode;
+
+        try {
+            $result = $this->mapper->execute($params);
         }
-        else {
-            $params['oneMonth'] = true;
-            $params['month'] = $month;
+        catch (\Throwable  $e) {
+            throw new \Exception($e->getMessage()) ;
         }
 
-        $result = $this->mapper->execute($params);
 
         return $result;
 
