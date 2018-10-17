@@ -1,0 +1,7 @@
+<phpunit bootstrap="autoload-phpunit.php">
+  <testsuites>
+    <testsuite name="pf">
+      <file>vendor/tm/tests/QueryBuilderHelperTest.php</file>
+    </testsuite>
+  </testsuites>
+</phpunit>

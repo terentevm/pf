@@ -9,6 +9,7 @@ use app\Models\Currency;
 use tm\Registry as Reg;
 use app\Models\DocumentCollection;
 use app\Models\RateRecord;
+use tm\helpers\QueryBuilderHelper as QBH;
 
 class Rates extends Model
 {
@@ -46,11 +47,11 @@ class Rates extends Model
     {
         $user_id = Reg::$app->user_id;
         
-        list($inCondition, $params) = Mapper::in($currencies, "curr");
+        list($inCondition, $params) = QBH::inCondition("id ", $currencies, "curr");
         
         $params['user_id'] = $user_id;
                 
-        $curr_arr = Currency::find()->where(["user_id = :user_id", "id IN (" . $inCondition . ")"])->setParams($params)->asArray()->all();
+        $curr_arr = Currency::find()->where(["user_id = :user_id", $inCondition])->setParams($params)->asArray()->all();
         
         
         $loader = LoaderFabric::getLoader();

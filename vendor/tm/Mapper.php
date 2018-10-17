@@ -8,6 +8,7 @@ use tm\MapperTrait;
 use tm\Registry;
 use tm\database\Connection;
 use tm\database\DBCommand;
+use tm\helpers\QueryBuilderHelper as QBH;
 
 abstract class Mapper extends Base
 {
@@ -126,11 +127,13 @@ abstract class Mapper extends Base
 
     protected function addDataFromForeignTable(&$data, $keys_arr, $tableName, $relation)
     {
-        $condition = $this->qb::createTextConditionFromArray($relation['table_col'], $keys_arr);
+        
+        list($condition, $inParams) =QBH::inCondition($relation['table_col'], $keys_arr);
+
         $currentModule = CURRENT_MUDULE;
         $class_name = "\\" . $currentModule . '\\models\\' . $relation['model'];
 
-        $rows = $class_name::find()->where([$condition])->all();
+        $rows = $class_name::find()->where([$condition])->setParams($inParams)->all();
 
         $result = $this->addRelationsToResult($data, $rows, $relation['f_key'], $relation['table_col'], $tableName);
 

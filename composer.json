@@ -1,7 +1,6 @@
 {
     "config": {
-        "COMPOSER_CAFILE": "E:/OSPanel/modules/php/PHP-7.1-x64/DevicelockInc.pem",
-		"cafile": "E:/OSPanel/modules/php/PHP-7.1-x64/DevicelockInc.pem",
+        
         "disable-tls": true,
         "secure-http": false
     },
@@ -9,6 +8,12 @@
         "twig/twig": "~2.0",
         "respect/validation": "*",
         "firebase/php-jwt": "^5.0"
+    },
+
+    "options": {
+        "ssl": {
+            "verify_peer": false
+        }
     }
 	
 }

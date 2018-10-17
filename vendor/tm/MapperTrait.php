@@ -18,25 +18,6 @@ trait MapperTrait
 
     public $params = [];
     
-    public static function in($arr, $nameParam = "")
-    {
-        $txt ="";
-        $params = [];
-        $values = [];
-        for ($i = 0; $i < count($arr); $i++) {
-            if ($nameParam == "") {
-                array_push($params, "?");
-                array_push($values, $arr[$i]);
-            } else {
-                array_push($params, ":" . $nameParam . $i);
-                $values[$nameParam . $i] = $arr[$i];
-            }
-        }
-        
-        $txt = implode(",", $params);
-        
-        return array($txt, $values);
-    }
     public function where(array $condition)
     {
         $this->where = $condition;

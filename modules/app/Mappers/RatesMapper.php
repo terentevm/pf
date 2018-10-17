@@ -4,6 +4,7 @@ namespace app\mappers;
 
 use tm\Mapper;
 use tm\Model;
+use tm\helpers\QueryBuilderHelper as QBH;
 
 class RatesMapper extends Mapper
 {
@@ -67,7 +68,8 @@ class RatesMapper extends Mapper
         ];
 
         if (count($currencies) > 0) {
-            list($paramString, $params) = $this->qb->createParamStringFromArray($currencies);
+           
+            list($paramString, $params) = QBH::createInParamString($currencies, "curr");
 
             foreach($params as $key => $value) {
                 $params[$key] = $value; 

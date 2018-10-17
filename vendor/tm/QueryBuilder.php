@@ -161,21 +161,7 @@ class QueryBuilder
         return '';
     }
     
-    /**
-     * transforms filters array to text condition
-     * @param string col_name  name of column wich is contained in filter array
-     * @param array filter array  this is values array
-     */
-    public static function createTextConditionFromArray($col_name, $filter_arr)
-    {
-        foreach ($filter_arr as &$arr) {
-            $arr = "'" . $arr . "'";
-        }
-        
-        $cond_text = "{$col_name} IN (" . implode(',', $filter_arr) . ")";
-        
-        return $cond_text;
-    }
+
 
     protected function performColumnesToParams($columnes)
     {
@@ -197,21 +183,6 @@ class QueryBuilder
         return implode(",", $res_arr);
     }
     
-    public function createParamStringFromArray(array $values) {
-        $length = count($values);
-        $pref = "val";
-        
-        $arr_param = [];
-        $params = [];
-        for ($i = 0; $i < $length; $i++) {
-            $param_name = $pref . $i;
-            $param_name_to_str = ":" . $pref . $i;
-            array_push($arr_param, $param_name_to_str);
-            $params[$param_name] = $values[$i];
-        }
-        
-        $paramString = implode(",", $arr_param);
-        
-        return array($paramString, $params);
-    }
+    
+
 }
