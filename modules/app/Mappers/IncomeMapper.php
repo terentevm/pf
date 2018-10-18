@@ -11,6 +11,8 @@ namespace app\mappers;
 use tm\Mapper;
 use tm\Model;
 
+use app\Mappers\RegIncomesMapper;
+
 class IncomeMapper extends Mapper
 {
     public static $db_columnes = ['id', 'user_id', 'date', 'dateInt', 'sum', 'comment'];
@@ -78,6 +80,13 @@ class IncomeMapper extends Mapper
         $regMoney = new \app\Models\RegMoneyTransactions();
         $regMoney->loadModel($obj);
         $success = $regMoney->save(false);
+
+        if ($success === false) {
+            return false;
+        }
+
+        $regIncomes = new RegIncomesMapper();
+        $success = $regIncomes->save($obj);
 
         unset($regMoney);
 

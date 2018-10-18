@@ -26,7 +26,13 @@ abstract class Mapper extends Base
     public function __construct($modelClassName)
     {
         if ($this->db_connection === null) {
-            $this->db_connection = Connection::init();
+            try {
+                $this->db_connection = Connection::init();
+            } catch (\Throwable $e) {
+                throw new \Exeption($e->getMessage());
+                return;
+            }
+            
         }
         
         if ($this->db === null) {
@@ -57,7 +63,13 @@ abstract class Mapper extends Base
                 return self::$mapperStorage[$mapper];
             }
 
-            $mapperInstance = new $mapper($modelClassName);
+            try {
+                $mapperInstance = new $mapper($modelClassName);
+            } catch (\Throwable $e) {
+                throw new \Exeption($e->getMessage());
+                return;
+            }
+            
             self::$mapperStorage[$mapper] = $mapperInstance;
             return $mapperInstance;
         }

@@ -29,6 +29,7 @@ class mySQLConnection implements IConnection
         $connOptions = $this->getConnectionOptions($db_config);
         
         $this->pdo = new \PDO($this->dsn, $this->user, $this->password, $connOptions);
+        
     }
     
     protected function __clone()

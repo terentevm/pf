@@ -10,6 +10,7 @@ namespace app\mappers;
 
 use tm\Mapper;
 use tm\Model;
+use app\Mappers\RegExpensesMapper;
 
 class ExpenditureMapper extends Mapper
 {
@@ -89,7 +90,14 @@ class ExpenditureMapper extends Mapper
         $regMoney = new \app\Models\RegMoneyTransactions();
         $regMoney->loadModel($obj);
         $success = $regMoney->save(false);
-       
+        
+        if ($success === false) {
+            return false;
+        }
+
+        $regExpenses = new RegExpensesMapper();
+        $success = $regExpenses->save($obj);
+      
         unset($regMoney);
        
         return $success;
