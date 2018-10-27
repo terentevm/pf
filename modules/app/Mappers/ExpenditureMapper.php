@@ -84,7 +84,82 @@ class ExpenditureMapper extends Mapper
         
         return $success;
     }
-    
+
+    public function  update(Model $obj, array $colsForUpdate)
+    {
+
+        $sql = $this->qb->buildUpdate($this, $colsForUpdate);
+
+        $this->update_stmt = $this->db->prepare($sql);
+
+        $this->db->beginTransaction();
+
+        $success = $this->update_stmt->execute($colsForUpdate);
+
+        if ($success === false) {
+
+            $this->db->rollBackTransaction();
+
+            return false;
+
+        }
+
+        //delete existed rows from doc_expend_rows
+
+        $deleted = $this->deleteRows($obj->id);
+
+        if ($deleted === false) {
+            $this->db->rollBackTransaction();
+            return false;
+        }
+
+        //save new rows
+
+        foreach ($obj->rows->strings() as $row) {
+
+            $row->setDocId($obj->getId());
+
+            $row_mapper = $this->getMapper("app\Models\ExpenditureRow");
+
+            $saved = $row_mapper->save($row);
+
+            if ($saved === false) {
+
+                $this->db->rollBackTransaction();
+
+                return false;
+
+            }
+        }
+
+        //rewrite data in registers
+
+        $success = $this->afterSave($obj);
+
+
+        if ($this->db->transactionExists()) {
+            if ($success) {
+                $this->db->commitTransaction();
+            } else {
+                $this->db->rollBackTransaction();
+            }
+        }
+
+        return $success;
+
+    }
+
+    private function deleteRows(string $docId)
+    {
+        $sql = "DELETE FROM doc_expend_rows where doc_id = :docId";
+
+        $deleted = $this->db->run($sql, ["docId" => $docId]);
+
+        return $deleted;
+
+
+    }
+
     protected function afterSave($obj)
     {
         $regMoney = new \app\Models\RegMoneyTransactions();
@@ -95,7 +170,7 @@ class ExpenditureMapper extends Mapper
             return false;
         }
 
-        $regExpenses = new RegExpensesMapper();
+        $regExpenses = new RegExpensesMapper("RegExpenses");
         $success = $regExpenses->save($obj);
       
         unset($regMoney);

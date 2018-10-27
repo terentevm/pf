@@ -165,7 +165,7 @@ class Rates extends Model
                     $sysCurrency = Currency::systemCurrensy();
                     
                     if (is_null($sysCurrency)) {
-                        return $arrBalances;    
+                        return $arrData;
                     }
                 }
                 
@@ -178,11 +178,13 @@ class Rates extends Model
         $lastRates = self::getLastRates($userId, $dateInt);
 
         if (empty($lastRates)) {
-            return self::addEmptyConvertedAmmount($arrData);
+            self::addEmptyConvertedAmmount($arrData, $amountProp);
+            return $arrData;
         }
        
         if (!key_exists($currencyId, $lastRates)) {
-            return self::addEmptyConvertedAmmount($arrData);
+            self::addEmptyConvertedAmmount($arrData, $amountProp);
+            return $arrData;
         }
 
         $rateTo = $lastRates[$currencyId]['rate'];

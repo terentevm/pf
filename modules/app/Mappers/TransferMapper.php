@@ -65,7 +65,40 @@ class TransferMapper extends Mapper
         
         return $db_arr;
     }
-    
+
+    public function update(Model $obj, array $colsForUpdate)
+    {
+        $sql = $this->qb->buildUpdate($this, $colsForUpdate);
+        $this->update_stmt = $this->db->prepare($sql);
+
+        $this->db->beginTransaction();
+
+        $success = $this->update_stmt->execute($colsForUpdate);
+
+        if ($success === false) {
+
+            $this->db->rollBackTransaction();
+
+            return false;
+
+        }
+
+
+        $success = $this->afterSave($obj);
+
+        if ($this->db->transactionExists()) {
+            if ($success) {
+                $this->db->commitTransaction();
+            } else {
+                $this->db->rollBackTransaction();
+            }
+        }
+
+
+        return $success;
+
+    }
+
     protected function afterSave($obj)
     {
         $regMoney = new \app\Models\RegMoneyTransactions();

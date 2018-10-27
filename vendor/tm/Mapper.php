@@ -247,25 +247,18 @@ abstract class Mapper extends Base
     {
         $sql = $this->qb->buildUpdate($this, $colsForUpdate);
         $this->update_stmt = $this->db->prepare($sql);
-        
-        $this->db->beginTransaction();
-        
+
         $success = $this->update_stmt->execute($colsForUpdate);
         
         if ($success === true) {
             $success = $this->afterUpdate($obj);
         }
-        
-        if ($this->db->transactionExists()) {
-            if ($success) {
-                $this->db->commitTransaction();
-            } else {
-                $this->db->rollBackTransaction();
-            }
-        }
+
         
         return $success;
+
     }
+
     protected function afterSave($obj)
     {
         return true;

@@ -79,6 +79,22 @@ class DBCommand
         return false;
     }
 
+    public function run(string $sql, array $params = [])
+    {
+        try {
+            $stmt = $this->pdo->prepare($sql);
+        } catch (PDOException $ex) {
+            return false;
+        }
+
+        try {
+            $result = $stmt->execute($params) ;
+            return $result;
+        } catch (PDOException $ex) {
+            return false;
+        }
+    }
+
     public function execute(array $param = []) : bool
     {
         if (!$this->stmt instanceof \PDOStatement) {
