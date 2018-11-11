@@ -9,7 +9,7 @@
 namespace app\Reports;
 
 use tm\IReport;
-
+use app\Models\Currency;
 use app\mappers\ReportIncomesMapper;
 use tm\helpers\DateHelper;
 
@@ -124,6 +124,14 @@ class Incomes implements IReport
 
     public function execute(): array
     {
+
+        if (is_null($this->currencyId)) {
+            $sysCurrency = Currency::systemCurrensy();
+
+            if ($sysCurrency instanceof Currency) {
+                $this->currencyId = $sysCurrency->getId();
+            }
+        }
 
         $params =[
             'userId' => $this->userId,

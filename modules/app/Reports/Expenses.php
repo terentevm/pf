@@ -3,6 +3,7 @@
 
 namespace app\Reports;
 
+use app\Models\Currency;
 use tm\IReport;
 
 use app\mappers\ReportExpensesMapper;
@@ -128,6 +129,14 @@ class Expenses implements  IReport
 //            && DateHelper::endOfMonth($this->endDate, "Y-m-d") == DateHelper::endOfDay($this->endDate, "Y-m-d")) {
 //            $oneMonth = true;
 //        }
+
+        if (is_null($this->currencyId)) {
+            $sysCurrency = Currency::systemCurrensy();
+
+            if ($sysCurrency instanceof Currency) {
+                $this->currencyId = $sysCurrency->getId();
+            }
+        }
 
         $params =[
             'userId' => $this->userId,
