@@ -14,6 +14,7 @@ $config = [
     'use_csrf_token' => false,
     'http_auth' => true,
     'use_sessions' =>false,
+    'jwt_from_header' => true, //if false jwt will be extracted from cookies
     'jwt_key' => 'fsfsdfdsfsdf-3dsg4t4fgdfg-g43t34t4555**-dfgdfgdfgewevdfvdn5455',
     'currensy_classificator_file' => MODULES_PATH . "/app/Models/Classificators/eur_currencies.php",
     'systemCurrency' => [
@@ -21,7 +22,8 @@ $config = [
         "short_name"=> "CZK",
         "code"=> "203",
         "mult"=> "1"
-    ]
+    ],
+    'routerClass' => 'tm\Router'
 ];
 
 return $config;

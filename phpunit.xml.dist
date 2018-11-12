@@ -3,6 +3,7 @@
     <testsuite name="pf">
       <file>vendor/tm/tests/QueryBuilderHelperTest.php</file>
       <file>vendor/tm/tests/mySQLConnectionTest.php</file>
+      <file>vendor/tm/tests/PipelineTest.php</file>
     </testsuite>
   </testsuites>
 </phpunit>

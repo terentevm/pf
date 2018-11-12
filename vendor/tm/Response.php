@@ -36,6 +36,11 @@ class Response
         $this->http_code = $code;
     }
 
+    public function setBody($body)
+    {
+        $this->body = $body;
+    }
+
     public function setContentType($content_type)
     {
         $this->headers['Content-Type'] = $content_type;
