@@ -1,13 +1,14 @@
 {
     "config": {
         
-        "disable-tls": true,
-        "secure-http": false
+        "disable-tls": false,
+        "secure-http": true
     },
     "require": {
         "twig/twig": "~2.0",
         "respect/validation": "*",
-        "firebase/php-jwt": "^5.0"
+        "firebase/php-jwt": "^5.0",
+        "slim/slim": "^3.0"
     },
 
     "options": {

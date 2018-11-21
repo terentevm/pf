@@ -1,3 +1,13 @@
 Views/compilation_cache/*
 .vscode/*
+vendor/composer/*
+vendor/container-interop/*
+vendor/firebase/*
+vendor/nikic/*
+vendor/pimple/*
+vendor/psr/*
+vendor/respect/*
+vendor/slim/*
+vendor/symphony/*
+vendor/twig/*
 bash.exe.stackdump
