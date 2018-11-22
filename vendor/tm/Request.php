@@ -3,67 +3,80 @@
 namespace tm;
 
 use tm\Base;
+use Slim\Http\Request as SlimRequest;
 
+use Psr\Http\Message\UriInterface;
+use Psr\Http\Message\StreamInterface;
+use Slim\Interfaces\Http\HeadersInterface;
 /**
- * This class provide access to POST, GET, FILES superglobals
+ * This class is decorator for Slim\Http\Request for compatability with my old code
  */
-class Request extends Base
+class Request extends SlimRequest
 {
-    private $post = [];
-    private $get = [];
-    private $files = [];
-    private $headers = [];
+    private $post_arr = [];
+    private $get_arr  = [];
+    private $files_arr  = [];
+    private $headers_arr  = [];
     
-    public function __construct($headers = [], $get = [], $post = [], $files = [])
-    {
-        $this->setHeaders($headers);
-        $this->set_get_params($get);
-        $this->set_post_params($post);
-        $this->set_files_params($files);
+    // public function __construct($headers = [], $get = [], $post = [], $files = [])
+    // {
+    //     $this->setHeaders($headers);
+    //     $this->set_get_params($get);
+    //     $this->set_post_params($post);
+    //     $this->set_files_params($files);
+
+    // }
+
+    public function __construct(
+        $method,
+        UriInterface $uri,
+        HeadersInterface $headers,
+        array $cookies,
+        array $serverParams,
+        StreamInterface $body,
+        array $uploadedFiles = []
+    ) {
+        
+        $this->set_get_params();
+        $this->set_post_params();
+        $this->set_files_params();
+        parent::__construct(
+            $method,
+            $uri,
+            $headers,
+            $cookies,
+            $serverParams,
+            $body,
+            $uploadedFiles = []
+        );
+
     }
 
     public function get(string $key='')
     {
         if ($key !=='') {
-            $value = $this->get[$key] ?? null;
-            return $value;
+            return $this->getQueryParam($key, null);
         }
         
-        return $this->get;
+        return $this->getQueryParams();
     }
 
     public function post(string $key='')
     {
         if ($key !=='') {
-            $value = $this->post[$key] ?? null;
+            $value = $this->post_arr[$key] ?? null;
             return $value;
         }
 
-        return $this->post;
-    }
-
-    public function server(string $key='')
-    {
-        if ($key =='') {
-            return $_SERVER;
-        }
-
-        $keyUp = strtoupper($key);
-        
-        return $_SERVER[$keyUp] ?? null;
-    }
-
-    public function files()
-    {
-        return $this->files;
+        return $this->post_arr;
     }
 
     public function set_get_params(array $params = [])
     {
         if (empty($params)) {
-            $this->get = $_GET;
+            $this->get_arr = $_GET;
         } else {
-            $this->get = $params;
+            $this->get_arr = $params;
         }
     }
 
@@ -105,27 +118,11 @@ class Request extends Base
         return $this->headers;
     }
     
-    public function getHeader($header_key)
-    {
-        if (array_key_exists($header_key, $this->headers)) {
-            return $this->headers[$header_key];
-        }
-        return '';
-    }
-
-    public function setHeaders(array $headers = [])
-    {
-        if (empty($headers)) {
-            $this->headers = $_SERVER;
-        } else {
-            $this->headers = $headers;
-        }
-    }
 
     public function getResponseType()
     {
-        $content_type = $this->getHeader('HTTP_ACCEPT');
-
+        $header = $this->getHeader('HTTP_ACCEPT');
+        $content_type =  $header[0];
         if (\preg_match('/html|HTML/', $content_type)) {
             return 'html';
         } elseif (\preg_match('/json|JSON/', $content_type)) {

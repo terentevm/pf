@@ -28,7 +28,7 @@ class UserController extends Controller
 
     public function actionLogin()
     {
-        $post = Reg::$app->request->post();
+        $post = $this->request->post();
 
         if (!empty($post)) {
             $login = $post['login'] ?? '';

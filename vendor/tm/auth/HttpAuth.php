@@ -8,65 +8,113 @@
 
 namespace tm\auth;
 
-use tm\auth\AccessInterface;
+use tm\IInvokable;
+
+use tm\auth\JwtExtractorFromHeader;
 use tm\Request;
 use tm\Registry;
 use Firebase\JWT\JWT;
 use Firebase\JWT\SignatureInvalidException;
 use Firebase\JWT\ExpiredException;
+use Slim\Exception\NotFoundException;
 
-class HttpAuth implements AccessInterface
+class HttpAuth implements IInvokable
 {
     private $access_open = [];
     private $route = null;
     private $jwt_key = null;
     
-    public function __construct($route)
+    private $container;
+
+    private $extractor;
+
+    public function __construct($container, $config)
     {
         $this->access_open = require APP . '/config/config_access.php';
-        $this->route = $route;
-        $this->jwt_key = Registry::$app->config->getJwtKey();
+        $this->jwt_key = $config->getJwtKey();
+        $this->container = $container;
+
+        $this->extractor = new JwtExtractorFromHeader(); //TODO To make extractor fabric
     }
     
-    public function checkAccess()
+    public function __invoke($request, $response, $next)
+    {
+        $this->route = $request->getAttribute('route');
+
+        $route = $this->route->getArguments();
+
+        if (empty($route)){
+            throw new NotFoundException($request, $response);
+        }
+        
+        $response = $this->checkAccess($request, $response, $next);
+
+        return $response;
+    }
+
+    public function checkAccess($request, $response, $next)
     {
         if (empty($this->access_open)) {
             return false;
         }
+       
+        $parsedBody = $request->getQueryParams();
+        $get = $request->get();
+
+        $route = $this->route->getArguments();
+
+        $module = $route['module'];
+        $controller = $route['controller'];
         
-        $module = $this->route['module'];
-        
+        $openedRoute = false;
+
         if (array_key_exists($module, $this->access_open)) {
-            $mudule_rules = $this->access_open[$this->route['module']]; //check module
+            $mudule_rules = $this->access_open[$module]; //check module
             
             if (in_array('*', $mudule_rules)) { //all controllers are allowed
-                return true;
+                $openedRoute = true;
             } else {
-                if (in_array($this->route['controller'], $mudule_rules)) { //check controller
-                    return true;
+                if (in_array($controller, $mudule_rules)) { //check controller
+                    $openedRoute = true;
                 }
             }
         }
         
-        $request = Registry::$app->request;
-        $header = $request->getHeader('HTTP_AUTHORIZATION');
-        if ($header == "") {
-            return false;
+        if ($openedRoute) {
+            $this->container["userId"] = null;
+            $response = $next($request, $response);
+            return $response;
         }
-        list($type, $jwt) = explode(" ", $header);
+
+        //extract JWT
+        $jwt = $this->extractor->extractJWT($request);
+
+        if (is_null($jwt)) {
+            
+            $newResponse = $response->withJson("Authentication error",401);
+
+            return $newResponse;
+        }
         
-        if ((strcasecmp($type, "Bearer") == 0)) {
-            try {
-                $decoded_data = JWT::decode($jwt, $this->jwt_key, array('HS256'));
-                $this->setUserId($decoded_data);
-                return true;
-            } catch (SignatureInvalidException $ex) {
-                return false;
-            } catch (ExpiredException $ex) {
-                return false;
-            }
+        try {
+            
+            $decoded_data = JWT::decode($jwt, $this->jwt_key, array('HS256'));
+            $this->container->set("userId", $decoded_data);
+            $response = $next($request, $response);
+            return $response;
+
+        } catch (SignatureInvalidException $ex) {
+            
+            $newResponse = $response->withJson("Authentication error",401);
+            return $newResponse;
+
+        } catch (ExpiredException $ex) {
+            
+            $newResponse = $response->withJson("Authentication error",401);
+            return $newResponse;
+
         }
-        return false;
+    
     }
     
     private function setUserId($data)

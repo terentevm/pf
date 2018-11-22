@@ -1,4 +1,5 @@
 <?php
+
 $loader = require dirname(__FILE__) . '/vendor/autoload.php';
 $loader->addPsr4('tm\\', __DIR__ . '/vendor/');
 $loader->addPsr4('cv\\', __DIR__ . '/modules/cv/');
@@ -18,10 +19,36 @@ define('MODULES_PATH', dirname(__FILE__) . "\\modules");
 define('MODULE_DEFAULT', "cv");
 define('TEST', false);
 
-$reg = tm\Registry::getInstance();
-$reg::$container->registerSingletons();
 
-$app = $reg->getApp();
+$config = [
+    'settings' => [
+        'displayErrorDetails' => true,
+        'determineRouteBeforeAppMiddleware' => true
+    ],
+];
 
-$app ->run();
-exit();
+$app = new Slim\App($config);
+
+$container = $app->getContainer();
+
+$container['conf'] = function ($container) {
+    return new tm\Configuration();
+};
+
+$container['AuthManager'] = function($container) {
+    
+    return tm\auth\AccessManager::getAccessManager($container);
+};
+
+$container['request'] = function ($container) {
+    // Replace this class with your extended implementation
+    return tm\Request::createFromEnvironment($container['environment']);
+};
+
+$app->add('AuthManager', 'checkAccess');
+
+$app->group('/{module}/{controller}[/{action}]', function () {
+    $this->map(['GET', 'POST', 'DELETE', 'PUT', 'OPTIONS'], '', \tm\Router::class . ':route');
+});
+
+$app->run();

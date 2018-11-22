@@ -12,7 +12,6 @@ class Router extends Base
 {
     private $request;
     private $config;
-    public $route = [];
    
     public $id;
     private $path_elements = array('module','controller','action');
@@ -23,13 +22,21 @@ class Router extends Base
         '([a-z0-9+_\-]+)(/)?' => '$controller',
         );
     
-    public function __construct(Request $request, Configuration $config)
+
+    private $container;
+    private $route;    
+    // public function __construct(Request $request, Configuration $config)
+    // {
+    //     $this->request = $request;
+    //     $this->config = $config;
+    // }
+
+    public function __construct($container)
     {
-        $this->request = $request;
-        $this->config = $config;
+        $this->container = $container;
     }
     
-    public function route()
+    public function routeDepricate($req, $res)
     {
         $module=  $this->route['module'];
         
@@ -67,6 +74,50 @@ class Router extends Base
         }
     }
     
+    public function route($req, $res)
+    {
+        
+        $this->route = $req->getAttribute('route');
+        $route = $this->route->getArguments();
+
+        $module = $route['module'];
+        $controller = $route['controller'];
+        
+        define('CURRENT_MUDULE', $module);
+
+        $controller_name = $module . '\\Controllers\\' . ucfirst($controller) .'Controller';
+        
+        try {
+            $reflection = new \ReflectionClass($controller_name);
+        } catch (\ReflectionException $ex) {
+            return $res->withJson("Not found", 404);
+        }
+        
+        if (isset($route['action'])) {
+            $action_name = $route['action'];
+        } else {
+            $route['action']= preg_replace('/action/', '', $reflection->getStaticPropertyValue('defaultAction', ''));
+        }
+        
+        
+        if ($route['action'] === '') {
+            return $res->withJson("Not found", 404);
+        }
+        
+        $controller = $reflection->newInstanceArgs([$req, $res, $route, $this->container]);
+        
+        $action_name = 'action' . ucfirst($route['action']);
+        
+        $action = $reflection->getMethod($action_name);
+        
+        try {
+            return $action->invoke($controller);
+        } catch (ReflectionException $ex) {
+            return $res->withJson("Not found", 404);
+        }
+    }
+
+   
     public function checkRoute() : int
     {
         if (!isset($this->route['module']) || is_null($this->route['module']) || $this->route['module'] === '') {

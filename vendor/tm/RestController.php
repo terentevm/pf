@@ -15,9 +15,9 @@ class RestController extends Controller
     protected $limit = 50;
     protected $offset = 0;
     
-    public function __construct($route)
+    public function __construct($request, $response, $route, $container)
     {
-        parent::__construct($route);
+        parent::__construct($request, $response, $route, $container);
     }
     
     public function actions()

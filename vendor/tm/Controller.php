@@ -22,11 +22,21 @@ class Controller extends Base
     
     protected $user_id = null;
     
-    public function __construct($route)
+    protected $container;
+    protected $request;
+    protected $response;
+
+    public function __construct($request, $response, $route, $container)
     {
         $this->route = $route;
+        $this->container = $container;
+        $this->request = $request;
+        $this->response = $response;
         $this->view = $route['action'];
-        $this->user_id = Reg::$app->user_id;
+        
+        $userId = $container->get("userId");
+
+        $this->user_id = $userId;
     }
 
     public function actions()
@@ -36,18 +46,20 @@ class Controller extends Base
     
     public function createResponse(ResponseData $data, int $httpcode = 200, $msg = '')
     {
-        $reqType = Reg::$app->request->getResponseType();
+        
+        $reqType = $this->request->getResponseType();
         
         if (is_string($data)) {
             $body = $data;
         } else {
-            $body = View::getRenderer($reqType, $this->route, $this->layout, $this->view)->render($data);
+            //$body = View::getRenderer($reqType, $this->route, $this->layout, $this->view)->render($data);
+            $body = "<h1>HTML views don't support!</h1>";
         }
         
-        $response = new Response($httpcode, $body);
-        $response->setContentType($response->createContentType($reqType));
+        $newResponse = $this->response->withStatus($httpcode)->withHeader('Content-type', $reqType)->withJson($data);  
         
-        return $response;
+        return  $newResponse ;
+
     }
 
     public function set($vars)
