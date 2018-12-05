@@ -45,7 +45,23 @@ $container['request'] = function ($container) {
     return tm\Request::createFromEnvironment($container['environment']);
 };
 
+$reg = tm\Registry::getInstance();
+$reg->setContainerDI($container);
+
 $app->add('AuthManager', 'checkAccess');
+
+$app->add(function ($req, $res, $next) {
+    $method = $req->getMethod();
+
+    if ($method !== 'OPTIONS') {
+        $res = $next($req, $res);
+    }
+
+    return $res
+        ->withHeader('Access-Control-Allow-Origin', '*')
+        ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
+        ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+});
 
 $app->group('/{module}/{controller}[/{action}]', function () {
     $this->map(['GET', 'POST', 'DELETE', 'PUT', 'OPTIONS'], '', \tm\Router::class . ':route');

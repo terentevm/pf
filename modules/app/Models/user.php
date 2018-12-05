@@ -3,6 +3,8 @@
 namespace app\Models;
 
 use tm\Model;
+
+use app\Models\Settings;
 use Respect\Validation\Validator as v;
 use Respect\Validation\Exceptions\ValidationException;
 use Respect\Validation\Exceptions\NestedValidationException;
@@ -123,4 +125,5 @@ class User extends Model
             return false;
         }
     }
+
 }

@@ -16,7 +16,7 @@ class CurrencyController extends RestController
     
     public function actionIndex()
     {
-        $get = Reg::$app->request->get();
+        $get = $this->request->get();
         
         $limit = $get['limit'] ?? 50;
         $offset = $get['offset'] ?? 0;
@@ -52,7 +52,7 @@ class CurrencyController extends RestController
 
     public function actionLoad()
     {
-        $post = Reg::$app->request->post();
+        $post = $this->request->post();
         
         $errors = [];
         if (!isset($post['currencies']) || empty($post['currencies'])) {

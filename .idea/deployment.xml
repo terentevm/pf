@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" serverName="FTP_REG_RU">
+    <serverData>
+      <paths name="FTP_REG_RU">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/httpdocs/terentevm.xyz/" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+          <excludedPaths>
+            <excludedPath local="true" path="$PROJECT_DIR$/er_shema.mwb" />
+            <excludedPath local="true" path="$PROJECT_DIR$/er_shema.mwb.bak" />
+          </excludedPaths>
+        </serverdata>
+      </paths>
+    </serverData>
+  </component>
+</project>

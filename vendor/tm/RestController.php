@@ -4,7 +4,6 @@
 namespace tm;
 
 use tm\Controller;
-use tm\Registry as Reg;
 
 class RestController extends Controller
 {
@@ -27,7 +26,7 @@ class RestController extends Controller
 
     public function actionIndex()
     {
-        $get = Reg::$app->request->get();
+        $get = $this->request->get();
         
         $limit = $get['limit'] ?? 50;
         $offset = $get['offset'] ?? 0;
@@ -46,14 +45,14 @@ class RestController extends Controller
     
     public function actionShow()
     {
-        $get = Reg::$app->request->get();
+        $get = $this->request->get();
         
         if (!isset($get['id'])) {
             return $this->createResponse($this->createResponseData(false, null, "Param 'id' hsn't been transfered"), 404);
         }
         $className = static::$classModel;
-        
-        $result = $className::findById($id, false);
+
+        $result = $className::findById($get['id'], false);
         
         if ($result === false) {
             return $this->createResponse($this->createResponseData(false, null, "Not found by id"), 404);
@@ -64,7 +63,7 @@ class RestController extends Controller
     
     public function actionCreate()
     {
-        $post = Reg::$app->request->post();
+        $post = $this->request->post();
         
         $upload_mode = $post['uploadMode'] ?? false;
         
@@ -96,7 +95,7 @@ class RestController extends Controller
     
     public function actionUpdate()
     {
-        $post = Reg::$app->request->post();
+        $post = $this->request->post();
         
         if (empty($post)) {
             return $this->createResponse($this->createResponseData(false, null, "Data for updating hasn't recieved"), 500);
@@ -125,7 +124,7 @@ class RestController extends Controller
     
     public function actionDelete()
     {
-        $id = Reg::$app->request->get('id');
+        $id = $this->request->get('id');
         
         if (is_null($id)) {
             return $this->createResponse($this->createResponseData(false, null, "Error. Params havo to contain id"), 500);

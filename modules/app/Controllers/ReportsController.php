@@ -22,7 +22,7 @@ class ReportsController extends RestController
      */
     public function actionBalance()
     {
-        $post = Reg::$app->request->post();
+        $post = $this->request->post();
         if (isset($post['date']) && v::date('Y-m-d')->validate($post['date'])) {
             $date = strtotime($post['date']);
         }
@@ -56,7 +56,7 @@ class ReportsController extends RestController
      */
     public function actionExpenses()
     {
-        $post = Reg::$app->request->post();
+        $post = $this->request->post();
 
         if (isset($post['beginDate']) && v::date('Y-m-d')->validate($post['beginDate'])) {
             $beginDate = $post['beginDate'];
@@ -117,7 +117,7 @@ class ReportsController extends RestController
      */
     public function actionIncomes()
     {
-        $post = Reg::$app->request->post();
+        $post = $this->request->post();
 
         if (isset($post['beginDate']) && v::date('Y-m-d')->validate($post['beginDate'])) {
             $beginDate = $post['beginDate'];

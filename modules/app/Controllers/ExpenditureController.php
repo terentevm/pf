@@ -20,7 +20,7 @@ class ExpenditureController extends RestController
     
     public function getAllowedParams_GET()
     {
-        $get = Reg::$app->request->get();
+        $get = $this->request->get();
         
         $get_params = [];
         
@@ -58,7 +58,7 @@ class ExpenditureController extends RestController
         $limit = $get['limit'] ?? 20;
         $offset = $get['offset'] ?? 0;
 
-        $arrPeriod = DateHelper::getPeriodFromRequestAsInt(Reg::$app->request);
+        $arrPeriod = DateHelper::getPeriodFromRequestAsInt($this->request);
         $finder = Expenditure::find();
         $finder->with('Wallet');
 
@@ -89,7 +89,7 @@ class ExpenditureController extends RestController
 
     public function actionShow()
     {
-        $get = Reg::$app->request->get();
+        $get = $this->request->get();
         
         if (!isset($get['id'])) {
             return $this->createResponse($this->createResponseData(false, null, "Param 'id' hsn't been transfered"), 404);

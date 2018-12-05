@@ -24,7 +24,7 @@ class WalletsController extends RestController
     
     public function actionIndex()
     {
-        $get = Reg::$app->request->get();
+        $get = $this->request->get();
         
         $limit = $get['limit'] ?? 50;
         $offset = $get['offset'] ?? 0;
@@ -43,7 +43,7 @@ class WalletsController extends RestController
     
     public function actionBalance()
     {
-        $get = Reg::$app->request->get();
+        $get = $this->request->get();
         
         if (!isset($get['id'])) {
             return $this->createResponse($this->createResponseData(false, ["Error. No wallet id"], ""), 500);   
@@ -55,7 +55,7 @@ class WalletsController extends RestController
     
     public function actionBalanceAll()
     {
-        $post = Reg::$app->request->post();
+        $post = $this->request->post();
         if (isset($post['date']) && v::date('Y-m-d')->validate($post['date'])) {
             $date = strtotime($post['date']);
         }

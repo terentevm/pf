@@ -15,7 +15,7 @@ use app\Models\Rates;
 
 class SettingsMapper extends Mapper
 {
-    public static $db_columnes = ['user_id' , 'currency_id', 'wallet_id'];
+    public static $db_columnes = ['user_id', 'currency_id', 'wallet_id', 'reportCurrency'];
     
     public static function setTable()
     {
@@ -26,14 +26,41 @@ class SettingsMapper extends Mapper
     {
         return 'user_id';
     }
-    
-    
+
+    public static function getCurrency()
+    {
+        return [
+            'model' => 'Currency',
+            'f_key' => 'currency_id',
+            'table_col' => 'id'
+        ];
+    }
+
+    public static function getReportCurrency()
+    {
+        return [
+            'model' => 'Currency',
+            'f_key' => 'reportCurrency',
+            'table_col' => 'id'
+        ];
+    }
+
+    public static function getWallet()
+    {
+        return [
+            'model' => 'Wallet',
+            'f_key' => 'wallet_id',
+            'table_col' => 'id'
+        ];
+    }
+
     public function mapModelToDb(Model $obj)
     {
         $db_arr = [
             'user_id' => $obj->getUser_Id(),
             'currency_id' => $obj->getCurrency_id(),
-            'wallet_id' => $obj->getWallet_id()
+            'wallet_id' => $obj->getWallet_id(),
+            'reportCurrency' => $obj->getReportCurrency()
         ];
         
         return $db_arr;
@@ -41,27 +68,28 @@ class SettingsMapper extends Mapper
 
     protected function afterSave($obj)
     {
-        $success = Currency::saveSystemCurrensy($obj->getUser_Id()) ;
-
-        if ($success === false) {
-            return false;
-        }
-
-        $sysCurrency = Currency::SystemCurrensy();
-
-        $record = [
-            'id' => null,
-            'currency_id' =>  $sysCurrency->getId(),
-            'date' => "1980-01-01",
-            'dateInt' => strtotime("1980-01-01"),
-            'mult' => 1,
-            'rate' => 1
-        ];
-
-        $rates = new Rates();
-        $rates->setDataset(array($record));
-        $success = $rates->save();
-        
-        return $success;
+//        $success = Currency::saveSystemCurrensy($obj->getUser_Id()) ;
+//
+//        if ($success === false) {
+//            return false;
+//        }
+//
+//        $sysCurrency = Currency::SystemCurrensy();
+//
+//        $record = [
+//            'id' => null,
+//            'currency_id' =>  $sysCurrency->getId(),
+//            'date' => "1980-01-01",
+//            'dateInt' => strtotime("1980-01-01"),
+//            'mult' => 1,
+//            'rate' => 1
+//        ];
+//
+//        $rates = new Rates();
+//        $rates->setDataset(array($record));
+//        $success = $rates->save();
+//
+//        return $success;
+        return true;
     }
 }

@@ -20,7 +20,7 @@ class TransferController extends RestController
 
     public function getAllowedParams_GET()
     {
-        $get = Reg::$app->request->get();
+        $get = $this->request->get();
         
         $get_params = [];
         
@@ -62,7 +62,7 @@ class TransferController extends RestController
         $limit = $get['limit'] ?? 20;
         $offset = $get['offset'] ?? 0;
 
-        $arrPeriod = DateHelper::getPeriodFromRequestAsInt(Reg::$app->request);
+        $arrPeriod = DateHelper::getPeriodFromRequestAsInt($this->request);
         $finder = Transfer::find();
         $finder->with('WalletFrom');
         $finder->with('WalletTo');

@@ -44,7 +44,14 @@ class UserController extends Controller
                 return $this->createResponse($this->createResponseData(false, $inputed_data, 'Invalid login or password!'), 401);
             }
 
-            $token = Reg::$app->access_manager->generateNewToken($user_id);
+            $ip = $this->request->getServerParam('REMOTE_ADDR', null);
+
+            $auth = $this->container['AuthManager'];
+            $token = $auth->generateNewToken(
+                [
+                    'user_id' => $user_id,
+                    'ip' => $ip
+                ]);
             
             $oSettings = Settings::getSettings($user_id);
 
@@ -58,10 +65,45 @@ class UserController extends Controller
             return $this->createResponse($this->createResponseData(false, null, "Login data hasn't ben recieved"), 200);
         }
     }
-    
+
+    public function actionSettings()
+    {
+        $method = $this->request->getMethod();
+
+        if ($this->user_id === null) {
+            return $this->createResponse($this->createResponseData(false, [], 'User is not authorized'), 401);
+        }
+
+        if ($method === 'GET') {
+            $oSettings = Settings::getSettings($this->user_id);
+
+            return $this->createResponse($this->createResponseData(true, $oSettings, "OK"), 200);
+        }
+
+        if ($method === 'POST' || $method === 'PUT') {
+            $postData = $this->request->post();
+
+            if (empty($postData)) {
+                return $this->createResponse($this->createResponseData(false, [], "No data for save or update"), 500);
+            }
+
+            $oSettings = new Settings();
+            $oSettings->loadSafe($postData);
+            $oSettings->setUser_Id(htmlspecialchars($this->user_id));
+            $ok = $oSettings->save();
+
+            if ($ok === true) {
+                return $this->createResponse($this->createResponseData(true, [], "OK"), 201);
+            } else {
+                return $this->createResponse($this->createResponseData(false, [], "Error"), 500);
+            }
+
+        }
+    }
+
     public function actionSignup()
     {
-        $post = Reg::$app->request->post();
+        $post = $this->request->post();
 
         if (!empty($post)) {
             $user = new User();
@@ -110,7 +152,7 @@ class UserController extends Controller
     
     public function changePassword()
     {
-        $post = Reg::$app->request->post();
+        $post = $this->request->post();
         
         if (empty($post)) {
             return $this->createResponse($this->createResponseData(false, null, "No data"), 500);
@@ -155,7 +197,7 @@ class UserController extends Controller
 
     public function actionDelete()
     {
-        $post = Reg::$app->request->post();
+        $post = $this->request->post();
         
         if (!empty($post) && isset($post['login'])) {
             $login = \filter_var($post['login'], FILTER_SANITIZE_EMAIL);

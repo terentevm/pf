@@ -85,7 +85,8 @@ class Currency extends Model
     
     public static function getClassificator()
     {
-        $file_path = Reg::$app->config->getRateClassificatorFilePath();
+        $container = Reg::getContainerDI();
+        $file_path = $container[conf]->getRateClassificatorFilePath();
         
         if ($file_path === '' || !is_file($file_path)) {
             return null;
@@ -98,7 +99,8 @@ class Currency extends Model
 
     public static function systemCurrensy()
     {
-        $sysCurrency_arr = Reg::$app->config->getSystemCurrency();
+        $container = Reg::getContainerDI();
+        $sysCurrency_arr = $container[conf]->getSystemCurrency();
        
         $sysCurrency = static::find()->where(["short_name = :short_name"])->setParam('short_name', $sysCurrency_arr['short_name'])->limit(1)->one();
        
@@ -107,8 +109,10 @@ class Currency extends Model
     
     public static function isSystemCurrency($charCode)
     {
-        $sysCurrency_arr = Reg::$app->config->getSystemCurrency();
-        
+        //$sysCurrency_arr = Reg::$app->config->getSystemCurrency();
+        $container = Reg::getContainerDI();
+        $sysCurrency_arr = $container[conf]->getSystemCurrency();
+
         return $sysCurrency_arr['short_name'] == $charCode ? true : false;
     }
 
@@ -117,7 +121,8 @@ class Currency extends Model
         $sysCurrency = self::SystemCurrensy();
 
         if (is_null($sysCurrency)) {
-            $sysCurrency_arr = Reg::$app->config->getSystemCurrency();
+            $container = Reg::getContainerDI();
+            $sysCurrency_arr = $container[conf]->getSystemCurrency();
             
             $currensy = new self();
             
@@ -149,8 +154,10 @@ class Currency extends Model
         $dateInt = strtotime($date);
         
         $mapper = new CurrencyMapper(get_called_class());
-        
-        $rates = $mapper->getRates(Reg::$app->user_id, $array_id, $dateInt);
+
+        $container = Reg::getContainerDI();
+
+        $rates = $mapper->getRates($container['userId'], $array_id, $dateInt);
 
         foreach ($rates as $rateRow) {
             foreach ($result as &$row) { 

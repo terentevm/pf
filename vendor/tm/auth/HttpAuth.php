@@ -41,6 +41,9 @@ class HttpAuth implements IInvokable
     {
         $this->route = $request->getAttribute('route');
 
+        if (is_null($this->route)){
+            throw new NotFoundException($request, $response);
+        }
         $route = $this->route->getArguments();
 
         if (empty($route)){
@@ -65,7 +68,8 @@ class HttpAuth implements IInvokable
 
         $module = $route['module'];
         $controller = $route['controller'];
-        
+        $action = $route['action'];
+
         $openedRoute = false;
 
         if (array_key_exists($module, $this->access_open)) {
@@ -74,8 +78,13 @@ class HttpAuth implements IInvokable
             if (in_array('*', $mudule_rules)) { //all controllers are allowed
                 $openedRoute = true;
             } else {
-                if (in_array($controller, $mudule_rules)) { //check controller
-                    $openedRoute = true;
+                if (array_key_exists($controller, $mudule_rules)) { //check controller
+                    $actions = $mudule_rules[$controller];
+
+                    if (in_array('*', $actions ) || in_array($action, $actions ) )  {
+                        $openedRoute = true;
+                    }
+
                 }
             }
         }
@@ -99,7 +108,7 @@ class HttpAuth implements IInvokable
         try {
             
             $decoded_data = JWT::decode($jwt, $this->jwt_key, array('HS256'));
-            $this->container->set("userId", $decoded_data);
+            $this->container["userId"] = $decoded_data->user_id;
             $response = $next($request, $response);
             return $response;
 
@@ -122,17 +131,8 @@ class HttpAuth implements IInvokable
         Registry::$app->user_id = $data->user_id ?? null;
     }
     
-    public function generateNewToken($user_id) : string
+    public function generateNewToken(array $params) : string
     {
-        $token = [
-            'user_id' => $user_id,
-        ];
-
-        $client_ip = Registry::$app->request->server('REMOTE_ADDR');
-
-        if (!is_null($client_ip)) {
-            $token['ip'] = $client_ip;
-        }
-        return  JWT::encode($token, $this->jwt_key);
+        return  JWT::encode($params, $this->jwt_key);
     }
 }

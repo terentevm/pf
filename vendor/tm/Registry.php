@@ -14,6 +14,8 @@ class Registry
     
     public static $app = null;
 
+    private static $containerDI = null;
+
     private function __construct()
     {
         if (self::$container === null) {
@@ -47,6 +49,16 @@ class Registry
         }
         
         throw \Exeption('Cannot initialize application');
+    }
+
+    public static function setContainerDI($container)
+    {
+        return self::$containerDI = $container;
+    }
+
+    public static function getContainerDI()
+    {
+        return self::$containerDI;
     }
 
     /**

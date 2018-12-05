@@ -60,7 +60,7 @@ class DateHelper
 
     public static function startOfWeek($date, $format = 'Y-m-d H:i:s')
     {
-        $d = \DateTime::createFromFormat($format, $date);
+        $d = strtoupper($date) === "NOW" ? new \DateTime($date) : \DateTime::createFromFormat($format, $date);
         $d->setTime(0, 0, 0);
         $d->modify("monday this week");
         return $d->format($format);
@@ -68,7 +68,7 @@ class DateHelper
 
     public static function endOfWeek($date, $format = 'Y-m-d H:i:s')
     {
-        $d = \DateTime::createFromFormat($format, $date);
+        $d = strtoupper($date) === "NOW" ? new \DateTime($date) : \DateTime::createFromFormat($format, $date);
         $d->setTime(0, 0, 0);
         $d->modify("sunday this week");
         return $d->format($format);
@@ -76,7 +76,7 @@ class DateHelper
 
     public static function startOfMonth($date, $format = 'Y-m-d H:i:s')
     {
-        $d = \DateTime::createFromFormat($format, $date);
+        $d = strtoupper($date) === "NOW" ? new \DateTime($date) : \DateTime::createFromFormat($format, $date);
         $d->setTime(0, 0, 0);
         $d->modify("first day of");
 
@@ -85,7 +85,7 @@ class DateHelper
 
     public static function endOfMonth($date, $format = 'Y-m-d H:i:s')
     {
-        $d = \DateTime::createFromFormat($format, $date);
+        $d = strtoupper($date) === "NOW" ? new \DateTime($date) : \DateTime::createFromFormat($format, $date);
         $d->setTime(23, 59, 59);
         $d->modify("last day of");
 
@@ -94,7 +94,7 @@ class DateHelper
 
     public static function startOfYear($date, $format = 'Y-m-d H:i:s')
     {
-        $d = \DateTime::createFromFormat($format, $date);
+        $d = strtoupper($date) === "NOW" ? new \DateTime($date) : \DateTime::createFromFormat($format, $date);
         $d->setDate($d->format("Y"), 1, 1);
         $d->setTime(0, 0, 0);
 
@@ -104,7 +104,7 @@ class DateHelper
 
     public static function endOfYear($date, $format = 'Y-m-d H:i:s')
     {
-        $d = \DateTime::createFromFormat($format, $date);
+        $d = strtoupper($date) === "NOW" ? new \DateTime($date) : \DateTime::createFromFormat($format, $date);
         $d->setDate($d->format("Y"), 12, 31);
         $d->setTime(23, 59, 59);
 

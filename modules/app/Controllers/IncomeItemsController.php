@@ -11,7 +11,7 @@ class IncomeItemsController extends RestController
     
     public function actionIndex()
     {
-        $get = Reg::$app->request->get();
+        $get = $this->request->get();
         
         $limit = $get['limit'] ?? 50;
         $offset = $get['offset'] ?? 0;

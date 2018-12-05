@@ -19,7 +19,7 @@ class IncomeController extends RestController
     public static $classModel = '\app\models\Income';
     public function getAllowedParams_GET()
     {
-        $get = Reg::$app->request->get();
+        $get = $this->request->get();
         
         $get_params = [];
         
@@ -53,7 +53,7 @@ class IncomeController extends RestController
         $limit = $get['limit'] ?? 20;
         $offset = $get['offset'] ?? 0;
 
-        $arrPeriod = DateHelper::getPeriodFromRequestAsInt(Reg::$app->request);
+        $arrPeriod = DateHelper::getPeriodFromRequestAsInt($this->request);
         $finder = Income::find();
         
 

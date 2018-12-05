@@ -2,7 +2,6 @@
 
 namespace tm;
 
-use tm\Base;
 use Slim\Http\Request as SlimRequest;
 
 use Psr\Http\Message\UriInterface;
@@ -15,17 +14,7 @@ class Request extends SlimRequest
 {
     private $post_arr = [];
     private $get_arr  = [];
-    private $files_arr  = [];
-    private $headers_arr  = [];
-    
-    // public function __construct($headers = [], $get = [], $post = [], $files = [])
-    // {
-    //     $this->setHeaders($headers);
-    //     $this->set_get_params($get);
-    //     $this->set_post_params($post);
-    //     $this->set_files_params($files);
 
-    // }
 
     public function __construct(
         $method,
@@ -68,7 +57,7 @@ class Request extends SlimRequest
             return $value;
         }
 
-        return $this->post_arr;
+        return $this->getParsedBody();
     }
 
     public function set_get_params(array $params = [])
@@ -97,7 +86,7 @@ class Request extends SlimRequest
     
     private function setPostFromInputSteam(string $input_stream)
     {
-        $params = json_decode($input_stream, true);
+        $params = \json_decode($input_stream, true);
         
         if (is_array($params) && !empty($params)) {
             $this->post = $params;
