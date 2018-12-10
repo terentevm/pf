@@ -77,6 +77,11 @@ abstract class Mapper extends Base
         throw new \Exception("Unknown: $mapper");
     }
 
+    public function getDb()
+    {
+        return $this->db;
+    }
+
     public function all()
     {
         list($sql, $params) = $this->qb->build($this);

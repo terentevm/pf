@@ -31,7 +31,7 @@ class RestController extends Controller
         $limit = $get['limit'] ?? 50;
         $offset = $get['offset'] ?? 0;
         
-        $className = get_called_class()::$classModel;
+        $className = static::$classModel;
         
         $result = $className::find()
                 ->where(['user_id = :user_id'])
@@ -101,7 +101,7 @@ class RestController extends Controller
             return $this->createResponse($this->createResponseData(false, null, "Data for updating hasn't recieved"), 500);
         }
         $post['user_id'] = $this->user_id;
-        $className = get_called_class()::$classModel;
+        $className = static::$classModel;
         
         $model = new $className();
         $model->load($post);
@@ -130,7 +130,7 @@ class RestController extends Controller
             return $this->createResponse($this->createResponseData(false, null, "Error. Params havo to contain id"), 500);
         }
         
-        $className = get_called_class()::$classModel;
+        $className = static::$classModel;
         
         $deleted = $className::find()->where(['id = :id'])->setParam('id', $id)->delete();
        

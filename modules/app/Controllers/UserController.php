@@ -47,6 +47,7 @@ class UserController extends Controller
             $ip = $this->request->getServerParam('REMOTE_ADDR', null);
 
             $auth = $this->container['AuthManager'];
+            
             $token = $auth->generateNewToken(
                 [
                     'user_id' => $user_id,
@@ -140,7 +141,6 @@ class UserController extends Controller
             }
 
            
-
             //if data are saved, create response with code 200
 
             return $this->createResponse($this->createResponseData(true, null, "User has been registered successfully!"), 201);

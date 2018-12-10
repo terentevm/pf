@@ -100,16 +100,22 @@ class Currency extends Model
     public static function systemCurrensy()
     {
         $container = Reg::getContainerDI();
-        $sysCurrency_arr = $container[conf]->getSystemCurrency();
+        $sysCurrency_arr = $container['conf']->getSystemCurrency();
        
-        $sysCurrency = static::find()->where(["short_name = :short_name"])->setParam('short_name', $sysCurrency_arr['short_name'])->limit(1)->one();
+        $sysCurrency = static::find()
+            ->where(["short_name = :short_name"])
+            ->andWhere("user_id = :userId")
+            ->setParam('short_name', $sysCurrency_arr['short_name'])
+            ->setParam('userId', $container->get("userId"))
+            ->limit(1)
+            ->one();
        
         return $sysCurrency;
     }
     
     public static function isSystemCurrency($charCode)
     {
-        //$sysCurrency_arr = Reg::$app->config->getSystemCurrency();
+        
         $container = Reg::getContainerDI();
         $sysCurrency_arr = $container[conf]->getSystemCurrency();
 

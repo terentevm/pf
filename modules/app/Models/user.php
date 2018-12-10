@@ -5,6 +5,9 @@ namespace app\Models;
 use tm\Model;
 
 use app\Models\Settings;
+use app\Models\Currency;
+use app\Models\Rates;
+
 use Respect\Validation\Validator as v;
 use Respect\Validation\Exceptions\ValidationException;
 use Respect\Validation\Exceptions\NestedValidationException;
@@ -125,5 +128,90 @@ class User extends Model
             return false;
         }
     }
+
+    public function save($upload_mode = false)
+    {
+        //for creating new user necessary to do following actions:
+        //1 - save user
+        //2 - save default currency
+        //3 - for default currency set default rate
+        //4 - save record with user settings
+        
+        $container = Reg::getContainerDI();
+        
+        $sysCurrency_arr = $container['conf']->getSystemCurrency();
+
+        try {
+            $mapper = Mapper::getMapper(get_called_class());
+        }
+        catch(\Throwable $e) {
+            return false;
+        }
+        
+        
+        $db = $mapper->getDb();
+        
+        $db->beginTransaction();
+        
+        $success = $mapper->save($this, false, false);
+        
+        if ($success) {
+            $db->rollBackTransaction();
+            return false;
+        }
+
+        //save system currency
+        $currency = new Currency();
+            
+        $currency->setUser_id($this->id);
+        $currency->setName($sysCurrency_arr['name']);
+        $currency->setShort_Name($sysCurrency_arr['short_name']) ;
+        $currency->setCode($sysCurrency_arr['code']);
+
+        $success = $currency->save();
+
+        if (!$success) {
+            $db->rollBackTransaction();
+            return false;
+        }
+
+        //save default rate for system currency
+
+        $record = [
+            'id' => null,
+            'currency_id' =>  $currency->getId(),
+            'date' => "1980-01-01",
+            'dateInt' => strtotime("1980-01-01"),
+            'mult' => 1,
+            'rate' => 1
+        ];
+        
+        $rates = new Rates();
+        $rates->setDataset(array($record));
+        
+        $success = $rates->save();
+        
+        if (!$success) {
+            $db->rollBackTransaction();
+            return false;
+        }
+
+        //save settings
+
+        $settings = new Settings($this->id, $currency->getId());
+        $success = $settings->save();
+
+        if (!$success) {
+            $db->rollBackTransaction();
+            return false;
+        }
+
+        $db->commitTransaction();
+
+        return true;
+
+    }
+
+    
 
 }
