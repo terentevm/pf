@@ -4,12 +4,9 @@ namespace app\Models;
 
 use tm\Model;
 
-use app\Models\Settings;
-use app\Models\Currency;
-use app\Models\Rates;
-
+use tm\Mapper;
+use tm\Registry as Reg;
 use Respect\Validation\Validator as v;
-use Respect\Validation\Exceptions\ValidationException;
 use Respect\Validation\Exceptions\NestedValidationException;
 
 /**
@@ -154,8 +151,8 @@ class User extends Model
         $db->beginTransaction();
         
         $success = $mapper->save($this, false, false);
-        
-        if ($success) {
+
+        if (!$success) {
             $db->rollBackTransaction();
             return false;
         }
@@ -179,7 +176,8 @@ class User extends Model
 
         $record = [
             'id' => null,
-            'currency_id' =>  $currency->getId(),
+            'userId' => $this->id,
+            'currencyId' => $currency->getId(),
             'date' => "1980-01-01",
             'dateInt' => strtotime("1980-01-01"),
             'mult' => 1,

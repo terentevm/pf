@@ -10,13 +10,10 @@ namespace app\Models;
 
 use tm\Model;
 use tm\Mapper;
-use app\Models\Currency;
-use app\Models\Rates;
 use Respect\Validation\Validator as v;
-use Respect\Validation\Exceptions\ValidationException;
 use Respect\Validation\Exceptions\NestedValidationException;
 
-class Wallet extends Model
+class Wallet extends Model implements \JsonSerializable
 {
     private $id = null;
     private $name = '';
@@ -150,6 +147,13 @@ class Wallet extends Model
         $resultConverted = Rates::convert($userId, $dateInt, $result, "balance" ,$currencyId);
         
         return $resultConverted;
+    }
+
+    public function jsonSerialize()
+    {
+        $vars = get_object_vars($this);
+
+        return $vars;
     }
 
 }

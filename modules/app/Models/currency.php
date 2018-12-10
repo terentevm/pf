@@ -16,7 +16,7 @@ use app\mappers\CurrencyMapper;
  *
  * @author terentyev.m
  */
-class Currency extends Model
+class Currency extends Model implements \JsonSerializable
 {
     private $id = null;
     private $code = '';
@@ -176,5 +176,12 @@ class Currency extends Model
         
 
         return $result;
+    }
+
+    public function jsonSerialize()
+    {
+        $vars = get_object_vars($this);
+
+        return $vars;
     }
 }

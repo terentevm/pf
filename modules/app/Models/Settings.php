@@ -94,6 +94,54 @@ class Settings extends Model implements \JsonSerializable
         $this->reportCurrency = $reportCurrency;
     }
 
+    /**
+     * @return null
+     */
+    public function getCurrency()
+    {
+        return $this->currency;
+    }
+
+    /**
+     * @param null $currency
+     */
+    public function setCurrency($currency): void
+    {
+        $this->currency = $currency;
+    }
+
+    /**
+     * @return null
+     */
+    public function getWallet()
+    {
+        return $this->wallet;
+    }
+
+    /**
+     * @param null $wallet
+     */
+    public function setWallet($wallet): void
+    {
+        $this->wallet = $wallet;
+    }
+
+    /**
+     * @return null
+     */
+    public function getCurrencyReports()
+    {
+        return $this->currencyReports;
+    }
+
+    /**
+     * @param null $currencyReports
+     */
+    public function setCurrencyReports($currencyReports): void
+    {
+        $this->currencyReports = $currencyReports;
+    }
+
     public static function getFilterRules()
     {
         return [
@@ -105,8 +153,13 @@ class Settings extends Model implements \JsonSerializable
 
     public static function getSettings($user_id)
     {
-        $oSettings = Mapper::getMapper(get_called_class())
-            ->with(['Currency', 'Wallet', 'ReportCurrency'])
+        try {
+            $mapperSettings = Mapper::getMapper(get_called_class());
+        } catch (\Throwable $e) {
+            return null;
+        }
+
+        $oSettings = $mapperSettings->with(['Currency', 'Wallet', 'ReportCurrency'])
             ->where(['user_id = :user_id'])
             ->limit(1)
             ->setParams(['user_id' => $user_id])
@@ -119,7 +172,9 @@ class Settings extends Model implements \JsonSerializable
             $oSettings->setHasCurrencies(false);
             return $oSettings;
         }
-        
+
+        $oSettings->setDefalults();
+
         if ($oSettings->isNewUser() === true) {
             $oSettings->setNewUser(true) ;
             $oSettings->setHasCurrencies(false);
@@ -127,7 +182,40 @@ class Settings extends Model implements \JsonSerializable
         
         return $oSettings;
     }
-    
+
+    private function setDefalults()
+    {
+        if (!is_null($this->wallet_id)) {
+            $wallet = Wallet::findById($this->wallet_id, false);
+
+            if ($wallet instanceof Wallet) {
+                $this->setWallet($wallet);
+            }
+        }
+
+        if (!is_null($this->currency_id)) {
+
+            $currency = Currency::findById($this->currency_id, false);
+
+            if ($currency instanceof Currency) {
+                $this->setCurrency($currency);
+            }
+        }
+
+        if (!is_null($this->reportCurrency)) {
+
+            if ($this->reportCurrency === $this->currency_id) {
+                $this->setCurrencyReports($this->getCurrency());
+            }
+
+            $currencyReports = Currency::findById($this->reportCurrency, false);
+
+            if ($currencyReports instanceof Currency) {
+                $this->setCurrencyReports($currencyReports);
+            }
+        }
+    }
+
     public function isNewUser()
     {
         if (is_null($this->user_id)) {
@@ -157,7 +245,7 @@ class Settings extends Model implements \JsonSerializable
             ->one();
 
         if (empty($settings)) {
-            $success = Mapper::getMapper(self::className())->save($this, false, true);
+            $success = Mapper::getMapper(self::className())->save($this, false, false);
             return $success;
         }
 
