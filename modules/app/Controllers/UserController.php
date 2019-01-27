@@ -93,6 +93,7 @@ class UserController extends Controller
             $oSettings->setUser_Id(htmlspecialchars($this->user_id));
             $ok = $oSettings->save();
 
+
             if ($ok === true) {
                 return $this->createResponse($this->createResponseData(true, [], "OK"), 201);
             } else {

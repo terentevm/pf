@@ -44,11 +44,6 @@ class HttpAuth implements IInvokable
         if (is_null($this->route)){
             throw new NotFoundException($request, $response);
         }
-        $route = $this->route->getArguments();
-
-        if (empty($route)){
-            throw new NotFoundException($request, $response);
-        }
         
         $response = $this->checkAccess($request, $response, $next);
 
@@ -71,6 +66,12 @@ class HttpAuth implements IInvokable
         $action = $route['action'];
 
         $openedRoute = false;
+
+        if (is_null($module ) || is_null($controller )) {
+            $this->container["userId"] = null;
+            $response = $next($request, $response);
+            return $response;
+        }
 
         if (array_key_exists($module, $this->access_open)) {
             $mudule_rules = $this->access_open[$module]; //check module

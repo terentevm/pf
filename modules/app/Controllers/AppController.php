@@ -10,6 +10,7 @@ namespace app\Controllers;
 
 use tm\Controller;
 use tm\Response;
+use Slim\Exception\NotFoundException;
 
 class AppController extends Controller
 {
@@ -18,8 +19,13 @@ class AppController extends Controller
     public function ActionIndex()
     {
         $index_file = MODULES_PATH . "/app/Views/index.html";
-        $html = file_get_contents($index_file);
-        $response = new Response(200, $html);
-        return $response;
+
+        if (file_exists($index_file)) {
+            $html = file_get_contents($index_file);
+            return $this->createResponse($html, 200, "OK");
+        }
+
+        throw new NotFoundException($this->request, $this->response);
+
     }
 }

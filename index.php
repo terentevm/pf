@@ -34,12 +34,12 @@ $container = $app->getContainer();
 $container['conf'] = function ($container) {
     return new tm\Configuration();
 };
-
+//
 $container['AuthManager'] = function($container) {
-    
+
     return tm\auth\AccessManager::getAccessManager($container);
 };
-
+//
 $container['request'] = function ($container) {
     // Replace this class with your extended implementation
     return tm\Request::createFromEnvironment($container['environment']);
@@ -47,9 +47,9 @@ $container['request'] = function ($container) {
 
 $reg = tm\Registry::getInstance();
 $reg->setContainerDI($container);
-
+//
 $app->add('AuthManager', 'checkAccess');
-
+//
 $app->add(function ($req, $res, $next) {
     $method = $req->getMethod();
 
@@ -63,8 +63,13 @@ $app->add(function ($req, $res, $next) {
         ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
 });
 
-$app->group('/{module}/{controller}[/{action}]', function () {
+
+$app->redirect('/', '/app/app/index', 301);
+
+
+$app->group('/{module}[/{controller}[/{action}]]', function () {
     $this->map(['GET', 'POST', 'DELETE', 'PUT', 'OPTIONS'], '', \tm\Router::class . ':route');
 });
+
 
 $app->run();

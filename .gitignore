@@ -1,5 +1,6 @@
 Views/compilation_cache/*
 .vscode/*
+.idea/*
 vendor/composer/*
 vendor/container-interop/*
 vendor/firebase/*

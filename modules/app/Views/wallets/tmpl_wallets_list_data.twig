@@ -1,8 +1,0 @@
-{% for element in vars %}
-    <tr name="tr_1" id="tr_1" data-href= "/wallets/GetElement/?{{ { 'id': element.id }|url_encode }}">
-          <td class="hide">{{ element.id }}</td>
-          <td dblclick="AddNew();"><a href= "/wallets/GetElement/?{{ { 'id': element.id }|url_encode }}">{{ element.name }}</a></td>
-          <td>{{ element.dic_currency_short_name }}</td>
-          <td class="visible-md visible-lg">{{ element.is_creditcard }}</td>
-      </tr>  
-{% endfor %}

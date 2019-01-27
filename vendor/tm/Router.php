@@ -73,15 +73,17 @@ class Router extends Base
             return new Response(404, "Not found");
         }
     }
-    
-    public function route($req, $res)
+
+    public function route($req, $res, $args)
     {
         
         $this->route = $req->getAttribute('route');
+
         $route = $this->route->getArguments();
 
-        $module = $route['module'];
-        $controller = $route['controller'];
+        $module = $route['module'] ?? $this->container->get('conf')->getDefaultModule();
+
+        $controller = $route['controller'] ?? $this->container->get('conf')->getDefaultController($module);
         
         define('CURRENT_MUDULE', $module);
 

@@ -43,8 +43,8 @@ class Controller extends Base
     {
         return array("Index", "Show", "Create", "Update");
     }
-    
-    public function createResponse(ResponseData $data, int $httpcode = 200, $msg = '')
+
+    public function createResponse($data, int $httpcode = 200, $msg = '')
     {
         
         $reqType = $this->request->getResponseType();
@@ -55,8 +55,14 @@ class Controller extends Base
             //$body = View::getRenderer($reqType, $this->route, $this->layout, $this->view)->render($data);
             $body = "<h1>HTML views don't support!</h1>";
         }
-        
-        $newResponse = $this->response->withStatus($httpcode)->withHeader('Content-type', $reqType)->withJson($data);  
+
+        if ($reqType === 'html') {
+            $newResponse = $this->response->withStatus($httpcode)->withHeader('Content-type', $reqType)->write($data);
+        } else {
+            $newResponse = $this->response->withStatus($httpcode)->withHeader('Content-type',
+                $reqType)->withJson($data);
+        }
+
         
         return  $newResponse ;
 

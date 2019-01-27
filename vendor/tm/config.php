@@ -2,7 +2,7 @@
 
 $config = [
     'lang' => 'en-GB',
-    'default_module' => 'cv',
+    'default_module' => 'app',
     'modules_settings' => [
         'cv' => [
             'default_controller' => 'main'

@@ -26,11 +26,11 @@ class Configuration
         if (!isset($this->config['modules_settings'])) {
             return '';
         }
-        
-        $mudule_settings = &$this->config['modules_settings'];
-        
-        if (isset($mudule_settings[$module])) {
-            return $mudule_settings[$module]['default_controller'];
+
+        $module_settings = &$this->config['modules_settings'];
+
+        if (isset($module_settings[$module])) {
+            return $module_settings[$module]['default_controller'];
         }
         
         return '';
@@ -81,4 +81,5 @@ class Configuration
             "mult"=> "1"
             ];
     }
+
 }
