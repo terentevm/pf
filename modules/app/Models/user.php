@@ -20,12 +20,14 @@ class User extends Model
     private $login;
     private $password;
     private $name;
-    
-    public function __construct($id = null, $login = '', $password = '', $name = '')
+    private $currency;
+
+    public function __construct($id = null, $login = '', $password = '', $name = '', $currency = '')
     {
         $this->login = $login;
         $this->password = $password;
         $this->name = $name;
+        $this->currency = $currency;
     }
     
     
@@ -68,6 +70,22 @@ class User extends Model
     {
         $this->name = $name;
     }
+
+    /**
+     * @return string
+     */
+    public function getCurrency(): string
+    {
+        return $this->currency;
+    }
+
+    /**
+     * @param string $currency
+     */
+    public function setCurrency(string $currency): void
+    {
+        $this->currency = $currency;
+    }
     
     public function checkUnique()
     {
@@ -89,8 +107,8 @@ class User extends Model
         if (empty($db_rec)) {
             return false;
         }
-       
-        if (password_verify($password, $db_rec['password'])) {
+
+        if (password_verify($password, trim($db_rec['password']))) {
             return $db_rec['id'];
         }
        
@@ -108,6 +126,7 @@ class User extends Model
             'login' => FILTER_SANITIZE_EMAIL,
             'password' => FILTER_DEFAULT,
             'name' => FILTER_SANITIZE_SPECIAL_CHARS,
+            'currency' => FILTER_SANITIZE_SPECIAL_CHARS,
         ];
     }
         
@@ -115,15 +134,24 @@ class User extends Model
     {
         $validator = v::attribute('login', v::notEmpty()->Email())
                     ->attribute('password', v::notEmpty()->stringType()->length(3, null))
-                    ->attribute('name', v::notEmpty()->stringType());
-        
+            ->attribute('name', v::notEmpty()->stringType())
+            ->attribute('currency', v::notEmpty()->stringType()->length(3, 3));
+
+        $container = Reg::getContainerDI();
+        $base_currency_list = $container['conf']->getBaseCurrencyList();
+
+
         try {
             $validator->assert($this);
-            return true;
         } catch (NestedValidationException $e) {
-            $errors = $e->getMessages();
             return false;
         }
+
+        if (!array_key_exists($this->currency, $base_currency_list)) {
+            return false;
+        }
+
+        return true;
     }
 
     public function save($upload_mode = false)
@@ -135,8 +163,11 @@ class User extends Model
         //4 - save record with user settings
         
         $container = Reg::getContainerDI();
-        
-        $sysCurrency_arr = $container['conf']->getSystemCurrency();
+
+        //$sysCurrency_arr = $container['conf']->getSystemCurrency();
+        $base_currency_list = $container['conf']->getBaseCurrencyList();
+
+        $sysCurrency_arr = $base_currency_list[$this->currency];
 
         try {
             $mapper = Mapper::getMapper(get_called_class());
@@ -149,8 +180,8 @@ class User extends Model
         $db = $mapper->getDb();
         
         $db->beginTransaction();
-        
-        $success = $mapper->save($this, false, false);
+
+        $success = $mapper->save($this);
 
         if (!$success) {
             $db->rollBackTransaction();

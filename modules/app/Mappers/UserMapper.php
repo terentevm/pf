@@ -12,7 +12,7 @@ use tm\Registry as Reg;
 
 class UserMapper extends Mapper
 {
-    public static $db_columnes = ['id', 'login', 'password','name'];
+    public static $db_columns = ['id', 'login', 'password', 'name'];
     
     public function __construct($modelClassName)
     {

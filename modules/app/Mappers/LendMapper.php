@@ -13,7 +13,7 @@ use tm\Model;
 
 class LendMapper extends Mapper
 {
-    public static $db_columnes = ['id', 'user_id' ,'date', 'dateInt', 'wallet_id', 'contact', 'sum'];
+    public static $db_columns = ['id', 'user_id', 'date', 'dateint', 'wallet_id', 'contact', 'sum'];
     
     public static function setTable()
     {
@@ -31,7 +31,7 @@ class LendMapper extends Mapper
             'id' => $obj->getId(),
             'user_id' => $obj->getUser_id(),
             'date' => $obj->getDate(),
-            'dateInt' => strtotime($obj->getDate()),
+            'dateint' => strtotime($obj->getDate()),
             'contact' =>$obj->getContact(),
             'wallet_id' => $obj->getWallet_id(),
             'sum' => $obj->getSum()

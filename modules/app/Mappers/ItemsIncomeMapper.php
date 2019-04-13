@@ -7,7 +7,7 @@ use tm\Model;
 
 class ItemsIncomeMapper extends Mapper
 {
-    public static $db_columnes = ['id', 'user_id','name', 'not_active', 'parent_id', 'comment'];
+    public static $db_columns = ['id', 'user_id', 'name', 'not_active', 'parent_id', 'comment'];
 
     public static function setTable()
     {

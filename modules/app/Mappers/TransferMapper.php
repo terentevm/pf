@@ -13,7 +13,17 @@ use tm\Model;
 
 class TransferMapper extends Mapper
 {
-    public static $db_columnes = ['id', 'user_id' ,'date', 'dateInt', 'wallet_id_from', 'wallet_id_to', 'sumFrom', 'sumTo' ,'comment'];
+    public static $db_columns = [
+        'id',
+        'user_id',
+        'date',
+        'dateint',
+        'wallet_id_from',
+        'wallet_id_to',
+        'sum_from',
+        'sum_to',
+        'comment'
+    ];
     
     public static function setTable()
     {
@@ -50,11 +60,11 @@ class TransferMapper extends Mapper
             'id' => $obj->getId(),
             'user_id' => $obj->getUser_id(),
             'date' => $obj->getDate(),
-            'dateInt' => strtotime($obj->getDate()),
+            'dateint' => strtotime($obj->getDate()),
             'wallet_id_from' => $obj->getWallet_id_from(),
             'wallet_id_to' => $obj->getWallet_id_to(),
-            'sumFrom' => $obj->getSumFrom(),
-            'sumTo' => $obj->getSumTo(),
+            'sum_from' => $obj->getSumFrom(),
+            'sum_to' => $obj->getSumTo(),
             'comment' =>$obj->getComment()
         ];
         

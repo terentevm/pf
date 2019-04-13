@@ -18,6 +18,16 @@ interface IConnection
     
     public function getPDO();
     
+    public function log(string $message);
+
+    /**
+     * Calls stored function at database server
+     * 
+     * @param string $funcName example funcName(param1, param2,...)
+     * @param array $funcParams
+     */
+    public function callFunction(string $funcName , array $funcParams = []);
+
     public function beginTransaction();
     
     public function commitTransaction();

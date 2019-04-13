@@ -8,7 +8,15 @@ use tm\helpers\QueryBuilderHelper as QBH;
 
 class RatesMapper extends Mapper
 {
-    public static $db_columnes = ['id', 'user_id','date','dateInt', 'currency_id' , 'mult', 'rate'];
+    public static $db_columns = [
+        'id',
+        'user_id',
+        'date',
+        'date_int',
+        'currency_id',
+        'mult',
+        'rate'
+    ];
 
     public static function setTable()
     {
@@ -23,7 +31,8 @@ class RatesMapper extends Mapper
     public function create(Model $obj)
     {
         if ($this->create_stmt === null) {
-            $sql = $this->qb->buildInsert($this);
+            // $sql = $this->qb->buildInsert($this);
+            $sql = "INSERT INTO public.rates (user_id, date, dateint, currency_id, mult, rate) VALUES (:user_id,:date,:dateint,:currency_id,:mult,:rate)";
             $this->create_stmt = $this->db->prepare($sql);
         }
 
@@ -36,7 +45,8 @@ class RatesMapper extends Mapper
         foreach ($dataset->strings() as $record) {
             
             $params = $this->mapModelToDb($record);
-            $success = $this->create_stmt->execute($params);
+            $success = $this->db->runStatement($this->create_stmt, $params);
+
             if ($success !== true) {
                 return false;
             }
@@ -48,10 +58,9 @@ class RatesMapper extends Mapper
     public function mapModelToDb(Model $obj)
     {
         $db_arr = [
-            'id' => null,
             'user_id' => $obj->getUserId(),
             'date' => $obj->getDate(),
-            'dateInt' => $obj->getDateInt(),
+            'dateint' => $obj->getDateInt(),
             'currency_id' => $obj->getCurrencyId(),
             'mult' => $obj->getMult(),
             'rate' => $obj->getRate()
@@ -63,8 +72,8 @@ class RatesMapper extends Mapper
     public function getLastRates(string $userId, int $dateInt, $currencies = [])
     {
         $params = [
-            "usedId" => $userId,
-            "dateInt" => $dateInt
+            "used_id" => $userId,
+            "dateint" => $dateInt
         ];
 
         if (count($currencies) > 0) {
@@ -87,7 +96,7 @@ class RatesMapper extends Mapper
         
         if (!empty($result)) {
             foreach($result  as $record) {
-                $id = $record['currId'];
+                $id = $record['curr_id'];
                 $result_accoc[$id] = [
                     "rate" => $record['rate'],
                     "mult" => $record['mult']
@@ -103,18 +112,18 @@ class RatesMapper extends Mapper
     {
         $sql = 
         "SELECT
-        ratesByDate.currId,
-        ratesByDate.maxDate,
+        ratesByDate.curr_id,
+        ratesByDate.max_date,
         reg.rate,
         reg.mult
         FROM 
         (SELECT 
-            rates.currency_id as currId,
-            MAX(rates.dateInt) as maxDate
-            FROM rates WHERE user_id = :usedId AND rates.dateInt < :dateInt #currenciesCondStr#
+            rates.currency_id as curr_id,
+            MAX(rates.dateint) as max_date
+            FROM rates WHERE user_id = :user_id AND rates.dateint < :dateint #currenciesCondStr#
         GROUP BY
-            rates.currency_id) as ratesByDate
-        LEFT JOIN rates as reg on ratesByDate.currId = reg.currency_id AND ratesByDate.maxDate = reg.dateInt";
+            rates.currency_id) as rates_by_date
+        LEFT JOIN rates as reg on rates_by_date.curr_id = reg.currency_id AND rates_by_date.max_date = reg.dateint";
 
         if ($currenciesCondStr == "") {
             \str_replace("#currenciesCondStr#", "", $sql);

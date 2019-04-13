@@ -13,7 +13,7 @@ use tm\Model;
 
 class ExpenditureRowMapper extends Mapper
 {
-    public static $db_columnes = ['id', 'doc_id', 'item_id', 'sum', 'comment'];
+    public static $db_columns = ['id', 'doc_id', 'item_id', 'sum', 'comment'];
     
     public static function setTable()
     {

@@ -7,11 +7,22 @@ use tm\Model;
 
 class RegExpensesMapper extends Mapper
 {
-    public static $db_columnes = ["id", "date", "month", "expendId", "dateInt", "walletId", "currencyId", "itemId", "userId", "sum"];
+    public static $db_columns = [
+        "id",
+        "date",
+        "month",
+        "expend_id",
+        "dateint",
+        "wallet_id",
+        "currency_id",
+        "item_id",
+        "user_id",
+        "sum"
+    ];
     
     public static function setTable()
     {
-        return 'regExpenses';
+        return 'reg_expenses';
     }
 
     protected function getPrimaryKey()
@@ -23,13 +34,13 @@ class RegExpensesMapper extends Mapper
     {
     }
 
-    public function save(Model $obj, $upload_mode = false, $useTransaction = false)
+    public function save(Model $obj)
     {
         $expendId = $obj->getId();
 
-        $sql = "CALL addToRegExpenses(:expendId)";
-        $this->create_stmt = $this->db->prepare($sql);
-        $success = $this->create_stmt->execute(["expendId" => $expendId]);
+        $success = $this->db_connection->callFunction("add_to_reg_expenses(:expendId)",
+            ["expendId" => $expendId]);
+
 
         return $success;
 

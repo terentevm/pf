@@ -5,10 +5,10 @@ namespace app\Models;
 use tm\Model;
 use tm\Mapper;
 use tm\rates\LoaderFabric;
-use app\Models\Currency;
+use tm\rates\RateData;
+use tm\rates\RatesLoaderException;
 use tm\Registry as Reg;
-use app\Models\DocumentCollection;
-use app\Models\RateRecord;
+
 use tm\helpers\QueryBuilderHelper as QBH;
 
 class Rates extends Model
@@ -43,40 +43,49 @@ class Rates extends Model
 
     }
 
-    public function loadRates(array $currencies, string $date1, string $date2)
+    public function loadRates(string $user_id, array $currencies, string $date1, string $date2)
     {
-        $user_id = Reg::$app->user_id;
-        
+
+        $sysCurrency = Currency::getSystemCurrency($user_id);
+
+        if (!$sysCurrency instanceof Currency) {
+            return false;
+        }
+
         list($inCondition, $params) = QBH::inCondition("id ", $currencies, "curr");
         
         $params['user_id'] = $user_id;
                 
         $curr_arr = Currency::find()->where(["user_id = :user_id", $inCondition])->setParams($params)->asArray()->all();
-        
-        
-        $loader = LoaderFabric::getLoader();
+
+
+        $loader = LoaderFabric::getLoader($sysCurrency->getShort_name());
+
+        if (is_null($loader)) {
+            return false;
+        }
+
+        $ok = false;
 
         foreach ($curr_arr as $currency) {
-            
-            if(Currency::isSystemCurrency($currency['short_name'])) {
-                $rates_data = [
-                    'code' => $currency['short_name'],
-                    'mult' => 1,
-                    'rates' => [
-                        strtotime("1980-01-01") => [ 'date' => "1980-01-01", 'rate' => 1 ]
-                    ]
-                ];     
+
+            if (trim($sysCurrency->getShort_name()) === trim($currency['short_name'])) {
+
+                $rates_data = new RateData($currency['short_name'], 1);
+                $rates_data->addRate("1980-01-01", 1);
+
             }
             else {
-                $rates_data = $loader->load($currency['short_name'], $date1, $date2);    
-            }
-            
+                try {
+                    $rates_data = $loader->load($currency['short_name'], $date1, $date2);
+                } catch (RatesLoaderException $e) {
+                    continue;
+                }
 
-            if (empty($rates_data)) {
-                continue;
             }
 
-            $rates = $rates_data['rates'];
+
+            $rates = $rates_data->getRates();
             
             $rates_db = $this->getExistsRates($currency['id'], $date1, $date2);
             
@@ -89,7 +98,7 @@ class Rates extends Model
                         'currencyId' => $currency['id'],
                         'date' => $rate['date'],
                         'dateInt' => strtotime($rate['date']),
-                        'mult' =>  $rates_data['mult'],
+                        'mult' => $rates_data->getMult(),
                         'rate' => $rate['rate'],
                     ] ;
                     

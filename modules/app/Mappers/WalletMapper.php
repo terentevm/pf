@@ -12,7 +12,15 @@ use tm\Model;
  */
 class WalletMapper extends Mapper
 {
-    public static $db_columnes = ['id', 'user_id' ,'name', 'currency_id', 'is_creditcard', 'grace_period', 'credit_limit'];
+    public static $db_columns = [
+        'id',
+        'user_id',
+        'name',
+        'currency_id',
+        'is_creditcard',
+        'grace_period',
+        'credit_limit'
+    ];
     
     public static function setTable()
     {
@@ -99,7 +107,7 @@ class WalletMapper extends Mapper
                         ROUND(SUM(trans.sum), 2) as balance
                 from 
                         regMoneyTrans as trans
-                where user_id = :userId AND dateInt <= :date
+                where user_id = :userId AND dateint <= :date
                 group by
                         trans.wallet_id) as temp
                 left join wallets on temp.wallet_id = wallets.id

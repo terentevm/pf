@@ -82,4 +82,9 @@ class Configuration
             ];
     }
 
+    public function getBaseCurrencyList()
+    {
+        return $this->config['baseCurrencyList'];
+    }
+
 }

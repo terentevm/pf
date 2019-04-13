@@ -14,11 +14,11 @@ use tm\Model;
 
 class BudgetExpenseMapper extends Mapper
 {
-    public static $db_columnes = ['id', 'userId', 'budgetId', 'itemId', 'sum'];
+    public static $db_columns = ['id', 'user_id', 'budget_id', 'item_id', 'sum'];
 
     public static function setTable()
     {
-        return 'budgetExpenses';
+        return 'budget_expenses';
     }
 
     protected function getPrimaryKey()
@@ -30,7 +30,7 @@ class BudgetExpenseMapper extends Mapper
     {
         return [
             'model' => 'ItemExpenditure',
-            'f_key' => 'itemId',
+            'f_key' => 'item_id',
             'table_col' => 'id'
         ];
     }
@@ -39,9 +39,9 @@ class BudgetExpenseMapper extends Mapper
     {
         $db_arr = [
             'id' => $obj->getId(),
-            'userId' => $obj->getUserId(),
-            'budgetId' => $obj->getBudgetId(),
-            'itemId' => $obj->getItemId(),
+            'user_id' => $obj->getUserId(),
+            'budget_id' => $obj->getBudgetId(),
+            'item_id' => $obj->getItemId(),
             'sum' => $obj->getSum()
         ];
 

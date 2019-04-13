@@ -40,7 +40,7 @@ class QueryBuilder
     public function buildSelect()
     {
         if (property_exists($this->mapper, 'db_columnes')) {
-            $fields = implode(',', $this->mapper::$db_columnes);
+            $fields = implode(',', $this->mapper::$db_columns);
         } else {
             $fields = '*';
         }
@@ -50,8 +50,8 @@ class QueryBuilder
 
     public function buildInsert(Mapper $mapperInstance)
     {
-        $fields = '(' . implode(',', $mapperInstance::$db_columnes) . ')';
-        $params = '(' . $this->performColumnesToParams($mapperInstance::$db_columnes) . ')';
+        $fields = '(' . implode(',', $mapperInstance::$db_columns) . ')';
+        $params = '(' . $this->performColumnesToParams($mapperInstance::$db_columns) . ')';
         
         $sql = 'INSERT INTO ' . $mapperInstance::setTable() . ' ' . $fields . ' VALUES ' . $params;
 

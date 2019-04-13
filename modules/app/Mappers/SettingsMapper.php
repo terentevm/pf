@@ -15,7 +15,7 @@ use app\Models\Rates;
 
 class SettingsMapper extends Mapper
 {
-    public static $db_columnes = ['user_id', 'currency_id', 'wallet_id', 'reportCurrency'];
+    public static $db_columns = ['user_id', 'currency_id', 'wallet_id', 'report_currency'];
     
     public static function setTable()
     {
@@ -60,7 +60,7 @@ class SettingsMapper extends Mapper
             'user_id' => $obj->getUser_Id(),
             'currency_id' => $obj->getCurrency_id(),
             'wallet_id' => $obj->getWallet_id(),
-            'reportCurrency' => $obj->getReportCurrency()
+            'report_currency' => $obj->getReportCurrency()
         ];
         
         return $db_arr;

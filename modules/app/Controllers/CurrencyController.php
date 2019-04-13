@@ -72,7 +72,8 @@ class CurrencyController extends RestController
         }
         
         $rates = new Rates();
-        $result = $rates->loadRates($post['currencies'], $post['dateFrom'], $post['dateTo']);
+        $result = $rates->loadRates($this->user_id, $post['currencies'], $post['dateFrom'],
+            $post['dateTo']);
         
         if ($result === true) {
             return $this->createResponse($this->createResponseData(true, ["Currency rates have been loaded"], ""), 201);

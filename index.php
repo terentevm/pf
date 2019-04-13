@@ -1,7 +1,7 @@
 <?php
 
 $loader = require dirname(__FILE__) . '/vendor/autoload.php';
-$loader->addPsr4('tm\\', __DIR__ . '/vendor/');
+$loader->addPsr4('tm\\', __DIR__);
 $loader->addPsr4('cv\\', __DIR__ . '/modules/cv/');
 $loader->addPsr4('app\\', __DIR__ . '/modules/app/');
 $loader->addPsr4('Controllers\\', __DIR__ . '/Controllers/');
@@ -18,7 +18,7 @@ define('APP', dirname(__FILE__));
 define('MODULES_PATH', dirname(__FILE__) . "\\modules");
 define('MODULE_DEFAULT', "cv");
 define('TEST', false);
-
+define('LOG_FOLDER', __DIR__ . '/logs');
 
 $config = [
     'settings' => [
@@ -30,6 +30,13 @@ $config = [
 $app = new Slim\App($config);
 
 $container = $app->getContainer();
+
+$container['logger'] = function ($c) {
+    $logger = new \Monolog\Logger('appLoger');
+    $file_handler = new \Monolog\Handler\StreamHandler(LOG_FOLDER . '/app.log');
+    $logger->pushHandler($file_handler);
+    return $logger;
+};
 
 $container['conf'] = function ($container) {
     return new tm\Configuration();

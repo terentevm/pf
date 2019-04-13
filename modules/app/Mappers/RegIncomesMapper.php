@@ -7,11 +7,22 @@ use tm\Model;
 
 class RegIncomesMapper extends Mapper
 {
-    public static $db_columnes = ["id", "date", "month", "incomeId", "dateInt", "walletId", "currencyId", "itemId", "userId", "sum"];
+    public static $db_columns = [
+        "id",
+        "date",
+        "month",
+        "income_id",
+        "dateint",
+        "wallet_id",
+        "currency_id",
+        "item_id",
+        "user_id",
+        "sum"
+    ];
     
     public static function setTable()
     {
-        return 'regIncomes';
+        return 'reg_incomes';
     }
 
     protected function getPrimaryKey()

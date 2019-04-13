@@ -15,7 +15,7 @@ use app\Mappers\RegIncomesMapper;
 
 class IncomeMapper extends Mapper
 {
-    public static $db_columnes = ['id', 'user_id', 'date', 'dateInt', 'sum', 'comment'];
+    public static $db_columns = ['id', 'user_id', 'date', 'dateint', 'sum', 'comment'];
 
     public static function setTable()
     {
@@ -34,7 +34,7 @@ class IncomeMapper extends Mapper
             'id' => $obj->getId(),
             'user_id' => $obj->getUser_id(),
             'date' => $obj->getDate(),
-            'dateInt' => strtotime($obj->getDate()),
+            'dateint' => strtotime($obj->getDate()),
             'comment' => $obj->getComment(),
             'sum' => $obj->getSum()
         ];

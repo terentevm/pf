@@ -1,9 +1,10 @@
 <phpunit bootstrap="autoload-phpunit.php">
   <testsuites>
     <testsuite name="pf">
-      <file>vendor/tm/tests/QueryBuilderHelperTest.php</file>
-      <file>vendor/tm/tests/mySQLConnectionTest.php</file>
-      <file>vendor/tm/tests/PipelineTest.php</file>
+      <file>tm/tests/CNBLoaderTest.php</file>
+      <file>tm/tests/QueryBuilderHelperTest.php</file>
+      <file>tm/tests/mySQLConnectionTest.php</file>
+      <file>tm/tests/PipelineTest.php</file>
     </testsuite>
   </testsuites>
 </phpunit>

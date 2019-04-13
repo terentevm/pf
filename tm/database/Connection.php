@@ -4,13 +4,14 @@ namespace tm\database;
 
 use tm\database\mySQLConnection;
 use tm\database\SQLiteConnection;
+use tm\database\PGConnection;
 use tm\QueryBuilder;
 
 abstract class Connection
 {
     public static function init()
     {
-        $db_config = require  dirname(__FILE__) . '/config_db.php';
+        $db_config = require dirname(__FILE__) . '/config_db.php';
         
         if (!isset($db_config['db_driver'])) {
             throw new \Exception("Isn't pointed database driver type out!");
@@ -24,7 +25,10 @@ abstract class Connection
             return mySQLConnection::init($db_config);
         } elseif ($db_config['db_driver'] == 'sqlite') {
             return SQLiteConnection::init($db_config);
-        } else {
+        } elseif ($db_config['db_driver'] == 'postgres') {
+            return PGConnection::init($db_config);
+        }
+        else {
             throw new \Exception("Connection driver type hasn't defined or has unsupported value");
         }
     }

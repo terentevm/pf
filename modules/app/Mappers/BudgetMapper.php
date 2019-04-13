@@ -15,11 +15,11 @@ use tm\Model;
 class BudgetMapper extends Mapper
 {
 
-    public static $db_columnes = ['id', 'userId', 'month', 'comment'];
+    public static $db_columns = ['id', 'user_id', 'month', 'comment'];
 
     public static function setTable()
     {
-        return 'docBudget';
+        return 'doc_budget';
     }
 
     protected function getPrimaryKey()
@@ -31,7 +31,7 @@ class BudgetMapper extends Mapper
     {
         $db_arr = [
             'id' => $budget->getId(),
-            'userId' => $budget->getUserId(),
+            'user_id' => $budget->getUserId(),
             'date' => $budget->getMonth(),
             'comment' => $budget->getComment()
         ];

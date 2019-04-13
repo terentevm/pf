@@ -12,7 +12,7 @@ use tm\helpers\QueryBuilderHelper as QBH;
  */
 class CurrencyMapper extends Mapper
 {
-    public static $db_columnes = ['id', 'user_id','code', 'short_name' , 'name'];
+    public static $db_columns = ['id', 'user_id', 'code', 'short_name', 'name'];
 
     public static function setTable()
     {
@@ -53,7 +53,7 @@ class CurrencyMapper extends Mapper
         $sql = str_replace("#paramCurrencyID#", $paramString, $sqlTemplate );
         
         $params["user_id"] = $user_id;
-        $params["dateInt"] = $dateInt;
+        $params["dateint"] = $dateInt;
 
         $result = $this->db->query($sql, $params);
         
@@ -75,10 +75,10 @@ class CurrencyMapper extends Mapper
                     currency.short_name,
                     currency.code,
                     currency.name,
-                    max(dateInt) as rateDate
+                    max(dateint) as rateDate
                 FROM ref_currency as currency
                     left join rates as rates on currency.id = rates.currency_id 
-                        AND rates.dateInt <= CAST(:dateInt AS UNSIGNED)
+                        AND rates.dateint <= CAST(:dateint AS UNSIGNED)
                 where currency.user_id = :user_id AND currency.id IN (#paramCurrencyID#)
                 group by
                     currency.id,
@@ -86,7 +86,7 @@ class CurrencyMapper extends Mapper
                     currency.code,
                     currency.name) as temp
                     left join rates as rates on temp.id = rates.currency_id
-                        and temp.rateDate = rates.dateInt";
+                        and temp.rateDate = rates.dateint";
     }
     
 }

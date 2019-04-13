@@ -9,11 +9,10 @@
 namespace app\Models;
 
 use tm\Model;
-use app\Models\DocumentCollection;
-use app\Models\ExpenditureRow;
-
+use app\Mappers\ExpenditureMapper;
+use app\Mappers\ExpenditureRowMapper;
+use app\Mappers\RegExpensesMapper;
 use Respect\Validation\Validator as v;
-use Respect\Validation\Exceptions\ValidationException;
 use Respect\Validation\Exceptions\NestedValidationException;
 
 /**
@@ -23,6 +22,9 @@ use Respect\Validation\Exceptions\NestedValidationException;
  */
 class Expenditure extends Model implements \JsonSerializable
 {
+
+    use TRegFunctions;
+
     private $id = null;
     private $user_id = null;
     private $date = null;
@@ -161,4 +163,122 @@ class Expenditure extends Model implements \JsonSerializable
             return false;
         }
     }
+
+    public function save($upload_mode = false)
+    {
+        $mapper = new ExpenditureMapper(self::className());
+        $dbCommand = $mapper->getDb();
+
+        $dbCommand->beginTransaction();
+
+        $success = $mapper->save($this);
+
+        if ($success === false) {
+            $dbCommand->rollBackTransaction();
+            return false;
+        }
+
+        $success = $this->storeRows();
+
+        if ($success === false) {
+            $dbCommand->rollBackTransaction();
+            return false;
+        }
+
+        $success = $this->storeToRegisters();
+
+        if ($success === false) {
+            $dbCommand->rollBackTransaction();
+            return false;
+        }
+
+        $dbCommand->commitTransaction();
+
+        return true;
+
+    }
+
+    public function update()
+    {
+        if ($this->id === null) {
+            return false;
+        }
+
+        $mapper = Mapper::getMapper(self::className());
+
+        $dbCommand = $mapper->getDb();
+
+        $dbCommand->beginTransaction();
+
+        $colsForUpdate = $mapper->mapModelToDb($this);
+
+        $success = $mapper->where(['id = :id'])
+            ->setParams(['id' => $this->id])
+            ->update($this, $colsForUpdate);
+
+        if ($success === false) {
+            $dbCommand->rollBackTransaction();
+            return false;
+        }
+
+        $deleted = $mapper->deleteRows($this->id);
+
+        if ($deleted === false) {
+            $dbCommand->rollBackTransaction();
+            return false;
+        }
+
+        $success = $this->storeRows();
+
+        if ($success === false) {
+            $dbCommand->rollBackTransaction();
+            return false;
+        }
+
+        $success = $this->storeToRegisters();
+
+        if ($success === false) {
+            $dbCommand->rollBackTransaction();
+            return false;
+        }
+
+        $dbCommand->commitTransaction();
+
+        return true;
+    }
+
+
+    private function storeRows()
+    {
+        $rowMapper = new ExpenditureRowMapper("app\Models\ExpenditureRow");
+
+        foreach ($this->rows->strings() as $row) {
+            $row->setDocId($this->id);
+
+            $success = $rowMapper->save($row);
+
+            if ($success === false) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private function storeToRegisters()
+    {
+
+        $success = $this->storeToRegMoneyTransactions();
+
+        if ($success === false) {
+            return false;
+        }
+
+        $regExpenses = new RegExpensesMapper("RegExpenses");
+
+        $success = $regExpenses->save($this);
+
+        return $success;
+    }
+
 }

@@ -13,20 +13,20 @@ class CNBLoader implements IRatesLoader
     private $url = "http://www.cnb.cz/miranda2/m2/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/vybrane.txt";
     
 
-    public function load(string $currencyCode, string $date1, string $date2) : array
+    public function load(string $currencyCode, string $date1, string $date2) : RateData
     {
         $this->currencyCode = $currencyCode;
         $this->date1 = new \DateTime($date1);
         $this->date2 = new \DateTime($date2);
 
         if ($this->date1 > $this->date2) {
-            return [];
+            throw new RatesLoaderException("Invalid parameters passed. Date 2 must be more then date 1",2);
         }
         
         $result = $this->makeRequest($currencyCode);
-        $result_arr = $this->parseData($result, $currencyCode);
+        $rate_data = $this->parseData($result, $currencyCode);
         
-        return $result_arr;
+        return $rate_data;
     }
 
     private function makeRequest($currencyCode)
@@ -40,6 +40,10 @@ class CNBLoader implements IRatesLoader
         
         $result= curl_exec($curl);
 
+        if(curl_errno($curl)){
+            throw new RatesLoaderException('Request Error:' . curl_error($curl),3);
+        }
+
         curl_close($curl);
 
         return $result;
@@ -47,7 +51,7 @@ class CNBLoader implements IRatesLoader
 
     private function createParamString($currencyCode)
     {
-        $mena = "mena=" . $currencyCode;
+        $mena = "mena=" . trim($currencyCode);
         $od = "od=" . $this->date1->format("d.m.Y");
         $do = "do=" . $this->date2->format("d.m.Y");
 
@@ -59,8 +63,6 @@ class CNBLoader implements IRatesLoader
     private function parseData(string $data_txt, $currencyCode)
     {
         $rows = explode("\n", $data_txt);
-       
-        
 
         $headers = explode("|", $rows[0]);
 
@@ -68,14 +70,10 @@ class CNBLoader implements IRatesLoader
         $mult = intval($parts_mult[1]);
         
         if ($mult === -1) {
-            return [];
+            throw new RatesLoaderException("Parsing error for currency code: " . $currencyCode,1);
         }
-        $result = [
-            'code' => $currencyCode,
-            'mult' => $mult,
-        ];
 
-        $rates = [];
+        $rate_data = new RateData($currencyCode, $mult);
 
         for ($i = 2; $i < count($rows); $i++) {
             $row_str = $rows[$i];
@@ -87,15 +85,12 @@ class CNBLoader implements IRatesLoader
             $parts = explode("|", $row_str);
 
             $date_fmt = (new \DateTime(trim($parts[0])))->format("Y-m-d");
-            $dateInt = strtotime($date_fmt);
-            $rates[$dateInt] =  [
-                'date' => $date_fmt,
-                'rate' => floatval(str_replace(",", ".", $parts[1]))
-            ];
+
+            $rate_data->addRate($date_fmt, floatval(str_replace(",", ".", $parts[1])));
+
         }
+
         
-        $result['rates'] = $rates;
-        
-        return $result;
+        return $rate_data;
     }
 }

@@ -86,7 +86,7 @@ class Currency extends Model implements \JsonSerializable
     public static function getClassificator()
     {
         $container = Reg::getContainerDI();
-        $file_path = $container[conf]->getRateClassificatorFilePath();
+        $file_path = $container['conf']->getRateClassificatorFilePath();
         
         if ($file_path === '' || !is_file($file_path)) {
             return null;
@@ -117,9 +117,25 @@ class Currency extends Model implements \JsonSerializable
     {
         
         $container = Reg::getContainerDI();
-        $sysCurrency_arr = $container[conf]->getSystemCurrency();
+        $sysCurrency_arr = $container['conf']->getSystemCurrency();
 
         return $sysCurrency_arr['short_name'] == $charCode ? true : false;
+    }
+
+    public static function getSystemCurrency($user_id)
+    {
+        $settingsByUser = Settings::getSettings($user_id);
+
+        if ($settingsByUser instanceof Settings) {
+            return $settingsByUser->getCurrency();
+        }
+
+        $container = Reg::getContainerDI();
+        $logger = $container['logger'];
+        $logger->error("Base currency hasn't been found for user with id: " . $user_id);
+
+        return null;
+
     }
 
     public static function saveSystemCurrensy($user_id)
@@ -128,7 +144,7 @@ class Currency extends Model implements \JsonSerializable
 
         if (is_null($sysCurrency)) {
             $container = Reg::getContainerDI();
-            $sysCurrency_arr = $container[conf]->getSystemCurrency();
+            $sysCurrency_arr = $container['conf']->getSystemCurrency();
             
             $currensy = new self();
             

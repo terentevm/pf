@@ -77,7 +77,7 @@ class RegMoneyTransactions extends Model
         $this->rows[] = [
             'user_id' => $model->getUser_id(), 
             'date' => $model->getDate(),
-            'dateInt' => strtotime($model->getDate()),
+            'dateint' => strtotime($model->getDate()),
             'wallet_id' => $model->getWallet_id(),
             'sum' => $doc_sum,
             'expend_id' => $model->getId(),
@@ -105,7 +105,7 @@ class RegMoneyTransactions extends Model
             $this->rows[] = [
                 'user_id' => $model->getUser_id(),
                 'date' => $model->getDate(),
-                'dateInt' => strtotime($model->getDate()),
+                'dateint' => strtotime($model->getDate()),
                 'wallet_id' => $wallet_id,
                 'sum' => $sum,
                 'expend_id' => null,
@@ -122,7 +122,7 @@ class RegMoneyTransactions extends Model
         $this->rows[] = [
             'user_id' => $model->getUser_id(),
             'date' => $model->getDate(),
-            'dateInt' => strtotime($model->getDate()),
+            'dateint' => strtotime($model->getDate()),
             'wallet_id' => $model->getWallet_id_from(),
             'sum' => $model->getSumFrom() * -1,
             'expend_id' => null,
@@ -135,7 +135,7 @@ class RegMoneyTransactions extends Model
         $this->rows[] = [
             'user_id' => $model->getUser_id(),
             'date' => $model->getDate(),
-            'dateInt' => strtotime($model->getDate()),
+            'dateint' => strtotime($model->getDate()),
             'wallet_id' => $model->getWallet_id_to(),
             'sum' => $model->getSumTo(),
             'expend_id' => null,
@@ -153,7 +153,7 @@ class RegMoneyTransactions extends Model
         $this->rows[] = [
             'user_id' => $model->getUser_id(),
             'date' => $model->getDate(),
-            'dateInt' => strtotime($model->getDate()),
+            'dateint' => strtotime($model->getDate()),
             'wallet_id' => $model->getWallet_id(),
             'sum' => $sum,
             'expend_id' => null,
@@ -171,7 +171,7 @@ class RegMoneyTransactions extends Model
         $this->rows[] = [
             'user_id' => $model->getUser_id(),
             'date' => $model->getDate(),
-            'dateInt' => strtotime($model->getDate()),
+            'dateint' => strtotime($model->getDate()),
             'wallet_id' => $model->getWallet_id(),
             'sum' => $sum,
             'expend_id' => null,

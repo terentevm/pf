@@ -13,7 +13,8 @@ use tm\database\IConnection;
 class DBCommand
 {
     private $pdo = null;
-    
+    private $db = null;
+
     protected $stmt = null;
     protected $stmtFetchMode = \PDO::FETCH_ASSOC;
      
@@ -27,6 +28,7 @@ class DBCommand
     public function __construct(IConnection $connection)
     {
         $this->pdo = $connection->getPDO();
+        $this->db = $connection;
     }
     
     public function query($sql, $param = [], $newStmt = true)
@@ -81,41 +83,82 @@ class DBCommand
 
     public function run(string $sql, array $params = [])
     {
+        $success = true;
+
         try {
             $stmt = $this->pdo->prepare($sql);
         } catch (PDOException $ex) {
+            $this->db->log($ex->getMessage());
             return false;
         }
 
         try {
-            $result = $stmt->execute($params) ;
-            return $result;
+            $success = $stmt->execute($params) ;
+            $success = !$this->hasErrors($stmt);
+
         } catch (PDOException $ex) {
-            return false;
+            $this->db->log($ex->getMessage());
+            $success = false;
         }
+
+        return $success;
+    }
+
+    public function runStatement(\PDOStatement $stmt, array $params = []) : bool
+    {
+        $success = true;
+        
+        try {
+            $success = $stmt->execute($params) ;
+            $success = !$this->hasErrors($stmt);
+
+        } catch (PDOException $ex) {
+            $this->db->log($ex->getMessage());
+            $success = false;
+        }  
+        
+        return $success;
+
     }
 
     public function execute(array $param = []) : bool
     {
+        
+        $success = true;
+        
         if (!$this->stmt instanceof \PDOStatement) {
             return false;
         }
         
         try {
-            $this->stmt->execute($param);
-            return true;
+            
+            $success = $this->stmt->execute($param);
+            $success = !$this->hasErrors($stmt);
+
         } catch (PDOException $ex) {
             $this->errors[] = [
                 'code' => $ex->getCode(),
                 'msg' => $ex->getMessage()
             ];
+            
+            $this->db->log($ex->getMessage());
+
+            $success = false;
+
         } catch (Throwable $ex) {
             $this->errors[] = [
                 'code' => $ex->getCode(),
                 'msg' => $ex->getMessage()
             ];
+            
+            $this->db->log($ex->getMessage());
+
+            $success = false;
+
         }
-        return false;
+        
+        return $success;
+
     }
     
     public function setFetchMode_Default() :bool
@@ -184,5 +227,18 @@ class DBCommand
     
     public function dump() {
         $this->stmt->debugDumpParams();    
+    }
+
+    private function hasErrors(\PDOStatement $stmt) : bool
+    {
+        $hasErrors = false;
+        $errors = $stmt->errorInfo();
+            
+        if ($errors[0] !== '00000' && $errors[2] !== '') {
+            $this->db->log($errors[2]);
+            $hasErrors = true;
+        }  
+
+        return $hasErrors;
     }
 }

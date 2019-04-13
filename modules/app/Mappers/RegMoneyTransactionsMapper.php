@@ -14,11 +14,22 @@ use app\Models\RegMoneyTransactions;
 
 class RegMoneyTransactionsMapper extends Mapper
 {
-    public static $db_columnes = ['date','dateInt', 'wallet_id', 'sum', 'expend_id', 'income_id', 'transfer_id', 'cb_id', 'lend_id', 'user_id'];
+    public static $db_columns = [
+        'date',
+        'dateint',
+        'wallet_id',
+        'sum',
+        'expend_id',
+        'income_id',
+        'transfer_id',
+        'cb_id',
+        'lend_id',
+        'user_id'
+    ];
     
     public static function setTable()
     {
-        return 'regMoneyTrans';
+        return 'reg_money_trans';
     }
 
     protected function getPrimaryKey()
@@ -29,8 +40,8 @@ class RegMoneyTransactionsMapper extends Mapper
     public function mapModelToDb(Model $obj)
     {
     }
-    
-    public function save(Model $obj, $upload_mode = false, $useTransaction = false)
+
+    public function save(Model $obj)
     {
         $rows = $obj->getRows();
         
@@ -42,13 +53,18 @@ class RegMoneyTransactionsMapper extends Mapper
             $sql = $this->qb->buildInsert($this);
             $this->create_stmt = $this->db->prepare($sql);
         }
-        
-        
-        $this->deleteReg($obj);
-        
+
+
+        $deleted = $this->deleteReg($obj);
+
+        if ($deleted === false) {
+            return false;
+        }
+
         foreach ($rows as $record) {
-            $success = $this->create_stmt->execute($record);
-            
+
+            $success = $this->db->runStatement($this->create_stmt, $record);
+
             if ($success === false) {
                 return false;
             }
@@ -62,10 +78,9 @@ class RegMoneyTransactionsMapper extends Mapper
         $model_id = $obj->getModelId();
         $col_name = $obj->getCondCol();
         $sql = 'DELETE FROM ' . $this->setTable() . ' WHERE ' . $col_name . ' = :model_id';
-        
-        $this->delete_stmt = $this->db->prepare($sql);
-        $success = $this->delete_stmt->execute(['model_id' => $model_id]);
-        
-        return $success;
+
+        $deleted = $this->db->run($sql, ["model_id" => $model_id]);
+
+        return $deleted;
     }
 }

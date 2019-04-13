@@ -27,8 +27,13 @@ class ComposerStaticInitf49c5f2c3fe12407a8bfabd4b87e24aa
         ),
         'P' => 
         array (
+            'Psr\\Log\\' => 8,
             'Psr\\Http\\Message\\' => 17,
             'Psr\\Container\\' => 14,
+        ),
+        'M' => 
+        array (
+            'Monolog\\' => 8,
         ),
         'I' => 
         array (
@@ -58,6 +63,10 @@ class ComposerStaticInitf49c5f2c3fe12407a8bfabd4b87e24aa
         array (
             0 => __DIR__ . '/..' . '/respect/validation/library',
         ),
+        'Psr\\Log\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
+        ),
         'Psr\\Http\\Message\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/http-message/src',
@@ -65,6 +74,10 @@ class ComposerStaticInitf49c5f2c3fe12407a8bfabd4b87e24aa
         'Psr\\Container\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/container/src',
+        ),
+        'Monolog\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
         ),
         'Interop\\Container\\' => 
         array (

@@ -13,7 +13,16 @@ use tm\Model;
 
 class ChangeBalanceMapper extends Mapper
 {
-    public static $db_columnes = ['id', 'user_id' ,'date', 'dateInt', 'wallet_id', 'sumExpend', 'sumIncome', 'newBalance'];
+    public static $db_columns = [
+        'id',
+        'user_id',
+        'date',
+        'dateint',
+        'wallet_id',
+        'sum_expend',
+        'sum_income',
+        'new_balance'
+    ];
     
     public static function setTable()
     {
@@ -32,11 +41,11 @@ class ChangeBalanceMapper extends Mapper
             'id' => $obj->getId(),
             'user_id' => $obj->getUser_id(),
             'date' => $obj->getDate(),
-            'dateInt' => strtotime($obj->getDate()),
+            'dateint' => strtotime($obj->getDate()),
             'wallet_id' => $obj->getWallet_id(),
-            'sumExpend' => $obj->getSumExpend(),
-            'sumIncome' => $obj->getSumIncome(),
-            'newBalance' => $obj->getNewBalance()
+            'sum_expend' => $obj->getSumExpend(),
+            'sum_income' => $obj->getSumIncome(),
+            'new_balance' => $obj->getNewBalance()
             
         ];
         

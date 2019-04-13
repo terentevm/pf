@@ -23,13 +23,14 @@ abstract class Mapper extends Base
     protected $update_stmt = null;
     protected $delete_stmt = null;
 
+
     public function __construct($modelClassName)
     {
         if ($this->db_connection === null) {
             try {
                 $this->db_connection = Connection::init();
             } catch (\Throwable $e) {
-                throw new \Exeption($e->getMessage());
+                throw new \Exception($e->getMessage());
                 return;
             }
             
@@ -66,7 +67,7 @@ abstract class Mapper extends Base
             try {
                 $mapperInstance = new $mapper($modelClassName);
             } catch (\Throwable $e) {
-                throw new \Exeption($e->getMessage());
+                throw new \Exception($e->getMessage());
                 return;
             }
             
@@ -210,11 +211,8 @@ abstract class Mapper extends Base
         return $model;
     }
 
-    public function save(Model $obj, $upload_mode = false, $useTransaction = false)
+    public function save(Model $obj)
     {
-        if (!$this->db->transactionExists() && $useTransaction) {
-            $this->db->beginTransaction();
-        }
 
         $success = $this->create($obj);
 
@@ -222,28 +220,19 @@ abstract class Mapper extends Base
             $success = $this->afterSave($obj);
         }
 
-        if ($this->db->transactionExists() && $useTransaction) {
-            if ($success) {
-                $this->db->commitTransaction();
-            } else {
-                $this->db->rollBackTransaction();
-            }
-        }
-
-
         return $success;
     }
 
     protected function create(Model $obj)
     {
-        if ($this->create_stmt === null) {
+        if (!($this->create_stmt instanceof \PDOStatement)) {
             $sql = $this->qb->buildInsert($this);
             $this->create_stmt = $this->db->prepare($sql);
         }
 
         $param = $this->mapModelToDb($obj);
 
-        $success = $this->create_stmt->execute($param);
+        $success = $this->db->runStatement($this->create_stmt, $param);
 
         return $success;
     }
@@ -251,9 +240,14 @@ abstract class Mapper extends Base
     public function update(Model $obj, array $colsForUpdate)
     {
         $sql = $this->qb->buildUpdate($this, $colsForUpdate);
+
         $this->update_stmt = $this->db->prepare($sql);
 
-        $success = $this->update_stmt->execute($colsForUpdate);
+        if (!($this->update_stmt instanceof \PDOStatement)) {
+            return false;
+        }
+
+        $success = $this->db->runStatement($this->update_stmt, $param);
         
         if ($success === true) {
             $success = $this->afterUpdate($obj);
@@ -277,13 +271,14 @@ abstract class Mapper extends Base
     public function delete()
     {
         $sql = $this->qb->buildDelete($this);
+
         $this->delete_stmt = $this->db->prepare($sql);
-        
-        if ($this->delete_stmt === false) {
+
+        if (!($this->delete_stmt instanceof \PDOStatement)) {
             return false;
         }
-        
-        $success = $this->delete_stmt->execute($this->params);
+
+        $success = $this->db->runStatement($this->delete_stmt, $this->params);
         
         return $success;
     }

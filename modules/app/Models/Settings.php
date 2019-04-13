@@ -153,6 +153,7 @@ class Settings extends Model implements \JsonSerializable
 
     public static function getSettings($user_id)
     {
+
         try {
             $mapperSettings = Mapper::getMapper(get_called_class());
         } catch (\Throwable $e) {
